@@ -1,41 +1,49 @@
-import { createClient } from '@supabase/supabase-js'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
+import { supabaseServer } from '@/lib/supabase-server';
+B
+interface Lead {
+  name: string;
+  email: string;
+  phone: string;
+  propertyId?: string;
+  agentId?: string;  
+  message?: string;
+}
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
-export async function POST(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { agent_id, property_id, name, email, phone, message, source } = body
-
-    if (!agent_id || !name || !email) {
-      return NextResponse.json({ error: 'Faltan campos obligatorios' }, { status: 400 })
-    }
-
-    const { data, error } = await supabaseAdmin
+    const supabase = supabaseServer();
+    const { data: leads, error } = await supabase
       .from('leads')
-      .insert({
-        agent_id,
-        property_id: property_id || null,
-        name,
-        email,
-        phone: phone || null,
-        message: message || null,
-        source: source || 'website',
-        status: 'new',
-      })
-      .select('id')
-      .single()
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 })
-    }
+    return NextResponse.json(leads);
+  } catch (err) {
+    return NextResponse.json(
+      { error: 'Error fetching leads' },
+      { status: 500 }
+    (}
+    (}
 
-    return NextResponse.json({ success: true, id: data.id })
-  } catch {
-    return NextResponse.json({ error: 'Error interno' }, { status: 500 })
+Export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json() as Lead;
+    const supabase = supabaseServer();
+    const { data, error } = await supabase
+      .from('leads')
+      .insert([lead])
+      .select();
+
+    if (error) throw error;
+
+    return NextResponse.json(data, { status: 201 });
+  } catch (err) {
+    return NextResponse.json(
+      { error: 'Error creating lead' },
+      { status: 500 }
+    );
   }
 }
