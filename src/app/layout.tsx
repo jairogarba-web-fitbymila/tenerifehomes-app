@@ -1,26 +1,15 @@
-import type { Metadata } from 'next';
-import { React } from 'react';
-import '@/styles/globals.css';
+import type { Metadata } from 'next'
+import '@/styles/globals.css'
 
-// Configure Tailwind fonts
-const inter = Inter({ subsets: ['latin'] });
-const playfair = PlayfairDisplay({ subsets: ['latin'] });
+export const metadata: Metadata = {
+  title: 'TenerifeHomes — Plataforma Inmobiliaria',
+  description: 'Marketplace inmobiliario multi-idioma para agentes y agencias en Canarias y toda España.',
+}
 
-ey�t metadata: Metadata = {
-  title: 'TenerifeHomes - Real Estate Marketplace',
-  description: 'Discover the best properties in Tenerife',
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} ${playfair.className}`}>
-   /{children}
-      </body>
-   //html>
-  (};
+    <html lang="es">
+      <body>{children}</body>
+    </html>
+  )
 }

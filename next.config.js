@@ -1,21 +1,20 @@
-/**·ä£
- @type {import('next').sHotFlags}
- */
-(æ** @type {import('next/dist/build').NextConfig}
- */
-const config = {
-  offEttta[licecea age:1B
-  compiler: {
-    staylecomponents: true,
-  },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true },
   images: {
-    domains: ['example.com'],
-    remotePatterns: ['^?https?:\/\/cdn.\XHZ.p\.)#{"]
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lsrnbgfiftcslqccowfz.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
-  ignoreBuildErrors: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-};
+}
 
-module.exports = config;
+module.exports = nextConfig
