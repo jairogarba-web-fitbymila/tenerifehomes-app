@@ -710,8 +710,8 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero-bg">
           <img
-            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=85"
-            alt="Agente inmobiliario profesional con tecnología"
+            src="https://images.unsplash.com/photo-1526948531399-320e7e40f0ca?w=1920&q=85"
+            alt="Profesionales inmobiliarios en oficina moderna con vistas panorámicas"
           />
           <div
             style={{
