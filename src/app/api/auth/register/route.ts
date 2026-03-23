@@ -8,68 +8,350 @@ function getSupabaseAdmin() {
   )
 }
 
-// Template-specific placeholder content for pre-populating agent websites
-const TEMPLATE_HERO_CONTENT: Record<string, { headline: string; subtitle: string; cta_text: string }> = {
-  luxury: {
-    headline: 'Propiedades Exclusivas en Tenerife',
-    subtitle: 'Descubra nuestra selección de villas y propiedades premium en las mejores ubicaciones de la isla.',
-    cta_text: 'Ver Propiedades',
-  },
-  mediterranean: {
-    headline: 'Tu Hogar en Tenerife Te Espera',
-    subtitle: 'Más de 15 años ayudando a familias a encontrar la propiedad perfecta en la isla.',
-    cta_text: 'Explorar Propiedades',
-  },
-  corporate: {
-    headline: 'Soluciones Inmobiliarias Profesionales',
-    subtitle: 'Un equipo de expertos a su disposición para encontrar la mejor inversión en Tenerife.',
-    cta_text: 'Contactar',
-  },
-  boutique: {
-    headline: 'Inmobiliaria con Alma',
-    subtitle: 'Seleccionamos cada propiedad con el mismo cuidado con el que elegiríamos la nuestra.',
-    cta_text: 'Descubrir',
-  },
-  network: {
-    headline: 'La Mayor Red Inmobiliaria de Tenerife',
-    subtitle: 'Múltiples oficinas, cientos de propiedades, un solo objetivo: encontrar tu hogar ideal.',
-    cta_text: 'Buscar Propiedades',
-  },
+// ─────────────────────────────────────────────
+// UNSPLASH IMAGES (free, high quality)
+// ─────────────────────────────────────────────
+const HERO_IMAGES: Record<string, string> = {
+  luxury: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1920&q=80',
+  mediterranean: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1920&q=80',
+  corporate: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1920&q=80',
+  boutique: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
+  network: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80',
 }
 
-const TEMPLATE_BIO: Record<string, string> = {
-  luxury: 'Especializado en propiedades de lujo y exclusivas en Tenerife. Ofrecemos un servicio personalizado y discreto para clientes que buscan lo mejor de la isla. Nuestra experiencia en el mercado premium nos permite encontrar oportunidades únicas.',
-  mediterranean: 'Con años de experiencia en el mercado inmobiliario de Tenerife, nos dedicamos a ayudar a familias y particulares a encontrar su hogar ideal. Conocemos cada rincón de la isla y trabajamos con cercanía y confianza.',
-  corporate: 'Somos una agencia inmobiliaria profesional con un equipo de expertos dedicados a ofrecer las mejores soluciones inmobiliarias en Tenerife. Nuestro enfoque profesional y orientado a resultados garantiza la mejor experiencia.',
-  boutique: 'Una agencia boutique donde cada cliente es único. No buscamos volumen, buscamos la propiedad perfecta para cada persona. Trabajamos con un número limitado de propiedades para garantizar la máxima calidad.',
-  network: 'Con presencia en múltiples ubicaciones de Tenerife, ofrecemos la cobertura más amplia del mercado inmobiliario de la isla. Nuestro equipo de agentes especializados cubre todas las zonas y tipos de propiedad.',
+const PROPERTY_IMAGES = {
+  villa: [
+    'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80',
+    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
+  ],
+  apartment: [
+    'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80',
+    'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80',
+  ],
+  penthouse: [
+    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
+    'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80',
+  ],
 }
 
-// Default services every agent gets
-function getDefaultServices(businessName: string) {
-  return [
-    { title: 'Compraventa de Propiedades', description: 'Asesoramiento completo en la compra y venta de inmuebles en Tenerife. Desde la búsqueda hasta la firma ante notario.', icon: 'building' },
-    { title: 'Valoración Gratuita', description: 'Obtenga una valoración profesional de su propiedad sin compromiso, basada en datos reales del mercado actual.', icon: 'briefcase' },
-    { title: 'Asesoría Legal y Fiscal', description: 'Conexión con los mejores profesionales legales y fiscales para garantizar una transacción segura y transparente.', icon: 'users' },
-    { title: 'Gestión de Alquileres', description: 'Servicio integral de gestión de alquileres vacacionales y de larga temporada, maximizando la rentabilidad de su inversión.', icon: 'map' },
-  ]
-}
-
-// Default stats based on template type
-const TEMPLATE_STATS: Record<string, Record<string, number>> = {
-  luxury: { propiedades: 0, clientes_satisfechos: 0, anos_experiencia: 0 },
-  mediterranean: { propiedades: 0, ventas_realizadas: 0, anos_experiencia: 0 },
-  corporate: { propiedades: 0, equipo: 1, oficinas: 1 },
-  boutique: { propiedades: 0, clientes_satisfechos: 0 },
-  network: { propiedades: 0, agentes: 1, oficinas: 1, anos_experiencia: 0 },
-}
-
-// Sections that should be active by default (core visible sections)
-const DEFAULT_ACTIVE_SECTIONS = [
-  'nav', 'hero', 'footer', 'properties_sale', 'about',
-  'services', 'contact_form', 'stats',
+const ZONE_IMAGES = [
+  'https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80',
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
+  'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80',
 ]
 
+const TEAM_PHOTOS = [
+  'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80',
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
+  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
+]
+
+// ─────────────────────────────────────────────
+// DEMO CONTENT PER TEMPLATE
+// ─────────────────────────────────────────────
+const TEMPLATE_CONTENT: Record<string, {
+  hero: { headline: string; subtitle: string; cta_text: string }
+  bio: string
+  quote: string
+  stats: Record<string, number>
+  properties: Array<{
+    title: string; description: string; property_type: string; operation_type: string
+    price: number; bedrooms: number; bathrooms: number; size_m2: number
+    location: string; badge: string | null; images: string[]; features: string[]
+  }>
+  testimonials: Array<{ quote: string; client_name: string; client_location: string; rating: number }>
+  services: Array<{ title: string; description: string; icon: string }>
+  zones: Array<{ name: string; description: string; image_url: string; property_count: number }>
+  team: Array<{ name: string; role: string; photo_url: string; bio: string; languages: string[] }>
+  activeSections: string[]
+}> = {
+  luxury: {
+    hero: {
+      headline: 'Propiedades Exclusivas en Tenerife',
+      subtitle: 'Descubra nuestra selección de villas y propiedades premium en las mejores ubicaciones de la isla.',
+      cta_text: 'Ver Colección',
+    },
+    bio: 'Especializado en propiedades de lujo y exclusivas en Tenerife. Ofrecemos un servicio personalizado y discreto para clientes que buscan lo mejor de la isla. Nuestra experiencia en el mercado premium nos permite encontrar oportunidades únicas que no están disponibles en los portales convencionales.',
+    quote: 'El lujo no es un precio, es una experiencia',
+    stats: { propiedades_exclusivas: 24, clientes_satisfechos: 150, anos_experiencia: 12, idiomas: 4 },
+    properties: [
+      {
+        title: 'Villa de lujo con vistas al océano en Costa Adeje',
+        description: 'Espectacular villa de diseño contemporáneo con infinity pool, jardín tropical y vistas panorámicas al Atlántico. Acabados de primera calidad, domótica integral y garaje para 3 vehículos.',
+        property_type: 'villa', operation_type: 'sale', price: 2450000,
+        bedrooms: 5, bathrooms: 4, size_m2: 380, location: 'Costa Adeje',
+        badge: 'exclusive', images: PROPERTY_IMAGES.villa,
+        features: ['piscina infinity', 'vistas al mar', 'domótica', 'garaje 3 coches', 'jardín tropical'],
+      },
+      {
+        title: 'Ático dúplex de lujo en Playa de la Arena',
+        description: 'Exclusivo ático dúplex con terraza de 80m², jacuzzi privado y vistas al mar y La Gomera. Cocina de diseño italiano, suelos de mármol y acabados premium.',
+        property_type: 'penthouse', operation_type: 'sale', price: 890000,
+        bedrooms: 3, bathrooms: 2, size_m2: 185, location: 'Playa de la Arena',
+        badge: 'featured', images: PROPERTY_IMAGES.penthouse,
+        features: ['terraza 80m²', 'jacuzzi', 'vistas al mar', 'mármol', 'cocina italiana'],
+      },
+      {
+        title: 'Apartamento premium en primera línea de mar',
+        description: 'Reformado con materiales de alta gama. Acceso directo a la playa, plaza de garaje y trastero. Comunidad con piscina y jardines cuidados.',
+        property_type: 'apartment', operation_type: 'sale', price: 425000,
+        bedrooms: 2, bathrooms: 2, size_m2: 95, location: 'Los Cristianos',
+        badge: 'new', images: PROPERTY_IMAGES.apartment,
+        features: ['primera línea', 'reformado', 'garaje', 'piscina comunitaria'],
+      },
+    ],
+    testimonials: [
+      { quote: 'Un servicio impecable de principio a fin. Nos encontraron la villa perfecta en Costa Adeje cuando llevábamos meses buscando sin éxito. Totalmente recomendable.', client_name: 'Thomas & Sarah W.', client_location: 'Londres, Reino Unido', rating: 5 },
+      { quote: 'Profesionalidad y discreción absolutas. Gestionaron toda la operación de compra de forma impecable, incluyendo la coordinación con nuestros asesores fiscales en Alemania.', client_name: 'Klaus M.', client_location: 'Múnich, Alemania', rating: 5 },
+      { quote: 'Conocen el mercado de lujo en Tenerife como nadie. Su selección de propiedades exclusivas nos ahorró semanas de búsqueda. Un placer trabajar con verdaderos profesionales.', client_name: 'Pierre & Marie D.', client_location: 'París, Francia', rating: 5 },
+    ],
+    services: [
+      { title: 'Búsqueda Exclusiva', description: 'Acceso a propiedades off-market y pre-lanzamientos que no encontrarás en portales convencionales. Selección curada para clientes exigentes.', icon: 'briefcase' },
+      { title: 'Valoración Premium', description: 'Valoración profesional detallada de su propiedad basada en comparables reales de mercado y tendencias actuales del segmento luxury.', icon: 'building' },
+      { title: 'Gestión Legal Integral', description: 'Coordinación completa con abogados, notarios y asesores fiscales especializados en compraventa internacional e inversiones.', icon: 'users' },
+      { title: 'Concierge Inmobiliario', description: 'Servicio post-venta completo: reformas, interiorismo, gestión de alquileres premium y mantenimiento de propiedades.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Costa Adeje', description: 'La zona más exclusiva del sur de Tenerife. Villas de lujo, resorts 5 estrellas y campos de golf. Hogar de las propiedades más cotizadas de la isla.', image_url: ZONE_IMAGES[0], property_count: 12 },
+      { name: 'Abama', description: 'Resort residencial de lujo con campo de golf, restaurantes con estrella Michelin y acceso privado a playa. El referente del luxury living en Canarias.', image_url: ZONE_IMAGES[1], property_count: 8 },
+      { name: 'Golf del Sur', description: 'Desarrollo residencial premium junto al campo de golf. Villas y apartamentos de alta gama con vistas al océano y al Teide.', image_url: ZONE_IMAGES[2], property_count: 4 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  mediterranean: {
+    hero: {
+      headline: 'Tu Hogar en Tenerife Te Espera',
+      subtitle: 'Más de 15 años ayudando a familias a encontrar la propiedad perfecta. Cercanía, confianza y experiencia.',
+      cta_text: 'Explorar Propiedades',
+    },
+    bio: 'Con más de 15 años de experiencia en el mercado inmobiliario de Tenerife, me dedico a ayudar a familias y particulares a encontrar su hogar ideal. Conozco cada rincón de la isla y trabajo con cercanía y confianza. Mi compromiso es acompañarte en cada paso del proceso, desde la primera visita hasta la firma ante notario.',
+    quote: 'Cada familia merece encontrar el hogar de sus sueños',
+    stats: { propiedades: 45, ventas_realizadas: 320, anos_experiencia: 15, clientes_felices: 280 },
+    properties: [
+      {
+        title: 'Apartamento luminoso con terraza en Los Cristianos',
+        description: 'Precioso apartamento totalmente reformado, a 5 minutos andando de la playa. Terraza con vistas al mar, cocina equipada y plaza de garaje incluida. Comunidad con piscina.',
+        property_type: 'apartment', operation_type: 'sale', price: 245000,
+        bedrooms: 2, bathrooms: 1, size_m2: 75, location: 'Los Cristianos',
+        badge: 'featured', images: PROPERTY_IMAGES.apartment,
+        features: ['terraza', 'vistas al mar', 'reformado', 'garaje', 'piscina comunitaria'],
+      },
+      {
+        title: 'Chalet familiar con jardín en Arona',
+        description: 'Amplio chalet independiente con jardín privado de 200m², barbacoa y garaje doble. Zona tranquila residencial, ideal para familias. Cerca de colegios y supermercados.',
+        property_type: 'villa', operation_type: 'sale', price: 385000,
+        bedrooms: 4, bathrooms: 3, size_m2: 180, location: 'Arona',
+        badge: null, images: PROPERTY_IMAGES.villa,
+        features: ['jardín 200m²', 'garaje doble', 'barbacoa', 'zona residencial'],
+      },
+      {
+        title: 'Piso céntrico reformado en Santa Cruz',
+        description: 'Piso completamente reformado en pleno centro de Santa Cruz. Tres habitaciones, dos baños, cocina americana y balcón. Excelente comunicación y todos los servicios.',
+        property_type: 'apartment', operation_type: 'sale', price: 195000,
+        bedrooms: 3, bathrooms: 2, size_m2: 90, location: 'Santa Cruz de Tenerife',
+        badge: 'reduced', images: PROPERTY_IMAGES.apartment,
+        features: ['céntrico', 'reformado', 'balcón', 'cocina americana'],
+      },
+    ],
+    testimonials: [
+      { quote: 'Nos ayudó a encontrar nuestro primer hogar en Tenerife. Siempre disponible, paciente y con un trato muy humano. Nos sentimos acompañados en todo momento.', client_name: 'María y Carlos G.', client_location: 'Los Cristianos', rating: 5 },
+      { quote: 'Vendimos nuestro apartamento en tiempo récord y al precio que queríamos. Nos asesoró perfectamente en cada paso del proceso. Un profesional de confianza.', client_name: 'Roberto P.', client_location: 'Arona', rating: 5 },
+      { quote: 'Llevábamos meses buscando por nuestra cuenta sin éxito. En dos semanas nos presentó tres opciones perfectas. Al final compramos una que ni sabíamos que existía.', client_name: 'Elena y Marco V.', client_location: 'Roma, Italia', rating: 5 },
+    ],
+    services: [
+      { title: 'Compraventa de Propiedades', description: 'Te acompaño en todo el proceso de compra o venta de tu propiedad. Desde la valoración inicial hasta la firma ante notario, siempre a tu lado.', icon: 'building' },
+      { title: 'Valoración Gratuita', description: '¿Quieres saber cuánto vale tu propiedad? Te ofrezco una valoración profesional sin compromiso basada en datos reales del mercado.', icon: 'briefcase' },
+      { title: 'Asesoría para Extranjeros', description: 'Si vienes de fuera, te ayudo con todo: NIE, cuenta bancaria, abogado, traductor... Todo lo que necesitas para comprar en España sin complicaciones.', icon: 'users' },
+      { title: 'Gestión de Alquileres', description: 'Si buscas alquilar tu propiedad (larga temporada o vacacional), me encargo de todo: inquilinos, contratos, mantenimiento y cobros.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Los Cristianos', description: 'Localidad turística con ambiente familiar, playas tranquilas y todos los servicios. Una de las zonas más demandadas del sur.', image_url: ZONE_IMAGES[0], property_count: 18 },
+      { name: 'Arona', description: 'Municipio con excelente calidad de vida. Zonas residenciales tranquilas, buen clima todo el año y precios competitivos.', image_url: ZONE_IMAGES[1], property_count: 15 },
+      { name: 'Adeje', description: 'Desde Costa Adeje hasta los pueblos del interior. Gran variedad de propiedades: desde apartamentos turísticos hasta fincas rústicas.', image_url: ZONE_IMAGES[2], property_count: 12 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  corporate: {
+    hero: {
+      headline: 'Su Agencia Inmobiliaria de Confianza',
+      subtitle: 'Un equipo de profesionales dedicados a encontrar la mejor inversión inmobiliaria en Tenerife.',
+      cta_text: 'Ver Propiedades',
+    },
+    bio: 'Somos una agencia inmobiliaria profesional con un equipo de expertos dedicados a ofrecer las mejores soluciones inmobiliarias en Tenerife. Nuestro enfoque profesional y orientado a resultados, combinado con un profundo conocimiento del mercado local, garantiza la mejor experiencia para nuestros clientes nacionales e internacionales.',
+    quote: 'Profesionalidad, transparencia y resultados',
+    stats: { propiedades_activas: 65, equipo: 8, oficinas: 2, anos_experiencia: 20 },
+    properties: [
+      {
+        title: 'Oficina comercial en zona prime de Santa Cruz',
+        description: 'Local comercial de 120m² en pleno centro comercial. Escaparate a calle principal, aire acondicionado central, fibra óptica y plaza de garaje. Ideal para cualquier negocio.',
+        property_type: 'commercial', operation_type: 'sale', price: 320000,
+        bedrooms: 0, bathrooms: 1, size_m2: 120, location: 'Santa Cruz de Tenerife',
+        badge: 'featured', images: PROPERTY_IMAGES.apartment,
+        features: ['escaparate', 'aire acondicionado', 'fibra óptica', 'garaje'],
+      },
+      {
+        title: 'Villa contemporánea en La Caleta',
+        description: 'Proyecto llave en mano de villa moderna con piscina, orientación sur y vistas al mar. Materiales de primera calidad, eficiencia energética A y diseño arquitectónico premiado.',
+        property_type: 'villa', operation_type: 'sale', price: 1250000,
+        bedrooms: 4, bathrooms: 3, size_m2: 260, location: 'La Caleta, Adeje',
+        badge: 'new', images: PROPERTY_IMAGES.villa,
+        features: ['piscina', 'vistas al mar', 'eficiencia A', 'diseño premiado'],
+      },
+      {
+        title: 'Apartamento de inversión con rentabilidad garantizada',
+        description: 'Apartamento en complejo turístico con gestión de alquiler incluida. Rentabilidad neta del 6% anual. Ocupación media del 85%. Inversión segura con retorno demostrable.',
+        property_type: 'apartment', operation_type: 'sale', price: 198000,
+        bedrooms: 1, bathrooms: 1, size_m2: 55, location: 'Playa de las Américas',
+        badge: 'investment', images: PROPERTY_IMAGES.apartment,
+        features: ['rentabilidad 6%', 'gestión incluida', 'complejo turístico', 'piscina'],
+      },
+    ],
+    testimonials: [
+      { quote: 'Gestionaron la compra de nuestras oficinas de forma impecable. Un equipo profesional que entiende las necesidades empresariales y cumple plazos sin excusas.', client_name: 'Inmobiliaria Costa Sur S.L.', client_location: 'Costa Adeje', rating: 5 },
+      { quote: 'Hemos confiado la gestión de nuestra cartera de 12 apartamentos turísticos. La ocupación ha subido un 30% y los ingresos se han incrementado notablemente.', client_name: 'Juan Antonio R.', client_location: 'Inversor, Madrid', rating: 5 },
+      { quote: 'Compramos 3 propiedades como inversión siguiendo sus recomendaciones. Todas están dando la rentabilidad prevista. Son asesores de inversión inmobiliaria, no simples vendedores.', client_name: 'Schmidt & Partners GmbH', client_location: 'Frankfurt, Alemania', rating: 5 },
+    ],
+    services: [
+      { title: 'Compraventa Profesional', description: 'Gestión integral de operaciones de compraventa con due diligence completa, valoración técnica y coordinación legal y fiscal.', icon: 'building' },
+      { title: 'Asesoría de Inversión', description: 'Análisis de rentabilidad, estudios de mercado por zona y asesoramiento estratégico para inversores nacionales e internacionales.', icon: 'briefcase' },
+      { title: 'Gestión Patrimonial', description: 'Administración completa de carteras inmobiliarias: alquileres, mantenimiento, fiscalidad y reporting mensual al propietario.', icon: 'users' },
+      { title: 'Servicios para Empresas', description: 'Búsqueda de locales comerciales, oficinas y naves. Asesoría en expansión de negocio y relocalización empresarial.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Costa Adeje', description: 'Zona prime del sur. Alta demanda turística y residencial. Las mejores rentabilidades de alquiler vacacional de la isla.', image_url: ZONE_IMAGES[0], property_count: 28 },
+      { name: 'Santa Cruz de Tenerife', description: 'Capital de provincia. Mercado diversificado: residencial, comercial y oficinas. Precios competitivos con potencial de revalorización.', image_url: ZONE_IMAGES[1], property_count: 22 },
+      { name: 'Puerto de la Cruz', description: 'Norte de la isla. Mercado en crecimiento, especialmente atractivo para compradores alemanes y nórdicos. Excelente relación calidad-precio.', image_url: ZONE_IMAGES[2], property_count: 15 },
+    ],
+    team: [
+      { name: 'Director/a Comercial', role: 'Dirección', photo_url: TEAM_PHOTOS[0], bio: 'Más de 15 años de experiencia en el sector inmobiliario. Especializado en operaciones corporativas e inversión.', languages: ['Español', 'Inglés', 'Alemán'] },
+      { name: 'Agente Senior', role: 'Ventas', photo_url: TEAM_PHOTOS[1], bio: 'Especialista en propiedades residenciales y atención al cliente internacional. Enfoque personalizado y orientado a resultados.', languages: ['Español', 'Inglés', 'Francés'] },
+      { name: 'Asesor de Inversión', role: 'Inversiones', photo_url: TEAM_PHOTOS[2], bio: 'Analista de mercado con experiencia en rentabilidad inmobiliaria y asesoramiento a fondos e inversores particulares.', languages: ['Español', 'Inglés'] },
+    ],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'team', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  boutique: {
+    hero: {
+      headline: 'Inmobiliaria con Alma',
+      subtitle: 'Seleccionamos cada propiedad con el mismo cuidado con el que elegiríamos la nuestra. Calidad sobre cantidad.',
+      cta_text: 'Descubrir',
+    },
+    bio: 'Somos una agencia boutique donde cada cliente es único. No buscamos volumen, buscamos la propiedad perfecta para cada persona. Trabajamos con un número limitado de propiedades para garantizar la máxima calidad y atención personalizada. Creemos que comprar una casa no es una transacción, es un momento vital, y merece ser tratado como tal.',
+    quote: 'Menos es más. Cada propiedad cuenta una historia',
+    stats: { propiedades_seleccionadas: 18, clientes_satisfechos: 95, anos_experiencia: 8 },
+    properties: [
+      {
+        title: 'Finca restaurada con encanto en el Valle de la Orotava',
+        description: 'Preciosa finca canaria del siglo XIX completamente restaurada respetando su carácter original. Vigas de madera, patios interiores, huerto ecológico y vistas al Teide. Una joya única.',
+        property_type: 'finca', operation_type: 'sale', price: 595000,
+        bedrooms: 4, bathrooms: 3, size_m2: 220, location: 'La Orotava',
+        badge: 'exclusive', images: PROPERTY_IMAGES.villa,
+        features: ['restaurada', 'siglo XIX', 'huerto', 'vistas al Teide', 'vigas madera'],
+      },
+      {
+        title: 'Apartamento con carácter en casco histórico',
+        description: 'Apartamento con personalidad en un edificio histórico restaurado del centro de La Laguna. Techos altos, suelos originales de baldosa hidráulica, balcón a la plaza.',
+        property_type: 'apartment', operation_type: 'sale', price: 215000,
+        bedrooms: 2, bathrooms: 1, size_m2: 85, location: 'San Cristóbal de La Laguna',
+        badge: null, images: PROPERTY_IMAGES.apartment,
+        features: ['casco histórico', 'techos altos', 'baldosa hidráulica', 'balcón'],
+      },
+      {
+        title: 'Casa de campo con viñedo en Tacoronte',
+        description: 'Encantadora casa de campo rodeada de viñedos con producción propia de vino. Porche cubierto, barbacoa, huerto y frutales. Tranquilidad absoluta a 20 min de Santa Cruz.',
+        property_type: 'finca', operation_type: 'sale', price: 345000,
+        bedrooms: 3, bathrooms: 2, size_m2: 150, location: 'Tacoronte',
+        badge: 'featured', images: PROPERTY_IMAGES.villa,
+        features: ['viñedo', 'huerto', 'barbacoa', 'porche', 'tranquilidad'],
+      },
+    ],
+    testimonials: [
+      { quote: 'No son agentes inmobiliarios al uso. Se tomaron el tiempo de entender qué buscábamos realmente, no solo en metros cuadrados, sino en estilo de vida. Encontraron nuestra finca soñada.', client_name: 'Caroline & Jean-Luc B.', client_location: 'Burdeos, Francia', rating: 5 },
+      { quote: 'La atención personalizada marca la diferencia. Nos presentaron solo 4 propiedades, pero las 4 encajaban perfectamente con lo que buscábamos. Sin perder el tiempo.', client_name: 'Marta S.', client_location: 'Barcelona', rating: 5 },
+      { quote: 'Vendieron nuestra casa en La Laguna preservando su historia. Encontraron compradores que aprecian el patrimonio, no especuladores. Eso tiene un valor incalculable para nosotros.', client_name: 'Familia Hernández', client_location: 'La Laguna', rating: 5 },
+    ],
+    services: [
+      { title: 'Búsqueda Personalizada', description: 'No trabajamos con listados genéricos. Cada búsqueda es un proyecto personal. Escuchamos, entendemos y encontramos.', icon: 'briefcase' },
+      { title: 'Propiedades con Historia', description: 'Nos especializamos en fincas, casas históricas y propiedades con carácter. Cada una cuenta una historia que merece ser continuada.', icon: 'building' },
+      { title: 'Acompañamiento Integral', description: 'Desde la primera visita hasta después de la mudanza. Arquitectos, reformas, decoración, jardinería... Todo coordinado por nosotros.', icon: 'users' },
+      { title: 'Valoración de Propiedades Singulares', description: 'Valorar una finca o una casa histórica requiere experiencia y sensibilidad. No es solo precio por metro cuadrado.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'La Orotava', description: 'Valle fértil con fincas históricas, casonas señoriales y una de las panorámicas más bellas de Tenerife. Patrimonio y naturaleza.', image_url: ZONE_IMAGES[0], property_count: 6 },
+      { name: 'La Laguna', description: 'Patrimonio de la Humanidad. Casco histórico vibrante, universidad, cultura. Propiedades con carácter en un entorno inigualable.', image_url: ZONE_IMAGES[1], property_count: 8 },
+      { name: 'Tacoronte - Tegueste', description: 'Zona vinícola del norte. Casas de campo, fincas rústicas y bodegas. Para quienes buscan vivir rodeados de naturaleza.', image_url: ZONE_IMAGES[2], property_count: 4 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  network: {
+    hero: {
+      headline: 'La Mayor Red Inmobiliaria de Tenerife',
+      subtitle: 'Múltiples oficinas, cientos de propiedades y un equipo experto. Si está en venta, lo tenemos.',
+      cta_text: 'Buscar Propiedades',
+    },
+    bio: 'Con presencia en las principales zonas de Tenerife, ofrecemos la cobertura más amplia del mercado inmobiliario de la isla. Nuestro equipo de agentes especializados por zona garantiza un conocimiento profundo de cada barrio, cada calle y cada oportunidad. Más de 400 propiedades en cartera y creciendo cada día.',
+    quote: 'En Tenerife, si se vende, pasa por nosotros',
+    stats: { propiedades: 420, agentes: 15, oficinas: 3, anos_experiencia: 25 },
+    properties: [
+      {
+        title: 'Apartamento turístico con licencia VV en Los Cristianos',
+        description: 'Apartamento de 1 dormitorio con licencia de vivienda vacacional activa. Ocupación del 80%, ingreso neto mensual de 1.200€. Inversión ideal con retorno inmediato.',
+        property_type: 'apartment', operation_type: 'sale', price: 175000,
+        bedrooms: 1, bathrooms: 1, size_m2: 45, location: 'Los Cristianos',
+        badge: 'investment', images: PROPERTY_IMAGES.apartment,
+        features: ['licencia VV', 'rentabilidad 8%', 'amueblado', 'piscina'],
+      },
+      {
+        title: 'Chalet adosado familiar en San Isidro',
+        description: 'Adosado de 3 plantas con garaje, trastero, azotea privada y pequeño jardín. Zona residencial tranquila, cerca de colegios y centro comercial. Perfecto para familias.',
+        property_type: 'townhouse', operation_type: 'sale', price: 275000,
+        bedrooms: 3, bathrooms: 2, size_m2: 130, location: 'San Isidro, Granadilla',
+        badge: null, images: PROPERTY_IMAGES.villa,
+        features: ['garaje', 'trastero', 'azotea', 'jardín', 'zona residencial'],
+      },
+      {
+        title: 'Villa con piscina en Palm-Mar',
+        description: 'Villa independiente en urbanización cerrada con vigilancia 24h. Piscina privada, jardín tropical, 4 dormitorios y vistas al océano. Urbanización tranquila y segura.',
+        property_type: 'villa', operation_type: 'sale', price: 650000,
+        bedrooms: 4, bathrooms: 3, size_m2: 200, location: 'Palm-Mar, Arona',
+        badge: 'featured', images: PROPERTY_IMAGES.villa,
+        features: ['piscina privada', 'seguridad 24h', 'vistas al mar', 'jardín tropical'],
+      },
+    ],
+    testimonials: [
+      { quote: 'Tienen propiedades en todas las zonas. Nos mostraron opciones en el sur y en el norte hasta que encontramos exactamente lo que buscábamos. Ninguna otra agencia tiene esa cobertura.', client_name: 'David & Anna K.', client_location: 'Estocolmo, Suecia', rating: 5 },
+      { quote: 'Compramos dos apartamentos como inversión en zonas diferentes de la isla. Su equipo nos asesoró sobre las mejores ubicaciones para rentabilidad turística. Resultados excelentes.', client_name: 'Grupo Inversor Baltic', client_location: 'Vilna, Lituania', rating: 5 },
+      { quote: 'Vendimos nuestra casa en Granadilla en 3 semanas. La pusieron en su red de 3 oficinas y tuvieron compradores al instante. El poder de una red grande se nota.', client_name: 'Francisco y Ana M.', client_location: 'Granadilla de Abona', rating: 5 },
+    ],
+    services: [
+      { title: 'Compraventa en Toda la Isla', description: 'Con oficinas en norte, sur y metropolitana, cubrimos toda Tenerife. No importa dónde busques, tenemos un agente especializado en esa zona.', icon: 'building' },
+      { title: 'Inversión Inmobiliaria', description: 'Asesoramiento profesional para inversores: análisis de rentabilidad, gestión de carteras y acceso a oportunidades antes de salir al mercado.', icon: 'briefcase' },
+      { title: 'Gestión Integral de Alquileres', description: 'Gestionamos más de 200 propiedades en alquiler. Vacacional y larga temporada. Inquilinos verificados, cobros garantizados y mantenimiento incluido.', icon: 'users' },
+      { title: 'Red de Colaboración MLS', description: 'Formamos parte de la red MLS más grande de Canarias. Si otro agente tiene un comprador para tu propiedad, lo sabremos.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Sur de Tenerife', description: 'Costa Adeje, Arona, Los Cristianos, Las Américas, San Isidro, Palm-Mar, El Médano. La zona con mayor demanda turística y residencial.', image_url: ZONE_IMAGES[0], property_count: 180 },
+      { name: 'Norte de Tenerife', description: 'Puerto de la Cruz, La Orotava, Icod, Los Realejos. Paisajes espectaculares, mercado en crecimiento y precios más accesibles.', image_url: ZONE_IMAGES[1], property_count: 120 },
+      { name: 'Área Metropolitana', description: 'Santa Cruz y La Laguna. El motor económico de la isla. Oficinas, locales comerciales y vivienda residencial urbana.', image_url: ZONE_IMAGES[2], property_count: 120 },
+    ],
+    team: [
+      { name: 'Director/a General', role: 'Dirección', photo_url: TEAM_PHOTOS[0], bio: 'Fundador de la agencia con 25 años de experiencia en el mercado inmobiliario canario. Visión estratégica y liderazgo.', languages: ['Español', 'Inglés'] },
+      { name: 'Responsable Zona Sur', role: 'Oficina Sur', photo_url: TEAM_PHOTOS[1], bio: 'Especialista en el mercado del sur de Tenerife. 10 años de experiencia, más de 200 operaciones cerradas.', languages: ['Español', 'Inglés', 'Alemán'] },
+      { name: 'Responsable Zona Norte', role: 'Oficina Norte', photo_url: TEAM_PHOTOS[2], bio: 'Experto en el mercado del norte. Conoce cada pueblo, cada finca y cada oportunidad del Valle de la Orotava.', languages: ['Español', 'Inglés', 'Francés'] },
+    ],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'team', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+}
+
+// ─────────────────────────────────────────────
+// REGISTRATION HANDLER
+// ─────────────────────────────────────────────
 export async function POST(request: Request) {
   try {
     const supabaseAdmin = getSupabaseAdmin()
@@ -78,7 +360,6 @@ export async function POST(request: Request) {
     if (!business_name || !email || !password) {
       return NextResponse.json({ error: 'Nombre, email y contraseña son obligatorios' }, { status: 400 })
     }
-
     if (password.length < 6) {
       return NextResponse.json({ error: 'La contraseña debe tener al menos 6 caracteres' }, { status: 400 })
     }
@@ -99,8 +380,10 @@ export async function POST(request: Request) {
     }
 
     const userId = authData.user.id
+    const templateKey = (template as string) in TEMPLATE_CONTENT ? template as string : 'luxury'
+    const content = TEMPLATE_CONTENT[templateKey]
 
-    // 2. Create agent profile with pre-populated bio and stats
+    // 2. Generate slug
     const slug = business_name
       .toLowerCase()
       .normalize('NFD')
@@ -108,7 +391,7 @@ export async function POST(request: Request) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
 
-    const templateKey = template as keyof typeof TEMPLATE_BIO
+    // 3. Create agent profile — FULL DATA from day one
     const profileData: Record<string, any> = {
       id: userId,
       email,
@@ -116,16 +399,15 @@ export async function POST(request: Request) {
       phone: phone || null,
       slug: `${slug}-${userId.slice(0, 6)}`,
       plan: 'starter',
-      template,
+      template: templateKey,
       business_type,
-      bio: TEMPLATE_BIO[templateKey] || TEMPLATE_BIO.luxury,
-      stats: TEMPLATE_STATS[templateKey] || TEMPLATE_STATS.luxury,
+      bio: content.bio,
+      quote: content.quote,
+      stats: content.stats,
       city: zone || 'Tenerife',
+      languages: ['es', 'en'],
     }
-
-    if (zone) {
-      profileData.primary_zone = zone
-    }
+    if (zone) profileData.primary_zone = zone
 
     const { error: profileError } = await supabaseAdmin
       .from('agent_profiles')
@@ -137,36 +419,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Error creando perfil de agente' }, { status: 500 })
     }
 
-    // 3. Pre-populate hero_config with template-appropriate content
-    // The trigger creates hero_config, but we need to UPDATE it with content
-    const heroContent = TEMPLATE_HERO_CONTENT[templateKey] || TEMPLATE_HERO_CONTENT.luxury
-    const { error: heroError } = await supabaseAdmin
-      .from('hero_config')
-      .update({
-        headline: heroContent.headline,
-        subtitle: heroContent.subtitle,
-        cta_text: heroContent.cta_text,
-        cta_link: '#propiedades',
-        overlay_opacity: 0.6,
-      })
-      .eq('agent_id', userId)
-
-    // If trigger didn't create hero_config, insert it
-    if (heroError) {
-      await supabaseAdmin
-        .from('hero_config')
-        .insert({
-          agent_id: userId,
-          headline: heroContent.headline,
-          subtitle: heroContent.subtitle,
-          cta_text: heroContent.cta_text,
-          cta_link: '#propiedades',
-          overlay_opacity: 0.6,
-        })
+    // 4. Hero config — with background image
+    const heroData = {
+      agent_id: userId,
+      headline: content.hero.headline,
+      subtitle: content.hero.subtitle,
+      cta_text: content.hero.cta_text,
+      cta_link: '#propiedades',
+      background_image_url: HERO_IMAGES[templateKey],
+      overlay_opacity: 0.55,
+    }
+    // Try update first (trigger may have created it), then insert
+    const { data: heroUpdate } = await supabaseAdmin
+      .from('hero_config').update(heroData).eq('agent_id', userId).select()
+    if (!heroUpdate || heroUpdate.length === 0) {
+      await supabaseAdmin.from('hero_config').insert(heroData)
     }
 
-    // 4. Activate default sections
-    for (const sectionKey of DEFAULT_ACTIVE_SECTIONS) {
+    // 5. Activate sections per template
+    for (const sectionKey of content.activeSections) {
       await supabaseAdmin
         .from('agent_sections')
         .update({ is_active: true })
@@ -174,21 +445,69 @@ export async function POST(request: Request) {
         .eq('section_key', sectionKey)
     }
 
-    // 5. Insert default services
-    const defaultServices = getDefaultServices(business_name)
-    const serviceInserts = defaultServices.map(s => ({
+    // 6. Insert demo properties
+    const propertyInserts = content.properties.map((p, i) => ({
       agent_id: userId,
-      ...s,
+      title: p.title,
+      slug: p.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + userId.slice(0, 4) + i,
+      description: p.description,
+      property_type: p.property_type,
+      operation_type: p.operation_type,
+      price: p.price,
+      bedrooms: p.bedrooms,
+      bathrooms: p.bathrooms,
+      size_m2: p.size_m2,
+      location: p.location,
+      badge: p.badge,
+      images: p.images,
+      features: p.features,
+      is_active: true,
+      is_featured: i === 0,
+      status: 'published',
+    }))
+    await supabaseAdmin.from('properties').insert(propertyInserts)
+
+    // 7. Insert testimonials
+    const testimonialInserts = content.testimonials.map(t => ({
+      agent_id: userId,
+      quote: t.quote,
+      client_name: t.client_name,
+      client_location: t.client_location,
+      rating: t.rating,
+    }))
+    await supabaseAdmin.from('testimonials').insert(testimonialInserts)
+
+    // 8. Insert services
+    const serviceInserts = content.services.map(s => ({
+      agent_id: userId,
+      title: s.title,
+      description: s.description,
+      icon: s.icon,
     }))
     await supabaseAdmin.from('services').insert(serviceInserts)
 
-    // 6. Insert default zones based on template/business_type
-    const defaultZones = [
-      { agent_id: userId, name: zone || 'Costa Adeje', description: 'Una de las zonas más demandadas del sur de Tenerife, conocida por sus playas y resorts de lujo.', property_count: 0 },
-      { agent_id: userId, name: 'Los Cristianos', description: 'Localidad turística con excelente clima, playas y servicios. Ideal para inversión y residencia.', property_count: 0 },
-      { agent_id: userId, name: 'Playa de las Américas', description: 'Centro turístico por excelencia con gran actividad comercial y de ocio.', property_count: 0 },
-    ]
-    await supabaseAdmin.from('zones').insert(defaultZones)
+    // 9. Insert zones
+    const zoneInserts = content.zones.map(z => ({
+      agent_id: userId,
+      name: z.name,
+      description: z.description,
+      image_url: z.image_url,
+      property_count: z.property_count,
+    }))
+    await supabaseAdmin.from('zones').insert(zoneInserts)
+
+    // 10. Insert team members (if template includes them)
+    if (content.team.length > 0) {
+      const teamInserts = content.team.map(t => ({
+        agent_id: userId,
+        name: t.name,
+        role: t.role,
+        photo_url: t.photo_url,
+        bio: t.bio,
+        languages: t.languages,
+      }))
+      await supabaseAdmin.from('team_members').insert(teamInserts)
+    }
 
     return NextResponse.json({ success: true, userId })
   } catch (err) {

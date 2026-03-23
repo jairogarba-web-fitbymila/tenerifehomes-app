@@ -15,6 +15,7 @@ import {
   Users,
   MapIcon,
   Briefcase,
+  Globe,
 } from 'lucide-react'
 
 interface AgentProfile {
@@ -272,7 +273,7 @@ function PropertiesSection({
 }: {
   properties: Property[]
   colors: any
-  operationType?: 'sale' | 'rent' | 'vacation'
+  operationType?: string
   title?: string
 }) {
   const filtered = operationType
@@ -283,11 +284,11 @@ function PropertiesSection({
 
   const displayTitle =
     title ||
-    (operationType === 'vacation'
+    (operationType === 'rent_vacation'
       ? 'Alquileres Vacacionales'
-      : operationType === 'rent'
+      : operationType === 'rent_long'
         ? 'Alquileres'
-        : 'Venta')
+        : 'Propiedades en Venta')
 
   return (
     <section id="propiedades" className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
@@ -378,20 +379,47 @@ function AboutSection({ agent, colors }: { agent: AgentProfile; colors: any }) {
         <div className="prose max-w-none text-gray-700">
           <p className="text-lg leading-relaxed">{agent.bio}</p>
         </div>
-        {agent.stats && Object.keys(agent.stats).length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
-            {Object.entries(agent.stats).map(([key, value]) => (
-              <div key={key} className="text-center">
-                <div className="text-3xl font-bold" style={{ color: colors.accent }}>
-                  {value}
-                </div>
-                <div className="text-sm text-gray-600 mt-1 capitalize">
-                  {key.replace(/_/g, ' ')}
-                </div>
-              </div>
-            ))}
+        {agent.quote && (
+          <blockquote className="mt-8 text-lg italic text-gray-500 border-l-4 pl-4" style={{ borderColor: colors.accent }}>
+            &ldquo;{agent.quote}&rdquo;
+          </blockquote>
+        )}
+        {agent.languages && agent.languages.length > 0 && (
+          <div className="mt-6 flex items-center gap-2 text-sm text-gray-500">
+            <Globe className="w-4 h-4" />
+            Idiomas: {agent.languages.map(l => {
+              const names: Record<string, string> = { es: 'Español', en: 'English', de: 'Deutsch', fr: 'Français', it: 'Italiano', pt: 'Português', nl: 'Nederlands', ru: 'Русский', sv: 'Svenska', lt: 'Lietuvių' }
+              return names[l] || l
+            }).join(', ')}
           </div>
         )}
+      </div>
+    </section>
+  )
+}
+
+// Stats Section Component (standalone, shown when stats section is active)
+function StatsSection({ agent, colors }: { agent: AgentProfile; colors: any }) {
+  if (!agent.stats || Object.keys(agent.stats).length === 0) return null
+
+  const formatLabel = (key: string) =>
+    key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+
+  return (
+    <section className="py-16" style={{ backgroundColor: colors.primary }}>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+          {Object.entries(agent.stats).map(([key, value]) => (
+            <div key={key} className="text-center">
+              <div className="text-4xl font-bold text-white">
+                {typeof value === 'number' && value > 0 ? (value >= 100 ? `${value}+` : value) : '—'}
+              </div>
+              <div className="text-sm text-white/70 mt-2">
+                {formatLabel(key)}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )
@@ -798,12 +826,12 @@ export default function AgentPublicPage({
   const sectionMap: Record<string, React.ReactNode> = {
     nav: <Navigation agent={agent} colors={colors} />,
     hero: <HeroSection agent={agent} hero={hero} colors={colors} />,
-    properties: <PropertiesSection properties={properties} colors={colors} />,
     properties_sale: <PropertiesSection properties={properties} colors={colors} operationType="sale" title="Propiedades en Venta" />,
-    properties_rent: <PropertiesSection properties={properties} colors={colors} operationType="rent" title="Alquileres" />,
-    properties_vacation: <PropertiesSection properties={properties} colors={colors} operationType="vacation" title="Alquileres Vacacionales" />,
+    properties_rent_long: <PropertiesSection properties={properties} colors={colors} operationType="rent_long" title="Alquileres de Larga Temporada" />,
+    properties_rent_vacation: <PropertiesSection properties={properties} colors={colors} operationType="rent_vacation" title="Alquileres Vacacionales" />,
     about: <AboutSection agent={agent} colors={colors} />,
     team: <TeamSection team={team} colors={colors} />,
+    stats: <StatsSection agent={agent} colors={colors} />,
     testimonials: <TestimonialsSection testimonials={testimonials} colors={colors} />,
     services: <ServicesSection services={services} colors={colors} />,
     zones: <ZonesSection zones={zones} colors={colors} />,

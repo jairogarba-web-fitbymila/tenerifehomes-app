@@ -196,6 +196,13 @@ export default function WebsiteEditorPage() {
         </Link>
       </div>
 
+      {/* Info banner */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg px-5 py-4">
+        <p className="text-sm text-blue-800">
+          <strong>Tu web ya está lista con datos de ejemplo.</strong> Solo tienes que sustituir los textos, fotos y propiedades de ejemplo por los tuyos. Puedes editar todo desde <a href="/dashboard/settings" className="underline font-medium">Ajustes</a> (tu perfil, fotos, bio) y desde aquí (cabecera, secciones).
+        </p>
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card p-5">
@@ -207,7 +214,7 @@ export default function WebsiteEditorPage() {
           <p className="text-2xl font-bold text-gray-900 mt-1 capitalize">{profile.template}</p>
         </div>
         <div className="card p-5">
-          <p className="text-sm text-gray-500">URL</p>
+          <p className="text-sm text-gray-500">URL de tu web</p>
           <p className="text-sm font-medium text-brand-600 mt-2 truncate">/agent/{profile.slug}</p>
         </div>
       </div>
