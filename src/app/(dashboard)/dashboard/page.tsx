@@ -25,7 +25,7 @@ interface RecentProperty {
   id: string
   title: string
   price: number
-  status: string
+  is_active: boolean
   operation_type: string
   created_at: string
 }
@@ -60,10 +60,10 @@ export default function DashboardPage() {
       // Load stats in parallel
       const [propsRes, activeRes, leadsRes, weekLeadsRes, recentPropsRes, recentLeadsRes] = await Promise.all([
         supabase.from('properties').select('id', { count: 'exact', head: true }).eq('agent_id', user.id),
-        supabase.from('properties').select('id', { count: 'exact', head: true }).eq('agent_id', user.id).eq('status', 'published'),
+        supabase.from('properties').select('id', { count: 'exact', head: true }).eq('agent_id', user.id).eq('is_active', true),
         supabase.from('leads').select('id', { count: 'exact', head: true }).eq('agent_id', user.id),
         supabase.from('leads').select('id', { count: 'exact', head: true }).eq('agent_id', user.id).gte('created_at', new Date(Date.now() - 7 * 86400000).toISOString()),
-        supabase.from('properties').select('id, title, price, status, operation_type, created_at').eq('agent_id', user.id).order('created_at', { ascending: false }).limit(5),
+        supabase.from('properties').select('id, title, price, is_active, operation_type, created_at').eq('agent_id', user.id).order('created_at', { ascending: false }).limit(5),
         supabase.from('leads').select('id, name, email, phone, status, created_at').eq('agent_id', user.id).order('created_at', { ascending: false }).limit(5),
       ])
 
@@ -197,8 +197,8 @@ export default function DashboardPage() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2 ml-3">
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusLabels[prop.status]?.color || 'bg-gray-100 text-gray-600'}`}>
-                      {statusLabels[prop.status]?.label || prop.status}
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${prop.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                      {prop.is_active ? 'Activa' : 'Inactiva'}
                     </span>
                     <span className="text-xs text-gray-400 flex items-center gap-1">
                       <Clock className="w-3 h-3" /> {timeAgo(prop.created_at)}

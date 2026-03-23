@@ -6,11 +6,10 @@ import Link from 'next/link'
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
-    name: '',
+    business_name: '',
     email: '',
     password: '',
     phone: '',
-    agency_name: '',
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -62,13 +61,13 @@ export default function RegisterPage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del negocio</label>
               <input
                 type="text"
-                value={form.name}
-                onChange={(e) => update('name', e.target.value)}
+                value={form.business_name}
+                onChange={(e) => update('business_name', e.target.value)}
                 className="input-field"
-                placeholder="Tu nombre"
+                placeholder="Tu nombre o agencia"
                 required
               />
             </div>
@@ -109,18 +108,7 @@ export default function RegisterPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre de agencia <span className="text-gray-400">(opcional)</span></label>
-              <input
-                type="text"
-                value={form.agency_name}
-                onChange={(e) => update('agency_name', e.target.value)}
-                className="input-field"
-                placeholder="Tu agencia"
-              />
-            </div>
-
-            <button type="submit" disabled={loading} className="btn-primary w-full mt-2">
+<button type="submit" disabled={loading} className="btn-primary w-full mt-2">
               {loading ? 'Registrando...' : 'Crear cuenta'}
             </button>
           </form>

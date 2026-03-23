@@ -31,11 +31,12 @@ const navItems = [
 ]
 
 interface AgentData {
-  name: string
+  business_name: string
   email: string
-  agency_name: string | null
   plan: string
   slug: string
+  template: string
+  business_type: string
 }
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -52,8 +53,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       if (!user) return
 
       const { data } = await supabase
-        .from('agents')
-        .select('name, email, agency_name, plan, slug')
+        .from('agent_profiles')
+        .select('business_name, email, plan, slug, template, business_type')
         .eq('id', user.id)
         .single()
 
@@ -138,7 +139,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
                 <div className="flex-1 text-left min-w-0">
                   <div className="text-sm font-medium text-gray-900 truncate">
-                    {agent?.name || 'Cargando...'}
+                    {agent?.business_name || 'Cargando...'}
                   </div>
                   <div className="text-xs text-gray-500 truncate">
                     Plan {agent?.plan || '...'}
@@ -184,7 +185,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="flex items-center gap-3">
               {agent?.slug && (
                 <a
-                  href={`/agent/${agent.slug}`}
+                  href={`/agente/${agent.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-gray-500 hover:text-brand-600 flex items-center gap-1"

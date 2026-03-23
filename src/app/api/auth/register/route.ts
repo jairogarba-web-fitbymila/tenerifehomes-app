@@ -8,9 +8,9 @@ const supabaseAdmin = createClient(
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password, phone, agency_name } = await request.json()
+    const { business_name, email, password, phone } = await request.json()
 
-    if (!name || !email || !password) {
+    if (!business_name || !email || !password) {
       return NextResponse.json({ error: 'Nombre, email y contraseña son obligatorios' }, { status: 400 })
     }
 
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       email,
       password,
       email_confirm: true,
-      user_metadata: { name, phone },
+      user_metadata: { business_name, phone },
     })
 
     if (authError) {
@@ -35,33 +35,31 @@ export async function POST(request: Request) {
 
     const userId = authData.user.id
 
-    // 2. Create agent profile
-    const slug = name
+    // 2. Create agent profile (triggers auto-create 27 sections + hero_config)
+    const slug = business_name
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
 
-    const { error: agentError } = await supabaseAdmin
-      .from('agents')
+    const { error: profileError } = await supabaseAdmin
+      .from('agent_profiles')
       .insert({
         id: userId,
         email,
-        name,
+        business_name,
         phone: phone || null,
         slug: `${slug}-${userId.slice(0, 6)}`,
-        role: 'agent',
-        plan: 'free',
-        status: 'active',
-        agency_name: agency_name || null,
-        preferred_lang: 'es',
-        template_id: 'atlantic',
+        plan: 'starter',
+        template: 'luxury',
+        business_type: 'individual',
       })
 
-    if (agentError) {
+    if (profileError) {
       // Rollback: delete the auth user if profile creation fails
       await supabaseAdmin.auth.admin.deleteUser(userId)
+      console.error('Profile creation error:', profileError)
       return NextResponse.json({ error: 'Error creando perfil de agente' }, { status: 500 })
     }
 
