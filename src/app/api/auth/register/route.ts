@@ -463,9 +463,9 @@ export async function POST(request: Request) {
       features: p.features,
       is_active: true,
       is_featured: i === 0,
-      status: 'published',
     }))
-    await supabaseAdmin.from('properties').insert(propertyInserts)
+    const { error: propError } = await supabaseAdmin.from('properties').insert(propertyInserts)
+    if (propError) console.error('Properties insert error:', propError)
 
     // 7. Insert testimonials
     const testimonialInserts = content.testimonials.map(t => ({
