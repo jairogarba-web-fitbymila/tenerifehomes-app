@@ -99,7 +99,7 @@ export default function SearchPage() {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-brand-600 font-display text-xl font-bold">TenerifeHomes</Link>
+          <Link href="/" className="text-brand-600 font-display text-xl font-bold">HabiBook</Link>
           <div className="flex items-center gap-3">
             <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900">Iniciar sesion</Link>
             <Link href="/register" className="btn-primary text-sm">Registrar agente</Link>

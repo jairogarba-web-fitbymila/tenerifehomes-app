@@ -2,8 +2,8 @@ import Link from 'next/link'
 import Footer from '@/components/Footer'
 
 export const metadata = {
-  title: 'Términos y Condiciones | TenerifeHomes',
-  description: 'Términos y condiciones de uso de la plataforma TenerifeHomes',
+  title: 'Términos y Condiciones | HabiBook',
+  description: 'Términos y condiciones de uso de la plataforma HabiBook',
 }
 
 export default function TerminosPage() {
@@ -22,7 +22,7 @@ export default function TerminosPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">1. Introducción y Aceptación de Términos</h2>
             <p className="text-gray-700 mb-4">
-              Bienvenido a TenerifeHomes. Al registrarse, acceder y utilizar esta plataforma inmobiliaria, usted acepta estar sujeto a estos Términos y Condiciones, así como a todas nuestras políticas incluida la Política de Privacidad.
+              Bienvenido a HabiBook. Al registrarse, acceder y utilizar esta plataforma inmobiliaria, usted acepta estar sujeto a estos Términos y Condiciones, así como a todas nuestras políticas incluida la Política de Privacidad.
             </p>
             <p className="text-gray-700 mb-4">
               Si no está de acuerdo con cualquier parte de estos términos, le recomendamos que no utilice nuestra plataforma. El uso continuado implica aceptación completa.
@@ -35,11 +35,11 @@ export default function TerminosPage() {
               Para propósitos de estos términos:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
-              <li><strong>"Plataforma"</strong> - El sitio web y la aplicación de TenerifeHomes</li>
+              <li><strong>"Plataforma"</strong> - El sitio web y la aplicación de HabiBook</li>
               <li><strong>"Usuario" o "Agente"</strong> - Usted, como agente o agencia inmobiliaria registrado</li>
               <li><strong>"Contenido"</strong> - Textos, imágenes, videos, anuncios de propiedades publicados en la plataforma</li>
-              <li><strong>"Servicios"</strong> - Los servicios ofrecidos por TenerifeHomes incluyendo alojamiento de propiedades, CRM, portales</li>
-              <li><strong>"TenerifeHomes"</strong> - La plataforma inmobiliaria y su operador</li>
+              <li><strong>"Servicios"</strong> - Los servicios ofrecidos por HabiBook incluyendo alojamiento de propiedades, CRM, portales</li>
+              <li><strong>"HabiBook"</strong> - La plataforma inmobiliaria y su operador</li>
             </ul>
           </section>
 
@@ -69,14 +69,14 @@ export default function TerminosPage() {
               <li>Aceptar estos términos y condiciones</li>
             </ol>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes se reserva el derecho de rechazar registros que no cumplan con los requisitos.
+              HabiBook se reserva el derecho de rechazar registros que no cumplan con los requisitos.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">5. Responsabilidades del Usuario/Agente</h2>
             <p className="text-gray-700 mb-4">
-              Como usuario de TenerifeHomes, usted es responsable de:
+              Como usuario de HabiBook, usted es responsable de:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Mantener su cuenta activa con información actualizada</li>
@@ -112,16 +112,16 @@ export default function TerminosPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">7. Contenido y Propiedad Intelectual</h2>
             <p className="text-gray-700 mb-4">
-              Al publicar contenido en TenerifeHomes:
+              Al publicar contenido en HabiBook:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Garantiza que es propietario o tiene licencia para usar ese contenido</li>
-              <li>Otorga a TenerifeHomes una licencia global para mostrar, distribuir y promocionar el contenido</li>
+              <li>Otorga a HabiBook una licencia global para mostrar, distribuir y promocionar el contenido</li>
               <li>Declara que el contenido no viola derechos de terceros</li>
               <li>Es responsable de cualquier reclamación por infracción de derechos</li>
             </ul>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes no es propietario del contenido que publica, pero puede utilizarlo para mejorar la plataforma.
+              HabiBook no es propietario del contenido que publica, pero puede utilizarlo para mejorar la plataforma.
             </p>
           </section>
 
@@ -167,7 +167,7 @@ export default function TerminosPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">11. Garantía Limitada</h2>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes proporciona la plataforma "tal cual":
+              HabiBook proporciona la plataforma "tal cual":
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Sin garantías explícitas o implícitas de disponibilidad continua</li>
@@ -180,7 +180,7 @@ export default function TerminosPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">12. Limitación de Responsabilidad</h2>
             <p className="text-gray-700 mb-4">
-              En ningún caso TenerifeHomes será responsable de:
+              En ningún caso HabiBook será responsable de:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Daños directos, indirectos, incidentales o consecuentes</li>
@@ -190,14 +190,14 @@ export default function TerminosPage() {
               <li>Violaciones de seguridad o acceso no autorizado</li>
             </ul>
             <p className="text-gray-700 mb-4">
-              La responsabilidad total de TenerifeHomes no excederá el monto total pagado en los últimos 12 meses.
+              La responsabilidad total de HabiBook no excederá el monto total pagado en los últimos 12 meses.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">13. Suspensión y Terminación de Cuenta</h2>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes puede suspender o terminar su cuenta si:
+              HabiBook puede suspender o terminar su cuenta si:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Viola estos términos y condiciones</li>
@@ -214,7 +214,7 @@ export default function TerminosPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">14. Modificación de Términos</h2>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes se reserva el derecho de:
+              HabiBook se reserva el derecho de:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Modificar estos términos en cualquier momento</li>
@@ -227,10 +227,10 @@ export default function TerminosPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">15. Soporte Técnico</h2>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes proporciona soporte técnico:
+              HabiBook proporciona soporte técnico:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
-              <li>Por correo electrónico: info@tenerifehomes.com</li>
+              <li>Por correo electrónico: info@habibook.com</li>
               <li>Tiempo de respuesta: dentro de 48 horas hábiles</li>
               <li>Disponible para usuarios de planes pagados</li>
             </ul>
@@ -249,7 +249,7 @@ export default function TerminosPage() {
               Ante cualquier controversia:
             </p>
             <ol className="list-decimal pl-6 space-y-2 text-gray-700 mb-4">
-              <li>Intente resolver el conflicto directamente con TenerifeHomes por email</li>
+              <li>Intente resolver el conflicto directamente con HabiBook por email</li>
               <li>Si no se resuelve en 30 días, puede solicitar mediación</li>
               <li>Como último recurso, puede acudir a los tribunales competentes</li>
             </ol>
@@ -268,7 +268,7 @@ export default function TerminosPage() {
               Para consultas sobre estos términos:
             </p>
             <p className="text-gray-700 mb-4">
-              <strong>Email:</strong> info@tenerifehomes.com<br />
+              <strong>Email:</strong> info@habibook.com<br />
               <strong>Ubicación:</strong> Tenerife, Islas Canarias, España
             </p>
           </section>

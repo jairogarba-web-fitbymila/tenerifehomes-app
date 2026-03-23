@@ -2,8 +2,8 @@ import Link from 'next/link'
 import Footer from '@/components/Footer'
 
 export const metadata = {
-  title: 'Aviso Legal | TenerifeHomes',
-  description: 'Aviso legal e información de identificación de TenerifeHomes',
+  title: 'Aviso Legal | HabiBook',
+  description: 'Aviso legal e información de identificación de HabiBook',
 }
 
 export default function AvisoLegalPage() {
@@ -25,9 +25,9 @@ export default function AvisoLegalPage() {
               Conforme a lo dispuesto en la Ley 34/1988, de 11 de noviembre, sobre publicidad y responsabilidad en la comunicación comercial, se facilitan a continuación los siguientes datos de identificación:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
-              <li><strong>Denominación Social:</strong> TenerifeHomes</li>
+              <li><strong>Denominación Social:</strong> HabiBook</li>
               <li><strong>Ubicación:</strong> Tenerife, Islas Canarias, España</li>
-              <li><strong>Correo Electrónico de Contacto:</strong> info@tenerifehomes.com</li>
+              <li><strong>Correo Electrónico de Contacto:</strong> info@habibook.com</li>
               <li><strong>Descripción del Servicio:</strong> Plataforma inmobiliaria integral para agentes y agencias en Canarias</li>
             </ul>
           </section>
@@ -38,7 +38,7 @@ export default function AvisoLegalPage() {
               Todos los contenidos de este sitio web, incluyendo pero no limitado a textos, imágenes, gráficos, logos, iconos, código HTML, CSS y JavaScript, están protegidos por las leyes de propiedad intelectual y derechos de autor.
             </p>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes es titular de todos los derechos de propiedad intelectual sobre los contenidos de este sitio web, salvo aquellos que hayan sido cedidos por terceros. Se prohíbe expresamente:
+              HabiBook es titular de todos los derechos de propiedad intelectual sobre los contenidos de este sitio web, salvo aquellos que hayan sido cedidos por terceros. Se prohíbe expresamente:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Reproducir, copiar, distribuir o transmitir contenidos sin autorización explícita</li>
@@ -51,7 +51,7 @@ export default function AvisoLegalPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">3. Condiciones de Uso</h2>
             <p className="text-gray-700 mb-4">
-              El acceso y uso de este sitio web implica la aceptación de estos términos y condiciones. TenerifeHomes se reserva el derecho de modificar estos términos en cualquier momento. Se recomienda revisar periódicamente esta página para verificar cambios.
+              El acceso y uso de este sitio web implica la aceptación de estos términos y condiciones. HabiBook se reserva el derecho de modificar estos términos en cualquier momento. Se recomienda revisar periódicamente esta página para verificar cambios.
             </p>
             <p className="text-gray-700 mb-4">
               El usuario se compromete a utilizar este sitio web de conformidad con las leyes aplicables y se abstiene de:
@@ -67,7 +67,7 @@ export default function AvisoLegalPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">4. Responsabilidad Civil</h2>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes no será responsable por:
+              HabiBook no será responsable por:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Daños directos o indirectos causados por el acceso o uso del sitio web</li>
@@ -76,14 +76,14 @@ export default function AvisoLegalPage() {
               <li>Contenidos alojados por terceros en el sitio web</li>
             </ul>
             <p className="text-gray-700 mb-4">
-              En ningún caso la responsabilidad de TenerifeHomes superará el importe de los pagos realizados por el usuario en los últimos 12 meses.
+              En ningún caso la responsabilidad de HabiBook superará el importe de los pagos realizados por el usuario en los últimos 12 meses.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">5. Exención de Garantías</h2>
             <p className="text-gray-700 mb-4">
-              Este sitio web se proporciona "tal cual" sin garantías de ningún tipo, ya sean explícitas o implícitas. TenerifeHomes no garantiza:
+              Este sitio web se proporciona "tal cual" sin garantías de ningún tipo, ya sean explícitas o implícitas. HabiBook no garantiza:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Que el servicio cumplirá con requisitos específicos</li>
@@ -96,7 +96,7 @@ export default function AvisoLegalPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">6. Enlaces Externos</h2>
             <p className="text-gray-700 mb-4">
-              Este sitio web puede contener enlaces a sitios web de terceros. TenerifeHomes no es responsable del contenido, precisión, legalidad o cualquier otro aspecto de estos sitios externos. La inclusión de un enlace no implica aprobación o asociación con el sitio vinculado.
+              Este sitio web puede contener enlaces a sitios web de terceros. HabiBook no es responsable del contenido, precisión, legalidad o cualquier otro aspecto de estos sitios externos. La inclusión de un enlace no implica aprobación o asociación con el sitio vinculado.
             </p>
           </section>
 
@@ -120,7 +120,7 @@ export default function AvisoLegalPage() {
               Para cualquier consulta relativa a este aviso legal, puede contactar a:
             </p>
             <p className="text-gray-700">
-              <strong>Email:</strong> info@tenerifehomes.com
+              <strong>Email:</strong> info@habibook.com
             </p>
           </section>
 

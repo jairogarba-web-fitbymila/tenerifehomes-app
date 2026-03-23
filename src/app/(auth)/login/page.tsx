@@ -40,7 +40,7 @@ function LoginForm() {
       {/* Left — Form */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
-          <Link href="/" className="text-brand-600 font-display text-2xl font-bold">TenerifeHomes</Link>
+          <Link href="/" className="text-brand-600 font-display text-2xl font-bold">HabiBook</Link>
           <h1 className="mt-8 text-3xl font-bold text-gray-900">Bienvenido de vuelta</h1>
           <p className="mt-2 text-gray-500">Accede a tu panel de agente</p>
 

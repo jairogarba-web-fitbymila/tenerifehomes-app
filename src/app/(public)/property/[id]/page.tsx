@@ -57,7 +57,7 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
           <Link href={`/agent/${agent.slug}`} className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm">
             <ArrowLeft className="w-4 h-4" /> Volver al agente
           </Link>
-          <span className="text-brand-600 font-display font-bold text-lg">TenerifeHomes</span>
+          <span className="text-brand-600 font-display font-bold text-lg">HabiBook</span>
         </div>
       </header>
 
@@ -247,7 +247,7 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white/60 text-sm text-center py-6 mt-12">
-        <p>Powered by <span className="text-white font-medium">TenerifeHomes</span></p>
+        <p>Powered by <span className="text-white font-medium">HabiBook</span></p>
       </footer>
     </div>
   )

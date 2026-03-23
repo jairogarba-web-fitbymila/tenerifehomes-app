@@ -742,7 +742,7 @@ function Footer({ colors }: { colors: any }) {
   return (
     <footer className="text-white text-sm text-center py-6" style={{ backgroundColor: colors.primary }}>
       <p>
-        Powered by <span className="font-medium">TenerifeHomes</span>
+        Powered by <span className="font-medium">HabiBook</span>
       </p>
     </footer>
   )

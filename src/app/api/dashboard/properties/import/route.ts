@@ -22,7 +22,7 @@ export async function GET() {
   return new NextResponse(csv, {
     headers: {
       'Content-Type': 'text/csv',
-      'Content-Disposition': 'attachment; filename=plantilla-propiedades-tenerifehomes.csv',
+      'Content-Disposition': 'attachment; filename=plantilla-propiedades-habibook.csv',
     },
   })
 }

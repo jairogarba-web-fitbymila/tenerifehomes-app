@@ -2,8 +2,8 @@ import Link from 'next/link'
 import Footer from '@/components/Footer'
 
 export const metadata = {
-  title: 'Política de Cookies | TenerifeHomes',
-  description: 'Información sobre el uso de cookies en TenerifeHomes',
+  title: 'Política de Cookies | HabiBook',
+  description: 'Información sobre el uso de cookies en HabiBook',
 }
 
 export default function CookiesPage() {
@@ -29,7 +29,7 @@ export default function CookiesPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">2. Tipos de Cookies que Utilizamos</h2>
             <p className="text-gray-700 mb-4">
-              En TenerifeHomes utilizamos diferentes tipos de cookies:
+              En HabiBook utilizamos diferentes tipos de cookies:
             </p>
 
             <h3 className="text-xl font-semibold mb-3">2.1 Cookies Técnicas o Necesarias</h3>
@@ -172,7 +172,7 @@ export default function CookiesPage() {
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>A través del banner de consentimiento (si vuelve a aparecer)</li>
               <li>En la sección de "Preferencias de Cookies" de la plataforma</li>
-              <li>Contactando a info@tenerifehomes.com</li>
+              <li>Contactando a info@habibook.com</li>
             </ul>
           </section>
 
@@ -193,7 +193,7 @@ export default function CookiesPage() {
               Si tiene preguntas sobre nuestra política de cookies, puede contactarnos:
             </p>
             <p className="text-gray-700">
-              <strong>Email:</strong> info@tenerifehomes.com
+              <strong>Email:</strong> info@habibook.com
             </p>
           </section>
 

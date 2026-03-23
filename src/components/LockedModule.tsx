@@ -29,7 +29,7 @@ export function LockedModule({
             Este módulo está desactivado. Por favor, contacta con soporte para más información.
           </p>
           <a
-            href="mailto:soporte@tenerifehomes.com"
+            href="mailto:soporte@habibook.com"
             className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Contactar Soporte

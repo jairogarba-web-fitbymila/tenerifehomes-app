@@ -93,7 +93,7 @@ export default function RegisterPage() {
       <div className="flex-1 flex items-center justify-center p-6 sm:p-8">
         <div className="w-full max-w-lg">
           <Link href="/" className="text-brand-600 font-display text-2xl font-bold">
-            TenerifeHomes
+            HabiBook
           </Link>
 
           {step === 1 ? (

@@ -2,8 +2,8 @@ import Link from 'next/link'
 import Footer from '@/components/Footer'
 
 export const metadata = {
-  title: 'Política de Privacidad | TenerifeHomes',
-  description: 'Política de privacidad y tratamiento de datos de TenerifeHomes',
+  title: 'Política de Privacidad | HabiBook',
+  description: 'Política de privacidad y tratamiento de datos de HabiBook',
 }
 
 export default function PrivacidadPage() {
@@ -22,20 +22,20 @@ export default function PrivacidadPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">1. Responsable del Tratamiento de Datos</h2>
             <p className="text-gray-700 mb-4">
-              <strong>Entidad:</strong> TenerifeHomes
+              <strong>Entidad:</strong> HabiBook
             </p>
             <p className="text-gray-700 mb-4">
               <strong>Ubicación:</strong> Tenerife, Islas Canarias, España
             </p>
             <p className="text-gray-700">
-              <strong>Email de contacto:</strong> info@tenerifehomes.com
+              <strong>Email de contacto:</strong> info@habibook.com
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">2. Cumplimiento RGPD</h2>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes cumple en todo momento con el Reglamento (UE) 2016/679, Reglamento General de Protección de Datos (RGPD), así como con la Ley Orgánica 3/2018, de 5 de diciembre (LOPDGDD) y demás normativa vigente en materia de protección de datos personales.
+              HabiBook cumple en todo momento con el Reglamento (UE) 2016/679, Reglamento General de Protección de Datos (RGPD), así como con la Ley Orgánica 3/2018, de 5 de diciembre (LOPDGDD) y demás normativa vigente en materia de protección de datos personales.
             </p>
           </section>
 
@@ -140,7 +140,7 @@ export default function PrivacidadPage() {
               Para ejercer cualquiera de los derechos anteriores, puede enviar una solicitud escrita a:
             </p>
             <p className="text-gray-700 mb-4">
-              <strong>Email:</strong> info@tenerifehomes.com
+              <strong>Email:</strong> info@habibook.com
             </p>
             <p className="text-gray-700 mb-4">
               Responderemos a su solicitud en un plazo máximo de 30 días hábiles desde su recepción.
@@ -161,7 +161,7 @@ export default function PrivacidadPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">12. Medidas de Seguridad</h2>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes implementa medidas técnicas y organizativas para proteger sus datos personales contra acceso no autorizado, alteración, divulgación o destrucción, incluyendo:
+              HabiBook implementa medidas técnicas y organizativas para proteger sus datos personales contra acceso no autorizado, alteración, divulgación o destrucción, incluyendo:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
               <li>Encriptación de datos en tránsito y en reposo</li>
@@ -182,7 +182,7 @@ export default function PrivacidadPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-bold mb-4">14. Cambios en la Política</h2>
             <p className="text-gray-700 mb-4">
-              TenerifeHomes se reserva el derecho de modificar esta política en cualquier momento. Los cambios significativos se comunicarán por email o mediante notificación en el sitio web. El uso continuado del sitio implica aceptación de los cambios.
+              HabiBook se reserva el derecho de modificar esta política en cualquier momento. Los cambios significativos se comunicarán por email o mediante notificación en el sitio web. El uso continuado del sitio implica aceptación de los cambios.
             </p>
           </section>
 

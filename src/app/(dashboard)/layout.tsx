@@ -148,7 +148,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Logo */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
             <Link href="/dashboard" className="text-brand-600 font-display text-xl font-bold">
-              TenerifeHomes
+              HabiBook
             </Link>
             <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-400 hover:text-gray-600">
               <X className="w-5 h-5" />
