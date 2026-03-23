@@ -17,12 +17,15 @@ import {
   ChevronRight,
 } from 'lucide-react'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+}
 
 async function getProperty(id: string) {
+  const supabase = getSupabase()
   const { data } = await supabase
     .from('properties')
     .select(`

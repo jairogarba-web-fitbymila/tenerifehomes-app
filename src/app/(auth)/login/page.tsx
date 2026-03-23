@@ -13,6 +13,7 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') || '/dashboard'
+  const registered = searchParams.get('registered') === 'true'
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -44,6 +45,11 @@ function LoginForm() {
           <p className="mt-2 text-gray-500">Accede a tu panel de agente</p>
 
           <form onSubmit={handleLogin} className="mt-8 space-y-5">
+            {registered && (
+              <div className="bg-green-50 text-green-700 px-4 py-3 rounded-lg text-sm border border-green-200">
+                ✓ Cuenta creada con éxito. Tu web está lista.
+              </div>
+            )}
             {error && (
               <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>
             )}
@@ -78,6 +84,17 @@ function LoginForm() {
             ¿No tienes cuenta?{' '}
             <Link href="/register" className="text-brand-600 font-medium hover:underline">
               Registrate como agente
+            </Link>
+          </p>
+
+          <p className="mt-8 text-center text-xs text-gray-400">
+            Al iniciar sesión aceptas los{' '}
+            <Link href="/legal/terminos" className="text-brand-600 hover:underline">
+              Términos y Condiciones
+            </Link>
+            {' '}y la{' '}
+            <Link href="/legal/privacidad" className="text-brand-600 hover:underline">
+              Política de Privacidad
             </Link>
           </p>
         </div>

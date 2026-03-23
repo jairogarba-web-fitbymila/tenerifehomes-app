@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import Footer from '@/components/Footer';
 
 export const dynamic = 'force-dynamic';
 
@@ -635,34 +636,6 @@ export default function HomePage() {
           margin: 0 auto 2rem;
         }
 
-        footer {
-          border-top: 1px solid rgba(255, 255, 255, 0.06);
-          padding: 2rem 3rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .f-logo {
-          font-family: var(--serif);
-          font-size: 1.1rem;
-        }
-        .f-logo span {
-          color: var(--gold);
-        }
-        .f-links {
-          display: flex;
-          gap: 1.5rem;
-        }
-        .f-links a {
-          font-size: 0.8rem;
-          color: var(--text-light);
-          text-decoration: none;
-        }
-        .f-copy {
-          font-size: 0.7rem;
-          color: rgba(255, 255, 255, 0.3);
-        }
-
         @media (max-width: 1024px) {
           .frame {
             grid-template-columns: 1fr;
@@ -715,11 +688,6 @@ export default function HomePage() {
           }
           .final-cta h2 {
             font-size: 2.2rem;
-          }
-          footer {
-            flex-direction: column;
-            gap: 1rem;
-            text-align: center;
           }
         }
       `}</style>
@@ -1228,17 +1196,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer>
-        <div className="f-logo">
-          Tenerife<span>Homes</span>
-        </div>
-        <div className="f-links">
-          <a href="#">Funcionalidades</a>
-          <a href="#">Precios</a>
-          <a href="#">Contacto</a>
-        </div>
-        <div className="f-copy">© 2026 TenerifeHomes</div>
-      </footer>
+      <Footer />
     </>
   );
 }
