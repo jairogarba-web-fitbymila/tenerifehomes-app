@@ -23,7 +23,8 @@ interface Property {
   id: string
   title: string
   price: number
-  status: string
+  is_active: boolean
+  is_featured: boolean
   operation_type: string
   property_type: string
   bedrooms: number | null
@@ -31,6 +32,7 @@ interface Property {
   size_m2: number | null
   location: string | null
   images: string[] | null
+  badge: string | null
   created_at: string
   updated_at: string
 }
@@ -43,21 +45,9 @@ interface ModuleResponse {
 
 const statusOptions = [
   { value: '', label: 'Todos los estados' },
-  { value: 'published', label: 'Publicadas' },
+  { value: 'active', label: 'Activas' },
   { value: 'draft', label: 'Borradores' },
-  { value: 'reserved', label: 'Reservadas' },
-  { value: 'sold', label: 'Vendidas' },
-  { value: 'rented', label: 'Alquiladas' },
 ]
-
-const statusStyles: Record<string, { label: string; color: string }> = {
-  published: { label: 'Publicada', color: 'bg-green-100 text-green-700' },
-  draft: { label: 'Borrador', color: 'bg-gray-100 text-gray-600' },
-  reserved: { label: 'Reservada', color: 'bg-amber-100 text-amber-700' },
-  sold: { label: 'Vendida', color: 'bg-blue-100 text-blue-700' },
-  rented: { label: 'Alquilada', color: 'bg-blue-100 text-blue-700' },
-  archived: { label: 'Archivada', color: 'bg-red-100 text-red-600' },
-}
 
 const tabOptions = [
   { id: 'sale', label: 'Venta', moduleId: 'properties_sale' },
@@ -119,23 +109,19 @@ export default function PropertiesPage() {
 
     let query = supabase
       .from('properties')
-      .select('id, title, price, status, operation_type, property_type, bedrooms, bathrooms, size_m2, location, images, created_at, updated_at')
+      .select('id, title, price, is_active, is_featured, operation_type, property_type, bedrooms, bathrooms, size_m2, location, images, badge, created_at, updated_at')
       .eq('agent_id', user.id)
       .order('updated_at', { ascending: false })
 
     // Filter by operation type based on active tab
-    const operationTypeMap: Record<string, string> = {
-      'sale': 'sale',
-      'rent_long': 'rent_long',
-      'rent_vacation': 'rent_vacation',
+    if (activeTab === 'sale' || activeTab === 'rent_long' || activeTab === 'rent_vacation') {
+      query = query.eq('operation_type', activeTab)
     }
 
-    if (activeTab in operationTypeMap) {
-      query = query.eq('operation_type', operationTypeMap[activeTab])
-    }
-
-    if (statusFilter) {
-      query = query.eq('status', statusFilter)
+    if (statusFilter === 'active') {
+      query = query.eq('is_active', true)
+    } else if (statusFilter === 'draft') {
+      query = query.eq('is_active', false)
     }
 
     const { data } = await query
@@ -320,9 +306,16 @@ export default function PropertiesPage() {
                       </div>
                     </td>
                     <td className="px-5 py-3">
-                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusStyles[prop.status]?.color || 'bg-gray-100 text-gray-600'}`}>
-                        {statusStyles[prop.status]?.label || prop.status}
+                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                        prop.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {prop.is_active ? 'Activa' : 'Borrador'}
                       </span>
+                      {prop.badge && (
+                        <span className="ml-1 text-xs px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 font-medium capitalize">
+                          {prop.badge}
+                        </span>
+                      )}
                     </td>
                     <td className="px-5 py-3 relative">
                       <button onClick={() => setMenuOpen(menuOpen === prop.id ? null : prop.id)} className="p-1 hover:bg-gray-100 rounded">

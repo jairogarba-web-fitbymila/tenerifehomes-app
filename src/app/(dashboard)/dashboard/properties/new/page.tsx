@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -10,35 +10,32 @@ import {
   X,
   Loader2,
   ImagePlus,
+  Check,
 } from 'lucide-react'
-
-interface Region {
-  slug: string
-  name: string
-}
 
 const propertyTypes = [
   { value: 'apartment', label: 'Apartamento' },
-  { value: 'house', label: 'Casa / Chalet' },
   { value: 'villa', label: 'Villa' },
   { value: 'penthouse', label: 'Ático' },
-  { value: 'studio', label: 'Estudio' },
-  { value: 'duplex', label: 'Dúplex' },
   { value: 'townhouse', label: 'Adosado' },
-  { value: 'finca', label: 'Finca rústica' },
   { value: 'commercial', label: 'Local comercial' },
   { value: 'land', label: 'Terreno' },
-  { value: 'garage', label: 'Garaje' },
-  { value: 'storage', label: 'Trastero' },
-  { value: 'office', label: 'Oficina' },
-  { value: 'building', label: 'Edificio' },
+  { value: 'finca', label: 'Finca rústica' },
 ]
 
 const operationTypes = [
   { value: 'sale', label: 'Venta' },
-  { value: 'rent', label: 'Alquiler' },
-  { value: 'rent_to_buy', label: 'Alquiler con opción a compra' },
-  { value: 'transfer', label: 'Traspaso' },
+  { value: 'rent_long', label: 'Alquiler larga temporada' },
+  { value: 'rent_vacation', label: 'Alquiler vacacional' },
+]
+
+const badgeOptions = [
+  { value: '', label: 'Sin badge' },
+  { value: 'exclusive', label: 'Exclusiva' },
+  { value: 'new', label: 'Nueva' },
+  { value: 'reduced', label: 'Rebajada' },
+  { value: 'featured', label: 'Destacada' },
+  { value: 'investment', label: 'Inversión' },
 ]
 
 const featuresList = [
@@ -48,12 +45,23 @@ const featuresList = [
   'Seguridad 24h', 'Gimnasio', 'Zona infantil', 'Barbacoa',
 ]
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .slice(0, 100)
+}
+
 export default function NewPropertyPage() {
   const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState(false)
-  const [regions, setRegions] = useState<Region[]>([])
-  const [images, setImages] = useState<File[]>([])
-  const [imagePreviews, setImagePreviews] = useState<string[]>([])
+  const [uploading, setUploading] = useState(false)
+  const [images, setImages] = useState<string[]>([])
+  const [imageUrlInput, setImageUrlInput] = useState('')
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
 
   const [form, setForm] = useState({
@@ -62,67 +70,67 @@ export default function NewPropertyPage() {
     property_type: 'apartment',
     operation_type: 'sale',
     price: '',
-    price_period: 'total',
-    region_slug: '',
-    city: '',
-    address: '',
-    postal_code: '',
-    latitude: '',
-    longitude: '',
+    location: '',
     bedrooms: '',
     bathrooms: '',
-    area_built: '',
-    area_plot: '',
-    floor: '',
-    year_built: '',
-    energy_rating: '',
-    status: 'draft',
+    size_m2: '',
+    badge: '',
   })
 
-  useEffect(() => {
-    async function loadRegions() {
-      const supabase = createClient()
-      const { data } = await supabase
-        .from('regions')
-        .select('slug, name')
-        .eq('is_active', true)
-        .order('name')
-      if (data) setRegions(data)
-    }
-    loadRegions()
-  }, [])
-
   function update(field: string, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }))
-  }
-
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files || [])
-    if (images.length + files.length > 30) {
-      alert('Máximo 30 imágenes por propiedad')
-      return
-    }
-    setImages((prev) => [...prev, ...files])
-    const newPreviews = files.map((f) => URL.createObjectURL(f))
-    setImagePreviews((prev) => [...prev, ...newPreviews])
-  }
-
-  function removeImage(index: number) {
-    setImages((prev) => prev.filter((_, i) => i !== index))
-    setImagePreviews((prev) => {
-      URL.revokeObjectURL(prev[index])
-      return prev.filter((_, i) => i !== index)
-    })
+    setForm(prev => ({ ...prev, [field]: value }))
   }
 
   function toggleFeature(feature: string) {
-    setSelectedFeatures((prev) =>
-      prev.includes(feature) ? prev.filter((f) => f !== feature) : [...prev, feature]
+    setSelectedFeatures(prev =>
+      prev.includes(feature) ? prev.filter(f => f !== feature) : [...prev, feature]
     )
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || [])
+    if (files.length === 0) return
+    setUploading(true)
+
+    for (const file of files) {
+      if (images.length >= 20) break
+
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('field_type', 'property')
+
+      try {
+        const res = await fetch('/api/dashboard/upload', { method: 'POST', body: formData })
+        const result = await res.json()
+        if (result.url) {
+          setImages(prev => [...prev, result.url])
+        }
+      } catch (err) {
+        console.error('Upload error:', err)
+      }
+    }
+
+    setUploading(false)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  function addImageUrl() {
+    const url = imageUrlInput.trim()
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      setImages(prev => [...prev, url])
+      setImageUrlInput('')
+    }
+  }
+
+  function removeImage(index: number) {
+    setImages(prev => prev.filter((_, i) => i !== index))
+  }
+
+  async function handleSubmit(isActive: boolean) {
+    if (!form.title.trim()) {
+      alert('El título es obligatorio')
+      return
+    }
     setLoading(true)
 
     try {
@@ -130,54 +138,32 @@ export default function NewPropertyPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('No autenticado')
 
-      // Upload images
-      const imageUrls: string[] = []
-      for (const img of images) {
-        const ext = img.name.split('.').pop()
-        const path = `${user.id}/${crypto.randomUUID()}.${ext}`
-        const { error: uploadError } = await supabase.storage
-          .from('property-images')
-          .upload(path, img, { cacheControl: '31536000' })
-        if (!uploadError) {
-          const { data: urlData } = supabase.storage.from('property-images').getPublicUrl(path)
-          imageUrls.push(urlData.publicUrl)
-        }
-      }
+      const slug = slugify(form.title) + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5)
 
-      // Create property
       const { data: property, error } = await supabase
         .from('properties')
         .insert({
           agent_id: user.id,
-          title: form.title,
+          title: form.title.trim(),
+          slug,
           description: form.description || null,
           property_type: form.property_type,
           operation_type: form.operation_type,
           price: parseFloat(form.price) || 0,
-          price_period: form.operation_type === 'rent' ? 'month' : 'total',
-          region_slug: form.region_slug || null,
-          city: form.city || null,
-          address: form.address || null,
-          postal_code: form.postal_code || null,
-          latitude: form.latitude ? parseFloat(form.latitude) : null,
-          longitude: form.longitude ? parseFloat(form.longitude) : null,
+          location: form.location || null,
           bedrooms: form.bedrooms ? parseInt(form.bedrooms) : null,
           bathrooms: form.bathrooms ? parseInt(form.bathrooms) : null,
-          area_built: form.area_built ? parseFloat(form.area_built) : null,
-          area_plot: form.area_plot ? parseFloat(form.area_plot) : null,
-          floor: form.floor || null,
-          year_built: form.year_built ? parseInt(form.year_built) : null,
-          energy_rating: form.energy_rating || null,
-          status: form.status,
+          size_m2: form.size_m2 ? parseInt(form.size_m2) : null,
+          badge: form.badge || null,
           features: selectedFeatures.length > 0 ? selectedFeatures : null,
-          main_image_url: imageUrls[0] || null,
-          images: imageUrls.length > 0 ? imageUrls : null,
+          images: images.length > 0 ? images : null,
+          is_active: isActive,
+          is_featured: false,
         })
         .select('id')
         .single()
 
       if (error) throw error
-
       router.push(`/dashboard/properties/${property.id}`)
     } catch (err: any) {
       alert(err.message || 'Error al crear la propiedad')
@@ -186,7 +172,7 @@ export default function NewPropertyPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto pb-12">
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
         <Link href="/dashboard/properties" className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
@@ -198,95 +184,151 @@ export default function NewPropertyPage() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Basic info */}
-        <section className="card p-6 space-y-5">
-          <h2 className="font-semibold text-gray-900 text-lg">Información básica</h2>
+      <div className="space-y-6">
+        {/* ========== IMAGES ========== */}
+        <section className="card p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-gray-900">Fotografías ({images.length})</h2>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="flex items-center gap-1.5 text-sm px-3 py-1.5 bg-brand-50 text-brand-700 rounded-lg hover:bg-brand-100 transition-colors"
+            >
+              {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+              Subir fotos
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+          </div>
 
+          {images.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              {images.map((url, i) => (
+                <div key={i} className="relative aspect-[4/3] rounded-lg overflow-hidden group bg-gray-100">
+                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(i)}
+                    className="absolute top-2 right-2 w-6 h-6 bg-black/60 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                  {i === 0 && (
+                    <span className="absolute bottom-1.5 left-1.5 bg-brand-600 text-white text-[10px] px-2 py-0.5 rounded font-medium">
+                      Principal
+                    </span>
+                  )}
+                </div>
+              ))}
+              {images.length < 20 && (
+                <label
+                  onClick={() => fileInputRef.current?.click()}
+                  className="aspect-[4/3] rounded-lg border-2 border-dashed border-gray-300 hover:border-brand-400 flex flex-col items-center justify-center cursor-pointer transition-colors"
+                >
+                  <ImagePlus className="w-7 h-7 text-gray-400" />
+                  <span className="text-xs text-gray-500 mt-1">Añadir</span>
+                </label>
+              )}
+            </div>
+          ) : (
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="border-2 border-dashed border-gray-300 hover:border-brand-400 rounded-xl p-8 text-center cursor-pointer transition-colors"
+            >
+              <ImagePlus className="w-10 h-10 text-gray-300 mx-auto" />
+              <p className="text-sm text-gray-500 mt-2">Sube las fotos de la propiedad</p>
+              <p className="text-xs text-gray-400 mt-1">JPG, PNG o WebP · Máximo 20 imágenes</p>
+            </div>
+          )}
+
+          {/* Add by URL */}
+          <div className="flex gap-2">
+            <input
+              type="url"
+              value={imageUrlInput}
+              onChange={(e) => setImageUrlInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addImageUrl())}
+              placeholder="Añadir imagen por URL (https://...)"
+              className="input-field flex-1 text-sm"
+            />
+            <button
+              type="button"
+              onClick={addImageUrl}
+              disabled={!imageUrlInput.trim()}
+              className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-40 transition-colors"
+            >
+              Añadir
+            </button>
+          </div>
+        </section>
+
+        {/* ========== BASIC INFO ========== */}
+        <section className="card p-6 space-y-4">
+          <h2 className="font-semibold text-gray-900">Información básica</h2>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Título *</label>
-            <input type="text" value={form.title} onChange={(e) => update('title', e.target.value)} className="input-field" placeholder="Ej: Apartamento con vistas al mar en Los Cristianos" required />
+            <input
+              type="text"
+              value={form.title}
+              onChange={(e) => update('title', e.target.value)}
+              className="input-field"
+              placeholder="Ej: Villa con piscina en Costa Adeje"
+              required
+            />
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de propiedad *</label>
-              <select value={form.property_type} onChange={(e) => update('property_type', e.target.value)} className="input-field">
-                {propertyTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Operación *</label>
-              <select value={form.operation_type} onChange={(e) => update('operation_type', e.target.value)} className="input-field">
-                {operationTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Precio (€) *</label>
-              <input type="number" value={form.price} onChange={(e) => update('price', e.target.value)} className="input-field" placeholder="250000" min="0" step="0.01" required />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-              <select value={form.status} onChange={(e) => update('status', e.target.value)} className="input-field">
-                <option value="draft">Borrador</option>
-                <option value="published">Publicada</option>
-              </select>
-            </div>
-          </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-            <textarea value={form.description} onChange={(e) => update('description', e.target.value)} className="input-field min-h-[120px]" placeholder="Describe la propiedad en detalle..." rows={5} />
+            <textarea
+              value={form.description}
+              onChange={(e) => update('description', e.target.value)}
+              className="input-field min-h-[120px]"
+              rows={5}
+              placeholder="Describe la propiedad en detalle..."
+            />
           </div>
-        </section>
-
-        {/* Location */}
-        <section className="card p-6 space-y-5">
-          <h2 className="font-semibold text-gray-900 text-lg">Ubicación</h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Región</label>
-              <select value={form.region_slug} onChange={(e) => update('region_slug', e.target.value)} className="input-field">
-                <option value="">Seleccionar región</option>
-                {regions.map((r) => <option key={r.slug} value={r.slug}>{r.name}</option>)}
+              <label className="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+              <select value={form.property_type} onChange={(e) => update('property_type', e.target.value)} className="input-field">
+                {propertyTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Ciudad / Municipio</label>
-              <input type="text" value={form.city} onChange={(e) => update('city', e.target.value)} className="input-field" placeholder="Los Cristianos" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Operación</label>
+              <select value={form.operation_type} onChange={(e) => update('operation_type', e.target.value)} className="input-field">
+                {operationTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Badge</label>
+              <select value={form.badge} onChange={(e) => update('badge', e.target.value)} className="input-field">
+                {badgeOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+              </select>
             </div>
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
-            <input type="text" value={form.address} onChange={(e) => update('address', e.target.value)} className="input-field" placeholder="Calle, número, piso..." />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Código postal</label>
-              <input type="text" value={form.postal_code} onChange={(e) => update('postal_code', e.target.value)} className="input-field" placeholder="38650" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Precio (€) *</label>
+              <input type="number" value={form.price} onChange={(e) => update('price', e.target.value)} className="input-field" min="0" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Latitud</label>
-              <input type="number" value={form.latitude} onChange={(e) => update('latitude', e.target.value)} className="input-field" placeholder="28.0520" step="any" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Longitud</label>
-              <input type="number" value={form.longitude} onChange={(e) => update('longitude', e.target.value)} className="input-field" placeholder="-16.7150" step="any" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+              <input type="text" value={form.location} onChange={(e) => update('location', e.target.value)} className="input-field" placeholder="Costa Adeje, Los Cristianos..." />
             </div>
           </div>
         </section>
 
-        {/* Details */}
-        <section className="card p-6 space-y-5">
-          <h2 className="font-semibold text-gray-900 text-lg">Características</h2>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {/* ========== DETAILS ========== */}
+        <section className="card p-6 space-y-4">
+          <h2 className="font-semibold text-gray-900">Características</h2>
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Habitaciones</label>
               <input type="number" value={form.bedrooms} onChange={(e) => update('bedrooms', e.target.value)} className="input-field" min="0" />
@@ -296,41 +338,17 @@ export default function NewPropertyPage() {
               <input type="number" value={form.bathrooms} onChange={(e) => update('bathrooms', e.target.value)} className="input-field" min="0" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sup. construida (m²)</label>
-              <input type="number" value={form.area_built} onChange={(e) => update('area_built', e.target.value)} className="input-field" min="0" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sup. parcela (m²)</label>
-              <input type="number" value={form.area_plot} onChange={(e) => update('area_plot', e.target.value)} className="input-field" min="0" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Planta</label>
-              <input type="text" value={form.floor} onChange={(e) => update('floor', e.target.value)} className="input-field" placeholder="3ª" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Año construcción</label>
-              <input type="number" value={form.year_built} onChange={(e) => update('year_built', e.target.value)} className="input-field" placeholder="2005" min="1800" max="2030" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Cert. energético</label>
-              <select value={form.energy_rating} onChange={(e) => update('energy_rating', e.target.value)} className="input-field">
-                <option value="">Sin especificar</option>
-                {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'En trámite', 'Exento'].map((r) => (
-                  <option key={r} value={r}>{r}</option>
-                ))}
-              </select>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Superficie (m²)</label>
+              <input type="number" value={form.size_m2} onChange={(e) => update('size_m2', e.target.value)} className="input-field" min="0" />
             </div>
           </div>
         </section>
 
-        {/* Features */}
+        {/* ========== FEATURES ========== */}
         <section className="card p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900 text-lg">Extras y equipamiento</h2>
+          <h2 className="font-semibold text-gray-900">Extras y equipamiento</h2>
           <div className="flex flex-wrap gap-2">
-            {featuresList.map((feature) => (
+            {featuresList.map(feature => (
               <button
                 key={feature}
                 type="button"
@@ -341,63 +359,32 @@ export default function NewPropertyPage() {
                     : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
                 }`}
               >
+                {selectedFeatures.includes(feature) && <Check className="w-3 h-3 inline mr-1" />}
                 {feature}
               </button>
             ))}
           </div>
         </section>
 
-        {/* Images */}
-        <section className="card p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900 text-lg">Fotografías</h2>
-          <p className="text-sm text-gray-500">Hasta 30 imágenes. La primera será la imagen principal.</p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {imagePreviews.map((src, i) => (
-              <div key={i} className="relative aspect-[4/3] rounded-lg overflow-hidden group">
-                <img src={src} alt="" className="w-full h-full object-cover" />
-                <button
-                  type="button"
-                  onClick={() => removeImage(i)}
-                  className="absolute top-2 right-2 w-6 h-6 bg-black/60 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-                {i === 0 && (
-                  <span className="absolute bottom-2 left-2 bg-brand-600 text-white text-xs px-2 py-0.5 rounded">Principal</span>
-                )}
-              </div>
-            ))}
-
-            {images.length < 30 && (
-              <label className="aspect-[4/3] rounded-lg border-2 border-dashed border-gray-300 hover:border-brand-400 flex flex-col items-center justify-center cursor-pointer transition-colors">
-                <ImagePlus className="w-8 h-8 text-gray-400" />
-                <span className="text-xs text-gray-500 mt-1">Añadir fotos</span>
-                <input type="file" accept="image/*" multiple onChange={handleImageChange} className="hidden" />
-              </label>
-            )}
-          </div>
-        </section>
-
-        {/* Submit */}
+        {/* ========== SUBMIT ========== */}
         <div className="flex items-center justify-between pb-8">
           <Link href="/dashboard/properties" className="btn-secondary">
             Cancelar
           </Link>
           <div className="flex gap-3">
             <button
-              type="submit"
+              type="button"
+              onClick={() => handleSubmit(false)}
               disabled={loading}
-              onClick={() => update('status', 'draft')}
               className="btn-secondary flex items-center gap-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
               Guardar borrador
             </button>
             <button
-              type="submit"
+              type="button"
+              onClick={() => handleSubmit(true)}
               disabled={loading}
-              onClick={() => update('status', 'published')}
               className="btn-primary flex items-center gap-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
@@ -405,7 +392,7 @@ export default function NewPropertyPage() {
             </button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   )
 }
