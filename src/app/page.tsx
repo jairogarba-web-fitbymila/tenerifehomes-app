@@ -606,7 +606,7 @@ export default function HomePage() {
           align-items: center;
           justify-content: center;
           text-align: center;
-          background: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1920&q=85')
+          background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=85')
             center/cover no-repeat;
         }
         .final-cta::after {
@@ -694,7 +694,7 @@ export default function HomePage() {
 
       <nav>
         <div className="logo">
-          Tenerife<span>Homes</span>
+          Habi<span>Book</span>
         </div>
         <div className="nav-r">
           <a href="#features">Funcionalidades</a>
@@ -710,8 +710,8 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero-bg">
           <img
-            src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1920&q=85"
-            alt="Villa de lujo Tenerife"
+            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=85"
+            alt="Agente inmobiliario profesional con tecnología"
           />
           <div
             style={{
@@ -737,7 +737,7 @@ export default function HomePage() {
               fontWeight: 500,
             }}
           >
-            Plataforma inmobiliaria para Tenerife
+            Plataforma inmobiliaria global
           </div>
           <h1 id="hero-title">
             <span className="hero-phrase active">
@@ -802,8 +802,8 @@ export default function HomePage() {
       <section className="frame" id="features">
         <div className="frame-img">
           <img
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80"
-            alt="Villa moderna"
+            src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200&q=80"
+            alt="Persona diseñando web inmobiliaria en ordenador"
           />
           <div
             className="overlay-gradient"
@@ -828,7 +828,7 @@ export default function HomePage() {
           <div className="frame-highlights">
             <span className="highlight-chip">7 plantillas</span>
             <span className="highlight-chip">Dominio propio</span>
-            <span className="highlight-chip">SEO Tenerife</span>
+            <span className="highlight-chip">SEO multiidioma</span>
             <span className="highlight-chip">100% responsive</span>
           </div>
           <a href="#" className="link-arrow">
@@ -841,8 +841,8 @@ export default function HomePage() {
       <section className="frame reverse">
         <div className="frame-img">
           <img
-            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80"
-            alt="Casa moderna"
+            src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1200&q=80"
+            alt="Dashboard de distribución a portales inmobiliarios"
           />
           <div
             className="overlay-gradient"
@@ -879,8 +879,8 @@ export default function HomePage() {
       <section className="frame">
         <div className="frame-img">
           <img
-            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80"
-            alt="Villa lujo"
+            src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&q=80"
+            alt="Dos agentes inmobiliarios colaborando con tablet"
           />
           <div
             className="overlay-gradient"
@@ -916,8 +916,8 @@ export default function HomePage() {
       <section className="frame reverse">
         <div className="frame-img">
           <img
-            src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1200&q=80"
-            alt="Villa piscina"
+            src="https://images.unsplash.com/photo-1556741533-6e6a62bd8b49?w=1200&q=80"
+            alt="Gestión de alquileres vacacionales en laptop"
           />
           <div
             className="overlay-gradient"
@@ -954,8 +954,8 @@ export default function HomePage() {
       <section className="frame">
         <div className="frame-img">
           <img
-            src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&q=80"
-            alt="Interior luxury"
+            src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80"
+            alt="CRM dashboard con analytics y leads en pantalla"
           />
           <div
             className="overlay-gradient"
@@ -992,8 +992,8 @@ export default function HomePage() {
       <section className="frame reverse">
         <div className="frame-img">
           <img
-            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80"
-            alt="Propiedad premium"
+            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&q=80"
+            alt="Profesionales reunidos discutiendo sobre planos"
           />
           <div
             className="overlay-gradient"
@@ -1062,7 +1062,7 @@ export default function HomePage() {
         <div className="gallery-grid">
           <div className="gal-item">
             <img
-              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80"
+              src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&q=80"
               alt="Luxury"
             />
             <div className="gal-cap">
@@ -1072,7 +1072,7 @@ export default function HomePage() {
           </div>
           <div className="gal-item">
             <img
-              src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=500&q=80"
+              src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=500&q=80"
               alt="Mediterranean"
             />
             <div className="gal-cap">
@@ -1082,7 +1082,7 @@ export default function HomePage() {
           </div>
           <div className="gal-item">
             <img
-              src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=500&q=80"
+              src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500&q=80"
               alt="Corporate"
             />
             <div className="gal-cap">
@@ -1092,7 +1092,7 @@ export default function HomePage() {
           </div>
           <div className="gal-item">
             <img
-              src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=500&q=80"
+              src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500&q=80"
               alt="Boutique"
             />
             <div className="gal-cap">
