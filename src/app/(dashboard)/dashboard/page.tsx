@@ -54,7 +54,7 @@ interface RecentLead {
 interface AgentProfile {
   slug: string
   business_name: string
-  bio_photo: string | null
+  bio_photo_url: string | null
   bio: string | null
   phone: string | null
   primary_zone: string | null
@@ -101,7 +101,7 @@ export default function DashboardPage() {
         supabase.from('leads').select('id', { count: 'exact', head: true }).eq('agent_id', user.id).gte('created_at', new Date(Date.now() - 7 * 86400000).toISOString()),
         supabase.from('properties').select('id, title, price, is_active, operation_type, created_at').eq('agent_id', user.id).order('created_at', { ascending: false }).limit(5),
         supabase.from('leads').select('id, name, email, phone, status, created_at').eq('agent_id', user.id).order('created_at', { ascending: false }).limit(5),
-        supabase.from('agent_profiles').select('slug, business_name, bio_photo, bio, phone, primary_zone').eq('user_id', user.id).single(),
+        supabase.from('agent_profiles').select('slug, business_name, bio_photo_url, bio, phone, primary_zone').eq('id', user.id).single(),
       ])
 
       setStats({
@@ -125,7 +125,7 @@ export default function DashboardPage() {
   }, [isWelcome])
 
   // Compute onboarding steps
-  const hasRealPhoto = profile?.bio_photo && !profile.bio_photo.includes('unsplash')
+  const hasRealPhoto = profile?.bio_photo_url && !profile.bio_photo_url.includes('unsplash')
   const hasCustomBio = profile?.bio && profile.bio.length > 20 && !profile.bio.includes('demo') && !profile.bio.includes('ejemplo')
   const hasPhone = !!profile?.phone
   const hasZone = !!profile?.primary_zone

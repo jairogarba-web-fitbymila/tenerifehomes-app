@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     const { data: agentData, error: agentError } = await supabase
       .from('agent_profiles')
       .select('id, plan')
-      .eq('user_id', user.id)
+      .eq('id', user.id)
       .single()
 
     if (agentError || !agentData) {

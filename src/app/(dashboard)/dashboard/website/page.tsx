@@ -94,6 +94,10 @@ const SECTION_EDIT_LINKS: Record<string, { href: string; label: string }> = {
   properties_rent_long: { href: '/dashboard/properties', label: 'Gestionar propiedades' },
   properties_rent_vacation: { href: '/dashboard/properties', label: 'Gestionar propiedades' },
   team: { href: '/dashboard/settings', label: 'Editar equipo' },
+  testimonials: { href: '/dashboard/website/testimonials', label: 'Editar testimonios' },
+  services: { href: '/dashboard/website/services', label: 'Editar servicios' },
+  zones: { href: '/dashboard/website/zones', label: 'Editar zonas' },
+  contact_form: { href: '/dashboard/settings', label: 'Editar datos de contacto' },
 }
 
 const TEMPLATES = [
@@ -364,7 +368,7 @@ export default function WebsiteEditorPage() {
                       ) : (
                         <>
                           <Upload className="w-6 h-6 text-gray-400" />
-                          <span className="text-xs text-gray-500">Subir imagen (1920×800 recomendado)</span>
+                          <span className="text-xs text-gray-500">Subir imagen · 1920×800px · JPG/PNG/WebP · Máx. 5 MB</span>
                         </>
                       )}
                     </button>

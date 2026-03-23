@@ -115,18 +115,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         console.error('Failed to fetch modules:', error)
       }
 
-      // Check admin status
-      try {
-        const adminResponse = await fetch('/api/admin/verify')
-        if (adminResponse.ok) {
-          const adminData = await adminResponse.json()
-          setIsAdmin(adminData.isAdmin === true)
-        }
-      } catch (error) {
-        console.error('Failed to verify admin:', error)
-      } finally {
-        setAdminLoading(false)
+      // Admin check — agency plan = admin access
+      if (data?.plan === 'agency') {
+        setIsAdmin(true)
       }
+      setAdminLoading(false)
     }
     loadData()
   }, [])

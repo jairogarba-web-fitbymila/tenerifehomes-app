@@ -197,7 +197,7 @@ export default function SettingsPage() {
                   {uploadingPhoto ? 'Subiendo...' : 'Cambiar foto'}
                   <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(e) => handlePhotoUpload(e, 'bio_photo_url')} disabled={uploadingPhoto} />
                 </label>
-                <p className="text-xs text-gray-400 mt-1">JPG, PNG o WebP. Mín. 400×400px</p>
+                <p className="text-xs text-gray-400 mt-1">JPG, PNG o WebP · Mín. 400×400px · Cuadrada (1:1) · Máx. 5 MB · Fondo neutro, iluminación natural</p>
               </div>
             </div>
           </div>
@@ -219,7 +219,7 @@ export default function SettingsPage() {
                   {uploadingLogo ? 'Subiendo...' : 'Cambiar logo'}
                   <input type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml" className="hidden" onChange={(e) => handlePhotoUpload(e, 'logo_url')} disabled={uploadingLogo} />
                 </label>
-                <p className="text-xs text-gray-400 mt-1">PNG o SVG transparente. Mín. 200×60px</p>
+                <p className="text-xs text-gray-400 mt-1">PNG o SVG con fondo transparente · Mín. 200×60px · Máx. 5 MB · Horizontal preferente</p>
               </div>
             </div>
           </div>
@@ -265,12 +265,13 @@ export default function SettingsPage() {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Bio / Descripción</label>
-          <textarea value={agent.bio || ''} onChange={(e) => update('bio', e.target.value)} className="input-field min-h-[120px]" rows={5} placeholder="Cuéntale a tus clientes sobre ti o tu negocio..." />
-          <p className="text-xs text-gray-400 mt-1">{(agent.bio || '').length} caracteres. Recomendado: 150-300</p>
+          <textarea value={agent.bio || ''} onChange={(e) => update('bio', e.target.value)} className="input-field min-h-[120px]" rows={5} maxLength={600} placeholder="Cuéntale a tus clientes sobre ti o tu negocio..." />
+          <p className="text-xs text-gray-400 mt-1">{(agent.bio || '').length}/600 caracteres · Recomendado: 150-300 · Incluye tu experiencia, especialidad y qué te diferencia</p>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Cita / Lema</label>
-          <input type="text" value={agent.quote || ''} onChange={(e) => update('quote', e.target.value)} className="input-field" placeholder="Tu lema profesional o frase que te define" />
+          <input type="text" value={agent.quote || ''} onChange={(e) => update('quote', e.target.value)} className="input-field" maxLength={120} placeholder="Tu lema profesional o frase que te define" />
+          <p className="text-xs text-gray-400 mt-1">{(agent.quote || '').length}/120 caracteres · Aparece debajo de tu nombre en la sección "Sobre mí"</p>
         </div>
       </section>
 
