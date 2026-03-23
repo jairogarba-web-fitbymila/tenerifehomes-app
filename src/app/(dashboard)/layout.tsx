@@ -18,14 +18,28 @@ import {
   Plus,
   ChevronDown,
   User,
+  Calendar,
+  DollarSign,
+  Lock,
+  Shield,
 } from 'lucide-react'
 
-const navItems = [
+interface NavItem {
+  href: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  moduleId?: string
+  isAdmin?: boolean
+}
+
+const navItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/properties', label: 'Propiedades', icon: Building2 },
-  { href: '/dashboard/leads', label: 'Leads', icon: Users },
+  { href: '/dashboard/properties', label: 'Propiedades', icon: Building2, moduleId: 'properties_sale' },
+  { href: '/dashboard/leads', label: 'Leads', icon: Users, moduleId: 'leads_basic' },
   { href: '/dashboard/messages', label: 'Mensajes', icon: MessageSquare },
-  { href: '/dashboard/analytics', label: 'Analíticas', icon: BarChart3 },
+  { href: '/dashboard/analytics', label: 'Analíticas', icon: BarChart3, moduleId: 'analytics_basic' },
+  { href: '/dashboard/rentals', label: 'Alquileres', icon: Calendar, moduleId: 'properties_rent_vacation' },
+  { href: '/dashboard/accounting', label: 'Contabilidad', icon: DollarSign, moduleId: 'accounting' },
   { href: '/dashboard/website', label: 'Mi web', icon: Globe },
   { href: '/dashboard/settings', label: 'Ajustes', icon: Settings },
 ]
@@ -39,19 +53,47 @@ interface AgentData {
   business_type: string
 }
 
+interface ModuleResponse {
+  modules: Array<{ id: string; min_plan: string }>
+  overrides: Array<{ module_id: string; is_enabled: boolean }>
+  plan: string
+}
+
+const planColors: Record<string, string> = {
+  starter: 'bg-gray-100 text-gray-700',
+  pro: 'bg-blue-100 text-blue-700',
+  premium: 'bg-purple-100 text-purple-700',
+  agency: 'bg-amber-100 text-amber-700',
+}
+
+function hasAccess(modules: Array<{ id: string; min_plan: string }>, overrides: Array<{ module_id: string; is_enabled: boolean }>, plan: string, moduleId: string) {
+  const override = overrides.find(o => o.module_id === moduleId)
+  if (override) return override.is_enabled
+  const mod = modules.find(m => m.id === moduleId)
+  if (!mod) return false
+  const hierarchy = { starter: 1, pro: 2, premium: 3, agency: 4 }
+  return hierarchy[plan as keyof typeof hierarchy] >= hierarchy[mod.min_plan as keyof typeof hierarchy]
+}
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [agent, setAgent] = useState<AgentData | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
+  const [modules, setModules] = useState<Array<{ id: string; min_plan: string }>>([])
+  const [overrides, setOverrides] = useState<Array<{ module_id: string; is_enabled: boolean }>>([])
+  const [plan, setPlan] = useState<string>('')
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [adminLoading, setAdminLoading] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
-    async function loadAgent() {
+    async function loadData() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
+      // Load agent profile
       const { data } = await supabase
         .from('agent_profiles')
         .select('business_name, email, plan, slug, template, business_type')
@@ -59,8 +101,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         .single()
 
       if (data) setAgent(data)
+
+      // Load modules
+      try {
+        const response = await fetch('/api/dashboard/modules')
+        if (response.ok) {
+          const moduleData = (await response.json()) as ModuleResponse
+          setModules(moduleData.modules)
+          setOverrides(moduleData.overrides)
+          setPlan(moduleData.plan)
+        }
+      } catch (error) {
+        console.error('Failed to fetch modules:', error)
+      }
+
+      // Check admin status
+      try {
+        const adminResponse = await fetch('/api/admin/verify')
+        if (adminResponse.ok) {
+          const adminData = await adminResponse.json()
+          setIsAdmin(adminData.isAdmin === true)
+        }
+      } catch (error) {
+        console.error('Failed to verify admin:', error)
+      } finally {
+        setAdminLoading(false)
+      }
     }
-    loadAgent()
+    loadData()
   }, [])
 
   async function handleLogout() {
@@ -109,6 +177,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto">
             {navItems.map((item) => {
               const active = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))
+              const isLocked = item.moduleId && !hasAccess(modules, overrides, plan, item.moduleId)
+              const isAdminOnly = item.isAdmin && !isAdmin
+
+              if (isAdminOnly && !isAdmin) return null
+
               return (
                 <Link
                   key={item.href}
@@ -118,17 +191,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     active
                       ? 'bg-brand-50 text-brand-700'
                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                  }`}
+                  } ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <item.icon className={`w-5 h-5 ${active ? 'text-brand-600' : 'text-gray-400'}`} />
-                  {item.label}
+                  <span className="flex-1">{item.label}</span>
+                  {isLocked && <Lock className="w-3.5 h-3.5 text-gray-400" />}
                 </Link>
               )
             })}
           </nav>
 
-          {/* Agent profile */}
-          <div className="border-t border-gray-100 p-3">
+          {/* Agent profile and admin section */}
+          <div className="border-t border-gray-100 p-3 space-y-3">
+            {/* Plan badge */}
+            {agent && plan && (
+              <div className={`text-center py-2 rounded-lg text-xs font-medium ${planColors[plan] || planColors.starter}`}>
+                Plan {agent.plan}
+              </div>
+            )}
+
+            {/* Agent profile */}
             <div className="relative">
               <button
                 onClick={() => setProfileOpen(!profileOpen)}
@@ -142,14 +224,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     {agent?.business_name || 'Cargando...'}
                   </div>
                   <div className="text-xs text-gray-500 truncate">
-                    Plan {agent?.plan || '...'}
+                    {agent?.email || '...'}
                   </div>
                 </div>
                 <ChevronDown className="w-4 h-4 text-gray-400" />
               </button>
 
               {profileOpen && (
-                <div className="absolute bottom-full left-0 right-0 mb-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+                <div className="absolute bottom-full left-0 right-0 mb-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                   <Link
                     href="/dashboard/profile"
                     className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -157,9 +239,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   >
                     <User className="w-4 h-4" /> Mi perfil
                   </Link>
+                  {!adminLoading && isAdmin && (
+                    <Link
+                      href="/admin"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-blue-700 hover:bg-blue-50 border-t border-gray-200"
+                      onClick={() => setProfileOpen(false)}
+                    >
+                      <Shield className="w-4 h-4" /> Admin
+                    </Link>
+                  )}
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full border-t border-gray-200"
                   >
                     <LogOut className="w-4 h-4" /> Cerrar sesión
                   </button>

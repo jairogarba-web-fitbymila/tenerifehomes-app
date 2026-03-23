@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-browser'
+import { LockedModule } from '@/components/LockedModule'
 import {
   Users,
   Search,
@@ -10,6 +11,7 @@ import {
   Clock,
   ChevronDown,
   MessageSquare,
+  TrendingUp,
 } from 'lucide-react'
 
 interface Lead {
@@ -23,6 +25,12 @@ interface Lead {
   property_id: string | null
   created_at: string
   properties?: { title: string } | null
+}
+
+interface ModuleResponse {
+  modules: Array<{ id: string; min_plan: string }>
+  overrides: Array<{ module_id: string; is_enabled: boolean }>
+  plan: string
 }
 
 const statusOptions = [
@@ -46,12 +54,45 @@ const statusStyles: Record<string, { label: string; color: string }> = {
   lost: { label: 'Perdido', color: 'bg-red-100 text-red-600' },
 }
 
+function hasAccess(modules: Array<{ id: string; min_plan: string }>, overrides: Array<{ module_id: string; is_enabled: boolean }>, plan: string, moduleId: string) {
+  const override = overrides.find(o => o.module_id === moduleId)
+  if (override) return override.is_enabled
+  const mod = modules.find(m => m.id === moduleId)
+  if (!mod) return false
+  const hierarchy = { starter: 1, pro: 2, premium: 3, agency: 4 }
+  return hierarchy[plan as keyof typeof hierarchy] >= hierarchy[mod.min_plan as keyof typeof hierarchy]
+}
+
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [expandedLead, setExpandedLead] = useState<string | null>(null)
+  const [modules, setModules] = useState<Array<{ id: string; min_plan: string }>>([])
+  const [overrides, setOverrides] = useState<Array<{ module_id: string; is_enabled: boolean }>>([])
+  const [plan, setPlan] = useState<string>('')
+  const [modulesLoading, setModulesLoading] = useState(true)
+
+  // Load module access info
+  useEffect(() => {
+    async function loadModules() {
+      try {
+        const response = await fetch('/api/dashboard/modules')
+        if (response.ok) {
+          const data = (await response.json()) as ModuleResponse
+          setModules(data.modules)
+          setOverrides(data.overrides)
+          setPlan(data.plan)
+        }
+      } catch (error) {
+        console.error('Failed to fetch modules:', error)
+      } finally {
+        setModulesLoading(false)
+      }
+    }
+    loadModules()
+  }, [])
 
   useEffect(() => {
     loadLeads()
@@ -96,11 +137,68 @@ export default function LeadsPage() {
     return `hace ${days}d`
   }
 
+  // Check basic leads access
+  const hasBasicLeads = !modulesLoading && hasAccess(modules, overrides, plan, 'leads_basic')
+  const hasCRMLeads = !modulesLoading && hasAccess(modules, overrides, plan, 'leads_crm')
+
+  if (!modulesLoading && !hasBasicLeads) {
+    const moduleData = modules.find(m => m.id === 'leads_basic')
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Leads</h1>
+        </div>
+        <LockedModule
+          moduleName="Leads"
+          requiredPlan={moduleData?.min_plan as any}
+        />
+      </div>
+    )
+  }
+
+  // Calculate stats
+  const newLeadsThisWeek = leads.filter(l => {
+    const leadDate = new Date(l.created_at)
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    return leadDate > weekAgo && l.status === 'new'
+  }).length
+
+  const wonLeads = leads.filter(l => l.status === 'won').length
+  const conversionRate = leads.length > 0 ? Math.round((wonLeads / leads.length) * 100) : 0
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Leads</h1>
         <p className="text-gray-500 text-sm mt-1">{leads.length} contactos en total</p>
+      </div>
+
+      {!hasCRMLeads && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
+          <div className="text-blue-600 flex-shrink-0 mt-0.5">
+            <TrendingUp className="w-5 h-5" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-blue-900">Funciones avanzadas de CRM bloqueadas</p>
+            <p className="text-sm text-blue-700 mt-1">Actualiza a Pro para acceder al registro de actividad y análisis completos</p>
+          </div>
+        </div>
+      )}
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="card p-4">
+          <div className="text-sm font-medium text-gray-600">Total de leads</div>
+          <div className="text-3xl font-bold text-gray-900 mt-2">{leads.length}</div>
+        </div>
+        <div className="card p-4">
+          <div className="text-sm font-medium text-gray-600">Nuevos esta semana</div>
+          <div className="text-3xl font-bold text-gray-900 mt-2">{newLeadsThisWeek}</div>
+        </div>
+        <div className="card p-4">
+          <div className="text-sm font-medium text-gray-600">Tasa de conversión</div>
+          <div className="text-3xl font-bold text-gray-900 mt-2">{conversionRate}%</div>
+        </div>
       </div>
 
       {/* Filters */}
@@ -170,7 +268,7 @@ export default function LeadsPage() {
               {/* Expanded details */}
               {expandedLead === lead.id && (
                 <div className="px-5 pb-4 pt-0 border-t border-gray-50">
-                  {lead.message && (
+                  {hasCRMLeads && lead.message && (
                     <div className="mt-3 p-3 bg-gray-50 rounded-lg">
                       <p className="text-xs font-medium text-gray-500 mb-1 flex items-center gap-1">
                         <MessageSquare className="w-3 h-3" /> Mensaje
@@ -178,7 +276,7 @@ export default function LeadsPage() {
                       <p className="text-sm text-gray-700">{lead.message}</p>
                     </div>
                   )}
-                  <div className="mt-3 flex items-center gap-2">
+                  <div className="mt-3 flex items-center gap-2 flex-wrap">
                     <span className="text-xs text-gray-500 mr-2">Cambiar estado:</span>
                     {Object.entries(statusStyles).map(([key, style]) => (
                       <button

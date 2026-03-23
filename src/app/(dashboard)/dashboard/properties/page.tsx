@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import Link from 'next/link'
+import { LockedModule } from '@/components/LockedModule'
+import { PLAN_HIERARCHY } from '@/lib/modules'
 import {
   Plus,
   Search,
@@ -33,6 +35,12 @@ interface Property {
   updated_at: string
 }
 
+interface ModuleResponse {
+  modules: Array<{ id: string; min_plan: string }>
+  overrides: Array<{ module_id: string; is_enabled: boolean }>
+  plan: string
+}
+
 const statusOptions = [
   { value: '', label: 'Todos los estados' },
   { value: 'published', label: 'Publicadas' },
@@ -51,16 +59,57 @@ const statusStyles: Record<string, { label: string; color: string }> = {
   archived: { label: 'Archivada', color: 'bg-red-100 text-red-600' },
 }
 
+const tabOptions = [
+  { id: 'sale', label: 'Venta', moduleId: 'properties_sale' },
+  { id: 'rent_long', label: 'Alquiler largo', moduleId: 'properties_rent_long' },
+  { id: 'rent_vacation', label: 'Alquiler vacacional', moduleId: 'properties_rent_vacation' },
+]
+
+function hasAccess(modules: Array<{ id: string; min_plan: string }>, overrides: Array<{ module_id: string; is_enabled: boolean }>, plan: string, moduleId: string) {
+  const override = overrides.find(o => o.module_id === moduleId)
+  if (override) return override.is_enabled
+  const mod = modules.find(m => m.id === moduleId)
+  if (!mod) return false
+  const hierarchy = { starter: 1, pro: 2, premium: 3, agency: 4 }
+  return hierarchy[plan as keyof typeof hierarchy] >= hierarchy[mod.min_plan as keyof typeof hierarchy]
+}
+
 export default function PropertiesPage() {
   const [properties, setProperties] = useState<Property[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [menuOpen, setMenuOpen] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<string>('sale')
+  const [modules, setModules] = useState<Array<{ id: string; min_plan: string }>>([])
+  const [overrides, setOverrides] = useState<Array<{ module_id: string; is_enabled: boolean }>>([])
+  const [plan, setPlan] = useState<string>('')
+  const [modulesLoading, setModulesLoading] = useState(true)
 
+  // Load module access info
+  useEffect(() => {
+    async function loadModules() {
+      try {
+        const response = await fetch('/api/dashboard/modules')
+        if (response.ok) {
+          const data = (await response.json()) as ModuleResponse
+          setModules(data.modules)
+          setOverrides(data.overrides)
+          setPlan(data.plan)
+        }
+      } catch (error) {
+        console.error('Failed to fetch modules:', error)
+      } finally {
+        setModulesLoading(false)
+      }
+    }
+    loadModules()
+  }, [])
+
+  // Load properties when tab or filter changes
   useEffect(() => {
     loadProperties()
-  }, [statusFilter])
+  }, [statusFilter, activeTab])
 
   async function loadProperties() {
     setLoading(true)
@@ -73,6 +122,17 @@ export default function PropertiesPage() {
       .select('id, title, price, status, operation_type, property_type, bedrooms, bathrooms, area_built, city, region_slug, main_image_url, created_at, updated_at')
       .eq('agent_id', user.id)
       .order('updated_at', { ascending: false })
+
+    // Filter by operation type based on active tab
+    const operationTypeMap: Record<string, string> = {
+      'sale': 'sale',
+      'rent_long': 'rent_long',
+      'rent_vacation': 'rent_vacation',
+    }
+
+    if (activeTab in operationTypeMap) {
+      query = query.eq('operation_type', operationTypeMap[activeTab])
+    }
 
     if (statusFilter) {
       query = query.eq('status', statusFilter)
@@ -99,6 +159,23 @@ export default function PropertiesPage() {
     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price)
   }
 
+  // Show locked module if no access to current tab's module
+  const currentTabModule = tabOptions.find(t => t.id === activeTab)?.moduleId || 'properties_sale'
+  if (!modulesLoading && !hasAccess(modules, overrides, plan, currentTabModule)) {
+    const moduleData = modules.find(m => m.id === currentTabModule)
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Propiedades</h1>
+        </div>
+        <LockedModule
+          moduleName={currentTabModule === 'properties_rent_vacation' ? 'Alquiler vacacional' : 'Propiedades'}
+          requiredPlan={moduleData?.min_plan as any}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -111,6 +188,28 @@ export default function PropertiesPage() {
           <Plus className="w-4 h-4" />
           Nueva propiedad
         </Link>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 border-b border-gray-200">
+        {tabOptions.map((tab) => {
+          const isLocked = !modulesLoading && !hasAccess(modules, overrides, plan, tab.moduleId)
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              disabled={isLocked}
+              className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? 'border-brand-600 text-brand-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
+              } ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {tab.label}
+              {isLocked && <span className="ml-1">🔒</span>}
+            </button>
+          )
+        })}
       </div>
 
       {/* Filters */}
@@ -229,7 +328,7 @@ export default function PropertiesPage() {
                             <Pencil className="w-3.5 h-3.5" /> Editar
                           </Link>
                           <Link href={`/property/${prop.id}`} target="_blank" className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setMenuOpen(null)}>
-                            <Eye className="w-3.5 h-3.5" /> Ver pública
+                            <Eye className="w-3.5 h-3.5" /> Ver en web
                           </Link>
                           <button onClick={() => deleteProperty(prop.id)} className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 w-full">
                             <Trash2 className="w-3.5 h-3.5" /> Eliminar
