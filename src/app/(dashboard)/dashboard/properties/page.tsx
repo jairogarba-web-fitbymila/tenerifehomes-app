@@ -16,6 +16,7 @@ import {
   Pencil,
   Trash2,
   ChevronDown,
+  Upload,
 } from 'lucide-react'
 
 interface Property {
@@ -27,10 +28,9 @@ interface Property {
   property_type: string
   bedrooms: number | null
   bathrooms: number | null
-  area_built: number | null
-  city: string | null
-  region_slug: string | null
-  main_image_url: string | null
+  size_m2: number | null
+  location: string | null
+  images: string[] | null
   created_at: string
   updated_at: string
 }
@@ -119,7 +119,7 @@ export default function PropertiesPage() {
 
     let query = supabase
       .from('properties')
-      .select('id, title, price, status, operation_type, property_type, bedrooms, bathrooms, area_built, city, region_slug, main_image_url, created_at, updated_at')
+      .select('id, title, price, status, operation_type, property_type, bedrooms, bathrooms, size_m2, location, images, created_at, updated_at')
       .eq('agent_id', user.id)
       .order('updated_at', { ascending: false })
 
@@ -152,7 +152,7 @@ export default function PropertiesPage() {
   }
 
   const filtered = properties.filter((p) =>
-    !search || p.title.toLowerCase().includes(search.toLowerCase()) || p.city?.toLowerCase().includes(search.toLowerCase())
+    !search || p.title.toLowerCase().includes(search.toLowerCase()) || p.location?.toLowerCase().includes(search.toLowerCase())
   )
 
   function formatPrice(price: number) {
@@ -184,10 +184,16 @@ export default function PropertiesPage() {
           <h1 className="text-2xl font-bold text-gray-900">Propiedades</h1>
           <p className="text-gray-500 text-sm mt-1">{properties.length} propiedades en total</p>
         </div>
-        <Link href="/dashboard/properties/new" className="btn-primary flex items-center gap-2 self-start">
-          <Plus className="w-4 h-4" />
-          Nueva propiedad
-        </Link>
+        <div className="flex items-center gap-2 self-start">
+          <Link href="/dashboard/properties/import" className="btn-secondary flex items-center gap-2 text-sm">
+            <Upload className="w-4 h-4" />
+            Importar
+          </Link>
+          <Link href="/dashboard/properties/new" className="btn-primary flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Nueva propiedad
+          </Link>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -281,8 +287,8 @@ export default function PropertiesPage() {
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                          {prop.main_image_url ? (
-                            <img src={prop.main_image_url} alt="" className="w-full h-full object-cover" />
+                          {prop.images && prop.images.length > 0 ? (
+                            <img src={prop.images[0]} alt="" className="w-full h-full object-cover" />
                           ) : (
                             <Building2 className="w-5 h-5 text-gray-400" />
                           )}
@@ -291,9 +297,9 @@ export default function PropertiesPage() {
                           <Link href={`/dashboard/properties/${prop.id}`} className="text-sm font-medium text-gray-900 hover:text-brand-600 truncate block">
                             {prop.title}
                           </Link>
-                          {prop.city && (
+                          {prop.location && (
                             <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-                              <MapPin className="w-3 h-3" /> {prop.city}
+                              <MapPin className="w-3 h-3" /> {prop.location}
                             </p>
                           )}
                         </div>
@@ -310,7 +316,7 @@ export default function PropertiesPage() {
                       <div className="flex items-center gap-3 text-xs text-gray-500">
                         {prop.bedrooms != null && <span>{prop.bedrooms} hab</span>}
                         {prop.bathrooms != null && <span>{prop.bathrooms} baños</span>}
-                        {prop.area_built != null && <span>{prop.area_built} m²</span>}
+                        {prop.size_m2 != null && <span>{prop.size_m2} m²</span>}
                       </div>
                     </td>
                     <td className="px-5 py-3">
