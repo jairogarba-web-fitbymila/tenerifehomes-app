@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase-browser'
 import Link from 'next/link'
 import {
@@ -11,6 +12,17 @@ import {
   Plus,
   ArrowRight,
   Clock,
+  CheckCircle2,
+  Circle,
+  ExternalLink,
+  Camera,
+  FileText,
+  Home,
+  Share2,
+  Upload,
+  Sparkles,
+  X,
+  Rocket,
 } from 'lucide-react'
 
 interface DashboardStats {
@@ -39,7 +51,28 @@ interface RecentLead {
   created_at: string
 }
 
+interface AgentProfile {
+  slug: string
+  business_name: string
+  bio_photo: string | null
+  bio: string | null
+  phone: string | null
+  primary_zone: string | null
+}
+
+interface OnboardingStep {
+  id: string
+  label: string
+  description: string
+  icon: typeof Camera
+  href: string
+  done: boolean
+}
+
 export default function DashboardPage() {
+  const searchParams = useSearchParams()
+  const isWelcome = searchParams.get('welcome') === 'true'
+
   const [stats, setStats] = useState<DashboardStats>({
     totalProperties: 0,
     activeProperties: 0,
@@ -49,7 +82,10 @@ export default function DashboardPage() {
   })
   const [recentProperties, setRecentProperties] = useState<RecentProperty[]>([])
   const [recentLeads, setRecentLeads] = useState<RecentLead[]>([])
+  const [profile, setProfile] = useState<AgentProfile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showWelcome, setShowWelcome] = useState(false)
+  const [dismissedOnboarding, setDismissedOnboarding] = useState(false)
 
   useEffect(() => {
     async function loadDashboard() {
@@ -57,14 +93,15 @@ export default function DashboardPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
-      // Load stats in parallel
-      const [propsRes, activeRes, leadsRes, weekLeadsRes, recentPropsRes, recentLeadsRes] = await Promise.all([
+      // Load stats + profile in parallel
+      const [propsRes, activeRes, leadsRes, weekLeadsRes, recentPropsRes, recentLeadsRes, profileRes] = await Promise.all([
         supabase.from('properties').select('id', { count: 'exact', head: true }).eq('agent_id', user.id),
         supabase.from('properties').select('id', { count: 'exact', head: true }).eq('agent_id', user.id).eq('is_active', true),
         supabase.from('leads').select('id', { count: 'exact', head: true }).eq('agent_id', user.id),
         supabase.from('leads').select('id', { count: 'exact', head: true }).eq('agent_id', user.id).gte('created_at', new Date(Date.now() - 7 * 86400000).toISOString()),
         supabase.from('properties').select('id, title, price, is_active, operation_type, created_at').eq('agent_id', user.id).order('created_at', { ascending: false }).limit(5),
         supabase.from('leads').select('id, name, email, phone, status, created_at').eq('agent_id', user.id).order('created_at', { ascending: false }).limit(5),
+        supabase.from('agent_profiles').select('slug, business_name, bio_photo, bio, phone, primary_zone').eq('user_id', user.id).single(),
       ])
 
       setStats({
@@ -77,10 +114,68 @@ export default function DashboardPage() {
 
       setRecentProperties(recentPropsRes.data || [])
       setRecentLeads(recentLeadsRes.data || [])
+      if (profileRes.data) setProfile(profileRes.data)
+
+      // Show welcome if query param or if profile looks brand new (no photo, default bio)
+      if (isWelcome) setShowWelcome(true)
+
       setLoading(false)
     }
     loadDashboard()
-  }, [])
+  }, [isWelcome])
+
+  // Compute onboarding steps
+  const hasRealPhoto = profile?.bio_photo && !profile.bio_photo.includes('unsplash')
+  const hasCustomBio = profile?.bio && profile.bio.length > 20 && !profile.bio.includes('demo') && !profile.bio.includes('ejemplo')
+  const hasPhone = !!profile?.phone
+  const hasZone = !!profile?.primary_zone
+
+  const onboardingSteps: OnboardingStep[] = [
+    {
+      id: 'photo',
+      label: 'Sube tu foto de perfil',
+      description: 'Los clientes confían más cuando ven quién les atiende',
+      icon: Camera,
+      href: '/dashboard/settings',
+      done: !!hasRealPhoto,
+    },
+    {
+      id: 'bio',
+      label: 'Personaliza tu biografía',
+      description: 'Cuéntales quién eres y por qué elegirte',
+      icon: FileText,
+      href: '/dashboard/settings',
+      done: !!hasCustomBio,
+    },
+    {
+      id: 'properties',
+      label: 'Añade tus propiedades reales',
+      description: 'Sustituye las de ejemplo por las tuyas',
+      icon: Home,
+      href: '/dashboard/properties',
+      done: false, // We can't easily detect this, so always show as pending initially
+    },
+    {
+      id: 'import',
+      label: 'Importa desde CSV o enlace',
+      description: 'Sube todas tus propiedades de golpe',
+      icon: Upload,
+      href: '/dashboard/properties/import',
+      done: false,
+    },
+    {
+      id: 'share',
+      label: 'Comparte tu web',
+      description: 'Envía el enlace a tus clientes y redes sociales',
+      icon: Share2,
+      href: profile?.slug ? `/agent/${profile.slug}` : '#',
+      done: false,
+    },
+  ]
+
+  const completedSteps = onboardingSteps.filter(s => s.done).length
+  const totalSteps = onboardingSteps.length
+  const showOnboarding = (showWelcome || completedSteps < 3) && !dismissedOnboarding
 
   const statCards = [
     { label: 'Propiedades activas', value: stats.activeProperties, total: stats.totalProperties, icon: Building2, color: 'text-brand-600 bg-brand-50' },
@@ -101,14 +196,6 @@ export default function DashboardPage() {
     if (hours < 24) return `hace ${hours}h`
     const days = Math.floor(hours / 24)
     return `hace ${days}d`
-  }
-
-  const statusLabels: Record<string, { label: string; color: string }> = {
-    published: { label: 'Publicada', color: 'bg-green-100 text-green-700' },
-    draft: { label: 'Borrador', color: 'bg-gray-100 text-gray-600' },
-    reserved: { label: 'Reservada', color: 'bg-amber-100 text-amber-700' },
-    sold: { label: 'Vendida', color: 'bg-blue-100 text-blue-700' },
-    rented: { label: 'Alquilada', color: 'bg-blue-100 text-blue-700' },
   }
 
   const leadStatusLabels: Record<string, { label: string; color: string }> = {
@@ -133,16 +220,132 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      {/* Welcome Banner — shown right after registration */}
+      {showWelcome && (
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 text-white p-6 sm:p-8">
+          <button
+            onClick={() => setShowWelcome(false)}
+            className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center flex-shrink-0">
+              <Rocket className="w-7 h-7" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-xl sm:text-2xl font-bold">
+                ¡Tu web ya está lista, {profile?.business_name}!
+              </h2>
+              <p className="text-white/80 mt-1">
+                Hemos creado tu web con contenido de ejemplo. Solo tienes que sustituirlo por el tuyo.
+              </p>
+            </div>
+            {profile?.slug && (
+              <a
+                href={`/agent/${profile.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-5 py-2.5 bg-white text-brand-700 rounded-lg font-semibold hover:bg-white/90 transition-colors flex-shrink-0"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Ver mi web
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Onboarding Checklist */}
+      {showOnboarding && (
+        <div className="card overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <Sparkles className="w-5 h-5 text-brand-600" />
+              <div>
+                <h2 className="font-semibold text-gray-900">Personaliza tu web</h2>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {completedSteps} de {totalSteps} pasos completados
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              {/* Progress bar */}
+              <div className="hidden sm:flex items-center gap-2">
+                <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-brand-600 rounded-full transition-all duration-500"
+                    style={{ width: `${(completedSteps / totalSteps) * 100}%` }}
+                  />
+                </div>
+                <span className="text-xs text-gray-400">{Math.round((completedSteps / totalSteps) * 100)}%</span>
+              </div>
+              <button
+                onClick={() => setDismissedOnboarding(true)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+                title="Ocultar guía"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          <div className="divide-y divide-gray-50">
+            {onboardingSteps.map((step) => (
+              <Link
+                key={step.id}
+                href={step.href}
+                target={step.id === 'share' ? '_blank' : undefined}
+                className="flex items-center gap-4 px-5 py-3.5 hover:bg-gray-50 transition-colors group"
+              >
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  step.done
+                    ? 'bg-green-100 text-green-600'
+                    : 'bg-gray-100 text-gray-400 group-hover:bg-brand-50 group-hover:text-brand-600'
+                }`}>
+                  {step.done ? (
+                    <CheckCircle2 className="w-5 h-5" />
+                  ) : (
+                    <step.icon className="w-4 h-4" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm font-medium ${step.done ? 'text-gray-400 line-through' : 'text-gray-900'}`}>
+                    {step.label}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">{step.description}</p>
+                </div>
+                {!step.done && (
+                  <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-brand-600 transition-colors flex-shrink-0" />
+                )}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-500 text-sm mt-1">Resumen de tu actividad</p>
         </div>
-        <Link href="/dashboard/properties/new" className="btn-primary flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          Nueva propiedad
-        </Link>
+        <div className="flex items-center gap-2">
+          {profile?.slug && (
+            <a
+              href={`/agent/${profile.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span className="hidden sm:inline">Ver mi web</span>
+            </a>
+          )}
+          <Link href="/dashboard/properties/new" className="btn-primary flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Nueva propiedad
+          </Link>
+        </div>
       </div>
 
       {/* Stats */}
