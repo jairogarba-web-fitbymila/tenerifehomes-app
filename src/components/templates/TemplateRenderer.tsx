@@ -14,8 +14,8 @@ function LuxuryTemplate({ data }: { data: TemplateData }) {
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <span className="text-2xl font-light tracking-widest uppercase" style={{color:'#C9A84C'}}>{agent.business_name}</span>
           <nav className="hidden md:flex gap-8 text-sm tracking-wider uppercase text-white/60">
-            <a href="#collection" className="hover:text-white/90 transition">Colecci\u00f3n</a>
-            <a href="#about" className="hover:text-white/90 transition">Sobre M\u00ed</a>
+            <a href="#collection" className="hover:text-white/90 transition">Colección</a>
+            <a href="#about" className="hover:text-white/90 transition">Sobre Mí</a>
             <a href="#contact" className="hover:text-white/90 transition">Contacto</a>
           </nav>
         </div>
@@ -35,10 +35,10 @@ function LuxuryTemplate({ data }: { data: TemplateData }) {
         </div>
       </section>
       {/* Stats */}
-      {agent.stats && <section className="border-y border-white/10 py-8"><div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">{Object.entries(agent.stats).map(([k,v])=>(<div key={k} className="text-center"><div className="text-3xl font-light" style={{color:'#C9A84C'}}>{typeof v==='number'?v.toLocaleString():'\u2014'}</div><div className="text-xs tracking-wider uppercase text-white/40 mt-1">{k.replace(/_/g,' ')}</div></div>))}</div></section>}
+      {agent.stats && <section className="border-y border-white/10 py-8"><div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">{Object.entries(agent.stats).map(([k,v])=>(<div key={k} className="text-center"><div className="text-3xl font-light" style={{color:'#C9A84C'}}>{typeof v==='number'?v.toLocaleString():'—'}</div><div className="text-xs tracking-wider uppercase text-white/40 mt-1">{k.replace(/_/g,' ')}</div></div>))}</div></section>}
       {/* Properties */}
       <section id="collection" className="max-w-7xl mx-auto px-6 py-20">
-        <h2 className="text-sm tracking-[0.3em] uppercase mb-12" style={{color:'#C9A84C'}}>Colecci\u00f3n Exclusiva</h2>
+        <h2 className="text-sm tracking-[0.3em] uppercase mb-12" style={{color:'#C9A84C'}}>Colección Exclusiva</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {properties.filter(p=>p.is_active).map(p=>(
             <div key={p.id} className="group cursor-pointer">
@@ -52,15 +52,15 @@ function LuxuryTemplate({ data }: { data: TemplateData }) {
               </div>
               <div className="flex gap-6 mt-3 text-sm text-white/40">
                 {p.bedrooms!=null && <span>{p.bedrooms} hab.</span>}
-                {p.bathrooms!=null && <span>{p.bathrooms} ba\u00f1os</span>}
-                {p.size_m2!=null && <span>{p.size_m2}m\u00b2</span>}
+                {p.bathrooms!=null && <span>{p.bathrooms} baños</span>}
+                {p.size_m2!=null && <span>{p.size_m2}m²</span>}
               </div>
             </div>
           ))}
         </div>
       </section>
       {/* About */}
-      {agent.bio && <section id="about" className="border-t border-white/10 py-20"><div className="max-w-4xl mx-auto px-6"><h2 className="text-sm tracking-[0.3em] uppercase mb-8" style={{color:'#C9A84C'}}>Sobre M\u00ed</h2><p className="text-xl text-white/70 leading-relaxed">{agent.bio}</p>{agent.quote && <blockquote className="mt-8 text-lg italic text-white/40 border-l-2 pl-6" style={{borderColor:'#C9A84C'}}>&ldquo;{agent.quote}&rdquo;</blockquote>}</div></section>}
+      {agent.bio && <section id="about" className="border-t border-white/10 py-20"><div className="max-w-4xl mx-auto px-6"><h2 className="text-sm tracking-[0.3em] uppercase mb-8" style={{color:'#C9A84C'}}>Sobre Mí</h2><p className="text-xl text-white/70 leading-relaxed">{agent.bio}</p>{agent.quote && <blockquote className="mt-8 text-lg italic text-white/40 border-l-2 pl-6" style={{borderColor:'#C9A84C'}}>&ldquo;{agent.quote}&rdquo;</blockquote>}</div></section>}
       {/* Testimonials */}
       {testimonials.length>0 && <section className="py-20 bg-white/[0.02]"><div className="max-w-6xl mx-auto px-6"><h2 className="text-sm tracking-[0.3em] uppercase mb-12 text-center" style={{color:'#C9A84C'}}>Testimonios</h2><div className="grid md:grid-cols-3 gap-8">{testimonials.map(t=>(<div key={t.id} className="border border-white/10 p-8"><div className="flex gap-1 mb-4">{[...Array(t.rating||5)].map((_,i)=>(<Star key={i} className="w-4 h-4" style={{color:'#C9A84C',fill:'#C9A84C'}} />))}</div><p className="text-white/70 italic mb-4">&ldquo;{t.quote}&rdquo;</p><p className="text-sm" style={{color:'#C9A84C'}}>{t.client_name}</p><p className="text-xs text-white/40">{t.client_location}</p></div>))}</div></div></section>}
       {/* Contact */}
@@ -80,7 +80,7 @@ function MediterraneanTemplate({ data }: { data: TemplateData }) {
       <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 border-b" style={{borderColor:C.sand}}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <span className="text-xl font-bold" style={{color:C.primary}}>{agent.business_name}</span>
-          <nav className="hidden md:flex gap-6 text-sm"><a href="#propiedades" className="hover:opacity-70">Propiedades</a><a href="#sobre" className="hover:opacity-70">Sobre M\u00ed</a><a href="#contacto" className="hover:opacity-70">Contacto</a></nav>
+          <nav className="hidden md:flex gap-6 text-sm"><a href="#propiedades" className="hover:opacity-70">Propiedades</a><a href="#sobre" className="hover:opacity-70">Sobre Mí</a><a href="#contacto" className="hover:opacity-70">Contacto</a></nav>
         </div>
       </header>
       {/* Hero Split */}
@@ -113,7 +113,7 @@ function MediterraneanTemplate({ data }: { data: TemplateData }) {
                 <div className="flex gap-4 text-sm opacity-60">
                   {p.bedrooms!=null && <span className="flex items-center gap-1"><Bed className="w-4 h-4" />{p.bedrooms}</span>}
                   {p.bathrooms!=null && <span className="flex items-center gap-1"><Bath className="w-4 h-4" />{p.bathrooms}</span>}
-                  {p.size_m2!=null && <span className="flex items-center gap-1"><Ruler className="w-4 h-4" />{p.size_m2}m\u00b2</span>}
+                  {p.size_m2!=null && <span className="flex items-center gap-1"><Ruler className="w-4 h-4" />{p.size_m2}m²</span>}
                 </div>
               </div>
             </div>
@@ -127,7 +127,7 @@ function MediterraneanTemplate({ data }: { data: TemplateData }) {
       {/* Testimonials */}
       {testimonials.length>0 && <section className="py-16" style={{backgroundColor:C.sand}}><div className="max-w-6xl mx-auto px-6"><h2 className="text-3xl font-bold mb-8 text-center" style={{color:C.primary}}>Lo Que Dicen Nuestros Clientes</h2><div className="grid md:grid-cols-2 gap-6">{testimonials.map(t=>(<div key={t.id} className="bg-white rounded-2xl p-6"><div className="flex gap-1 mb-3">{[...Array(t.rating||5)].map((_,i)=>(<Star key={i} className="w-4 h-4" style={{color:C.primary,fill:C.primary}} />))}</div><p className="italic opacity-70 mb-4">&ldquo;{t.quote}&rdquo;</p><p className="font-semibold">{t.client_name}</p><p className="text-sm opacity-50">{t.client_location}</p></div>))}</div></div></section>}
       {/* Contact */}
-      <section id="contacto" className="max-w-2xl mx-auto px-6 py-16 text-center"><h2 className="text-3xl font-bold mb-3" style={{color:C.primary}}>\u00bfHablamos?</h2><p className="opacity-60 mb-8">Estoy aqu\u00ed para ayudarte a encontrar tu hogar</p><div className="flex flex-col sm:flex-row gap-4 justify-center">{agent.phone&&<a href={`tel:${agent.phone}`} className="px-6 py-3 rounded-full border-2 font-medium" style={{borderColor:C.primary,color:C.primary}}><Phone className="w-4 h-4 inline mr-2" />{agent.phone}</a>}{agent.whatsapp&&<a href={`https://wa.me/${agent.whatsapp}`} className="px-6 py-3 rounded-full text-white font-medium" style={{backgroundColor:C.primary}}><MessageSquare className="w-4 h-4 inline mr-2" />WhatsApp</a>}</div></section>
+      <section id="contacto" className="max-w-2xl mx-auto px-6 py-16 text-center"><h2 className="text-3xl font-bold mb-3" style={{color:C.primary}}>¿Hablamos?</h2><p className="opacity-60 mb-8">Estoy aquí para ayudarte a encontrar tu hogar</p><div className="flex flex-col sm:flex-row gap-4 justify-center">{agent.phone&&<a href={`tel:${agent.phone}`} className="px-6 py-3 rounded-full border-2 font-medium" style={{borderColor:C.primary,color:C.primary}}><Phone className="w-4 h-4 inline mr-2" />{agent.phone}</a>}{agent.whatsapp&&<a href={`https://wa.me/${agent.whatsapp}`} className="px-6 py-3 rounded-full text-white font-medium" style={{backgroundColor:C.primary}}><MessageSquare className="w-4 h-4 inline mr-2" />WhatsApp</a>}</div></section>
       <footer className="py-6 text-center text-sm opacity-40">Powered by <span style={{color:C.primary}}>HabiBook</span></footer>
     </div>
   )
@@ -146,7 +146,7 @@ function CorporateTemplate({ data }: { data: TemplateData }) {
         </div>
       </header>
       {/* Stats Bar */}
-      {agent.stats && <div style={{backgroundColor:C.accent}} className="text-white"><div className="max-w-7xl mx-auto px-6 py-4 flex flex-wrap justify-center gap-8 md:gap-16">{Object.entries(agent.stats).map(([k,v])=>(<div key={k} className="text-center"><span className="text-2xl font-bold">{typeof v==='number'?v.toLocaleString():'\u2014'}</span><span className="text-xs ml-2 uppercase opacity-70">{k.replace(/_/g,' ')}</span></div>))}</div></div>}
+      {agent.stats && <div style={{backgroundColor:C.accent}} className="text-white"><div className="max-w-7xl mx-auto px-6 py-4 flex flex-wrap justify-center gap-8 md:gap-16">{Object.entries(agent.stats).map(([k,v])=>(<div key={k} className="text-center"><span className="text-2xl font-bold">{typeof v==='number'?v.toLocaleString():'—'}</span><span className="text-xs ml-2 uppercase opacity-70">{k.replace(/_/g,' ')}</span></div>))}</div></div>}
       {/* Hero */}
       <section className="relative h-[60vh] flex items-center" style={{backgroundImage:`url(${hero?.background_image_url})`,backgroundSize:'cover',backgroundPosition:'center'}}>
         <div className="absolute inset-0" style={{backgroundColor:C.primary,opacity:0.7}} />
@@ -170,7 +170,7 @@ function CorporateTemplate({ data }: { data: TemplateData }) {
                 <p className="text-lg font-bold mb-1" style={{color:C.primary}}>{p.price?formatPrice(p.price):'Consultar'}</p>
                 <h3 className="text-sm font-medium line-clamp-1 mb-1">{p.title}</h3>
                 <p className="text-xs text-gray-400 mb-2"><MapPin className="w-3 h-3 inline" /> {p.location}</p>
-                <div className="flex gap-3 text-xs text-gray-500">{p.bedrooms!=null&&<span><Bed className="w-3 h-3 inline" /> {p.bedrooms}</span>}{p.bathrooms!=null&&<span><Bath className="w-3 h-3 inline" /> {p.bathrooms}</span>}{p.size_m2!=null&&<span>{p.size_m2}m\u00b2</span>}</div>
+                <div className="flex gap-3 text-xs text-gray-500">{p.bedrooms!=null&&<span><Bed className="w-3 h-3 inline" /> {p.bedrooms}</span>}{p.bathrooms!=null&&<span><Bath className="w-3 h-3 inline" /> {p.bathrooms}</span>}{p.size_m2!=null&&<span>{p.size_m2}m²</span>}</div>
               </div>
             </div>
           ))}
@@ -183,7 +183,7 @@ function CorporateTemplate({ data }: { data: TemplateData }) {
       {/* Testimonials */}
       {testimonials.length>0 && <section className="py-16" style={{backgroundColor:C.primary}}><div className="max-w-6xl mx-auto px-6"><h2 className="text-3xl font-bold text-white mb-8 text-center">Testimonios</h2><div className="grid md:grid-cols-3 gap-6">{testimonials.map(t=>(<div key={t.id} className="bg-white/10 backdrop-blur rounded-lg p-6"><div className="flex gap-1 mb-3">{[...Array(t.rating||5)].map((_,i)=>(<Star key={i} className="w-4 h-4" style={{color:C.accent,fill:C.accent}} />))}</div><p className="text-white/80 italic mb-4">&ldquo;{t.quote}&rdquo;</p><p className="text-white font-medium">{t.client_name}</p><p className="text-white/50 text-sm">{t.client_location}</p></div>))}</div></div></section>}
       {/* Contact */}
-      <section id="contact" className="max-w-2xl mx-auto px-6 py-16 text-center"><h2 className="text-3xl font-bold mb-3" style={{color:C.primary}}>Cont\u00e1ctenos</h2><p className="text-gray-500 mb-8">Nuestro equipo est\u00e1 listo para ayudarle</p><div className="flex flex-col sm:flex-row gap-4 justify-center">{agent.phone&&<a href={`tel:${agent.phone}`} className="px-6 py-3 rounded border-2 font-medium" style={{borderColor:C.primary,color:C.primary}}><Phone className="w-4 h-4 inline mr-2" />Llamar</a>}{agent.email&&<a href={`mailto:${agent.email}`} className="px-6 py-3 rounded text-white font-medium" style={{backgroundColor:C.accent}}><Mail className="w-4 h-4 inline mr-2" />Email</a>}</div></section>
+      <section id="contact" className="max-w-2xl mx-auto px-6 py-16 text-center"><h2 className="text-3xl font-bold mb-3" style={{color:C.primary}}>Contáctenos</h2><p className="text-gray-500 mb-8">Nuestro equipo está listo para ayudarle</p><div className="flex flex-col sm:flex-row gap-4 justify-center">{agent.phone&&<a href={`tel:${agent.phone}`} className="px-6 py-3 rounded border-2 font-medium" style={{borderColor:C.primary,color:C.primary}}><Phone className="w-4 h-4 inline mr-2" />Llamar</a>}{agent.email&&<a href={`mailto:${agent.email}`} className="px-6 py-3 rounded text-white font-medium" style={{backgroundColor:C.accent}}><Mail className="w-4 h-4 inline mr-2" />Email</a>}</div></section>
       <footer className="py-6 text-center text-sm text-gray-400" style={{backgroundColor:C.light}}>Powered by <span style={{color:C.accent}}>HabiBook</span></footer>
     </div>
   )
@@ -195,7 +195,7 @@ function BoutiqueTemplate({ data }: { data: TemplateData }) {
   return (
     <div className="min-h-screen" style={{backgroundColor:C.bg,color:C.text,fontFamily:'Georgia,serif'}}>
       {/* Nav - minimal */}
-      <header className="py-8"><div className="max-w-6xl mx-auto px-6 flex items-center justify-between"><span className="text-2xl tracking-wide" style={{color:C.rose}}>{agent.business_name}</span><nav className="hidden md:flex gap-8 text-sm" style={{fontFamily:'system-ui'}}><a href="#portfolio" className="hover:opacity-70">Portfolio</a><a href="#philosophy" className="hover:opacity-70">Filosof\u00eda</a><a href="#contact" className="hover:opacity-70">Contacto</a></nav></div></header>
+      <header className="py-8"><div className="max-w-6xl mx-auto px-6 flex items-center justify-between"><span className="text-2xl tracking-wide" style={{color:C.rose}}>{agent.business_name}</span><nav className="hidden md:flex gap-8 text-sm" style={{fontFamily:'system-ui'}}><a href="#portfolio" className="hover:opacity-70">Portfolio</a><a href="#philosophy" className="hover:opacity-70">Filosofía</a><a href="#contact" className="hover:opacity-70">Contacto</a></nav></div></header>
       {/* Hero - large image with text overlay bottom */}
       <section className="max-w-6xl mx-auto px-6 mb-20">
         <div className="relative rounded-lg overflow-hidden" style={{height:'75vh'}}>
@@ -223,7 +223,7 @@ function BoutiqueTemplate({ data }: { data: TemplateData }) {
                 <div><h3 className="text-xl mb-1">{p.title}</h3><p className="text-sm opacity-50" style={{fontFamily:'system-ui'}}>{p.location}</p></div>
                 <p className="text-lg" style={{color:C.rose}}>{p.price?formatPrice(p.price):'Consultar'}</p>
               </div>
-              <div className="flex gap-6 mt-2 text-sm opacity-40" style={{fontFamily:'system-ui'}}>{p.bedrooms!=null&&<span>{p.bedrooms} dormitorios</span>}{p.size_m2!=null&&<span>{p.size_m2}m\u00b2</span>}</div>
+              <div className="flex gap-6 mt-2 text-sm opacity-40" style={{fontFamily:'system-ui'}}>{p.bedrooms!=null&&<span>{p.bedrooms} dormitorios</span>}{p.size_m2!=null&&<span>{p.size_m2}m²</span>}</div>
             </div>
           ))}
         </div>
@@ -232,7 +232,7 @@ function BoutiqueTemplate({ data }: { data: TemplateData }) {
       <section id="philosophy" className="py-20" style={{backgroundColor:'white'}}>
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           {agent.bio_photo_url && <div className="aspect-[3/4] rounded-lg overflow-hidden"><img src={agent.bio_photo_url} alt="" className="w-full h-full object-cover" /></div>}
-          <div><h2 className="text-sm tracking-[0.2em] uppercase mb-6" style={{color:C.sage,fontFamily:'system-ui'}}>Nuestra Filosof\u00eda</h2><p className="text-lg leading-relaxed opacity-80">{agent.bio}</p>{agent.languages&&<p className="mt-6 text-sm opacity-40" style={{fontFamily:'system-ui'}}>Idiomas: {agent.languages.join(', ')}</p>}</div>
+          <div><h2 className="text-sm tracking-[0.2em] uppercase mb-6" style={{color:C.sage,fontFamily:'system-ui'}}>Nuestra Filosofía</h2><p className="text-lg leading-relaxed opacity-80">{agent.bio}</p>{agent.languages&&<p className="mt-6 text-sm opacity-40" style={{fontFamily:'system-ui'}}>Idiomas: {agent.languages.join(', ')}</p>}</div>
         </div>
       </section>
       {/* Services */}
@@ -240,7 +240,7 @@ function BoutiqueTemplate({ data }: { data: TemplateData }) {
       {/* Testimonials */}
       {testimonials.length>0 && <section className="py-20" style={{backgroundColor:'white'}}><div className="max-w-4xl mx-auto px-6"><h2 className="text-sm tracking-[0.2em] uppercase mb-10 text-center" style={{color:C.sage,fontFamily:'system-ui'}}>Testimonios</h2>{testimonials.map(t=>(<div key={t.id} className="mb-10 text-center"><p className="text-xl italic leading-relaxed mb-4">&ldquo;{t.quote}&rdquo;</p><p className="text-sm font-semibold" style={{fontFamily:'system-ui'}}>{t.client_name}</p><p className="text-xs opacity-40" style={{fontFamily:'system-ui'}}>{t.client_location}</p></div>))}</div></section>}
       {/* Contact */}
-      <section id="contact" className="max-w-2xl mx-auto px-6 py-20 text-center"><h2 className="text-3xl mb-3">Concertar una Cita</h2><p className="text-sm opacity-50 mb-8" style={{fontFamily:'system-ui'}}>Atenci\u00f3n personalizada, solo con cita previa</p><div className="flex flex-col sm:flex-row gap-4 justify-center">{agent.phone&&<a href={`tel:${agent.phone}`} className="px-8 py-3 rounded-lg text-white text-sm" style={{backgroundColor:C.rose,fontFamily:'system-ui'}}><Phone className="w-4 h-4 inline mr-2" />Llamar</a>}{agent.whatsapp&&<a href={`https://wa.me/${agent.whatsapp}`} className="px-8 py-3 rounded-lg text-white text-sm" style={{backgroundColor:C.sage,fontFamily:'system-ui'}}>WhatsApp</a>}</div></section>
+      <section id="contact" className="max-w-2xl mx-auto px-6 py-20 text-center"><h2 className="text-3xl mb-3">Concertar una Cita</h2><p className="text-sm opacity-50 mb-8" style={{fontFamily:'system-ui'}}>Atención personalizada, solo con cita previa</p><div className="flex flex-col sm:flex-row gap-4 justify-center">{agent.phone&&<a href={`tel:${agent.phone}`} className="px-8 py-3 rounded-lg text-white text-sm" style={{backgroundColor:C.rose,fontFamily:'system-ui'}}><Phone className="w-4 h-4 inline mr-2" />Llamar</a>}{agent.whatsapp&&<a href={`https://wa.me/${agent.whatsapp}`} className="px-8 py-3 rounded-lg text-white text-sm" style={{backgroundColor:C.sage,fontFamily:'system-ui'}}>WhatsApp</a>}</div></section>
       <footer className="py-6 text-center text-xs opacity-30" style={{fontFamily:'system-ui'}}>Powered by <span style={{color:C.rose}}>HabiBook</span></footer>
     </div>
   )
@@ -268,7 +268,7 @@ function ClassicTemplate({ data }: { data: TemplateData }) {
         </div>
       </section>
       {/* Awards / Stats ribbon */}
-      {agent.stats && <div className="border-y-2" style={{borderColor:C.gold,backgroundColor:'white'}}><div className="max-w-7xl mx-auto px-6 py-6 flex flex-wrap justify-center gap-10">{Object.entries(agent.stats).map(([k,v])=>(<div key={k} className="flex items-center gap-3"><Award className="w-6 h-6" style={{color:C.gold}} /><div><div className="text-2xl font-bold" style={{color:C.brown}}>{typeof v==='number'?v.toLocaleString():'\u2014'}</div><div className="text-xs uppercase tracking-wider opacity-50" style={{fontFamily:'system-ui'}}>{k.replace(/_/g,' ')}</div></div></div>))}</div></div>}
+      {agent.stats && <div className="border-y-2" style={{borderColor:C.gold,backgroundColor:'white'}}><div className="max-w-7xl mx-auto px-6 py-6 flex flex-wrap justify-center gap-10">{Object.entries(agent.stats).map(([k,v])=>(<div key={k} className="flex items-center gap-3"><Award className="w-6 h-6" style={{color:C.gold}} /><div><div className="text-2xl font-bold" style={{color:C.brown}}>{typeof v==='number'?v.toLocaleString():'—'}</div><div className="text-xs uppercase tracking-wider opacity-50" style={{fontFamily:'system-ui'}}>{k.replace(/_/g,' ')}</div></div></div>))}</div></div>}
       {/* Properties */}
       <section id="propiedades" className="max-w-7xl mx-auto px-6 py-16">
         <h2 className="text-3xl font-bold mb-2" style={{color:C.brown}}>Propiedades Seleccionadas</h2>
@@ -280,7 +280,7 @@ function ClassicTemplate({ data }: { data: TemplateData }) {
                 {p.images?.[0]&&<img src={p.images[0]} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
                 {p.badge&&<span className="absolute top-3 left-3 px-3 py-1 text-white text-xs font-medium" style={{backgroundColor:C.gold}}>{p.badge}</span>}
               </div>
-              <div className="p-5"><h3 className="font-bold mb-1">{p.title}</h3><p className="text-sm opacity-50 mb-2" style={{fontFamily:'system-ui'}}><MapPin className="w-3 h-3 inline" /> {p.location}</p><p className="text-xl font-bold" style={{color:C.caramel}}>{p.price?formatPrice(p.price):'Consultar'}</p><div className="flex gap-4 mt-2 text-sm opacity-50" style={{fontFamily:'system-ui'}}>{p.bedrooms!=null&&<span>{p.bedrooms} hab</span>}{p.bathrooms!=null&&<span>{p.bathrooms} ba\u00f1</span>}{p.size_m2!=null&&<span>{p.size_m2}m\u00b2</span>}</div></div>
+              <div className="p-5"><h3 className="font-bold mb-1">{p.title}</h3><p className="text-sm opacity-50 mb-2" style={{fontFamily:'system-ui'}}><MapPin className="w-3 h-3 inline" /> {p.location}</p><p className="text-xl font-bold" style={{color:C.caramel}}>{p.price?formatPrice(p.price):'Consultar'}</p><div className="flex gap-4 mt-2 text-sm opacity-50" style={{fontFamily:'system-ui'}}>{p.bedrooms!=null&&<span>{p.bedrooms} hab</span>}{p.bathrooms!=null&&<span>{p.bathrooms} bañ</span>}{p.size_m2!=null&&<span>{p.size_m2}m²</span>}</div></div>
             </div>
           ))}
         </div>
@@ -290,7 +290,7 @@ function ClassicTemplate({ data }: { data: TemplateData }) {
       {/* Testimonials */}
       {testimonials.length>0 && <section className="max-w-6xl mx-auto px-6 py-16"><h2 className="text-3xl font-bold mb-8" style={{color:C.brown}}>Clientes Satisfechos</h2><div className="grid md:grid-cols-2 gap-8">{testimonials.map(t=>(<div key={t.id} className="bg-white p-8 border-l-4" style={{borderColor:C.gold}}><div className="flex gap-1 mb-3">{[...Array(t.rating||5)].map((_,i)=>(<Star key={i} className="w-4 h-4" style={{color:C.gold,fill:C.gold}} />))}</div><p className="italic opacity-70 mb-4">&ldquo;{t.quote}&rdquo;</p><p className="font-bold">{t.client_name}</p><p className="text-sm opacity-50" style={{fontFamily:'system-ui'}}>{t.client_location}</p></div>))}</div></section>}
       {/* Contact */}
-      <section id="contacto" className="text-white py-16" style={{backgroundColor:C.brown}}><div className="max-w-2xl mx-auto px-6 text-center"><h2 className="text-3xl font-bold mb-3">Contacte Conmigo</h2><p className="opacity-60 mb-8" style={{fontFamily:'system-ui'}}>M\u00e1s de dos d\u00e9cadas de experiencia a su servicio</p><div className="flex flex-col sm:flex-row gap-4 justify-center">{agent.phone&&<a href={`tel:${agent.phone}`} className="px-8 py-3 border border-white/30 text-sm" style={{fontFamily:'system-ui'}}><Phone className="w-4 h-4 inline mr-2" />{agent.phone}</a>}{agent.whatsapp&&<a href={`https://wa.me/${agent.whatsapp}`} className="px-8 py-3 text-sm font-medium" style={{backgroundColor:C.gold,color:C.brown,fontFamily:'system-ui'}}>WhatsApp</a>}</div></div></section>
+      <section id="contacto" className="text-white py-16" style={{backgroundColor:C.brown}}><div className="max-w-2xl mx-auto px-6 text-center"><h2 className="text-3xl font-bold mb-3">Contacte Conmigo</h2><p className="opacity-60 mb-8" style={{fontFamily:'system-ui'}}>Más de dos décadas de experiencia a su servicio</p><div className="flex flex-col sm:flex-row gap-4 justify-center">{agent.phone&&<a href={`tel:${agent.phone}`} className="px-8 py-3 border border-white/30 text-sm" style={{fontFamily:'system-ui'}}><Phone className="w-4 h-4 inline mr-2" />{agent.phone}</a>}{agent.whatsapp&&<a href={`https://wa.me/${agent.whatsapp}`} className="px-8 py-3 text-sm font-medium" style={{backgroundColor:C.gold,color:C.brown,fontFamily:'system-ui'}}>WhatsApp</a>}</div></div></section>
       <footer className="py-6 text-center text-xs opacity-30" style={{fontFamily:'system-ui'}}>Powered by <span style={{color:C.gold}}>HabiBook</span></footer>
     </div>
   )
@@ -325,7 +325,7 @@ function NetworkTemplate({ data }: { data: TemplateData }) {
         </div>
       </section>
       {/* Stats */}
-      {agent.stats&&<div style={{backgroundColor:C.navy}} className="text-white -mt-1"><div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">{Object.entries(agent.stats).map(([k,v])=>(<div key={k}><div className="text-3xl font-bold">{typeof v==='number'?v.toLocaleString():'\u2014'}</div><div className="text-xs uppercase text-white/50 mt-1">{k.replace(/_/g,' ')}</div></div>))}</div></div>}
+      {agent.stats&&<div style={{backgroundColor:C.navy}} className="text-white -mt-1"><div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">{Object.entries(agent.stats).map(([k,v])=>(<div key={k}><div className="text-3xl font-bold">{typeof v==='number'?v.toLocaleString():'—'}</div><div className="text-xs uppercase text-white/50 mt-1">{k.replace(/_/g,' ')}</div></div>))}</div></div>}
       {/* Properties with tabs */}
       <section id="propiedades" className="max-w-7xl mx-auto px-6 py-16">
         <h2 className="text-3xl font-bold mb-6" style={{color:C.navy}}>Nuestras Propiedades</h2>
@@ -338,7 +338,7 @@ function NetworkTemplate({ data }: { data: TemplateData }) {
                 {p.badge&&<span className="absolute top-3 left-3 px-3 py-1 rounded-full text-white text-xs" style={{backgroundColor:C.coral}}>{p.badge}</span>}
                 <span className="absolute bottom-3 right-3 px-3 py-1 rounded text-xs font-medium text-white" style={{backgroundColor:C.navy+'CC'}}>{p.operation_type==='sale'?'Venta':p.operation_type==='rent_vacation'?'Vacacional':'Alquiler'}</span>
               </div>
-              <div className="p-5"><h3 className="font-semibold mb-1">{p.title}</h3><p className="text-sm text-gray-400 mb-2"><MapPin className="w-3 h-3 inline" /> {p.location}</p><p className="text-xl font-bold" style={{color:C.navy}}>{p.price?formatPrice(p.price):'Consultar'}{p.operation_type==='rent_vacation'&&p.price_per_night&&<span className="text-sm font-normal text-gray-400"> / noche</span>}</p><div className="flex gap-3 mt-2 text-sm text-gray-400">{p.bedrooms!=null&&<span><Bed className="w-3 h-3 inline" /> {p.bedrooms}</span>}{p.bathrooms!=null&&<span><Bath className="w-3 h-3 inline" /> {p.bathrooms}</span>}{p.size_m2!=null&&<span>{p.size_m2}m\u00b2</span>}</div></div>
+              <div className="p-5"><h3 className="font-semibold mb-1">{p.title}</h3><p className="text-sm text-gray-400 mb-2"><MapPin className="w-3 h-3 inline" /> {p.location}</p><p className="text-xl font-bold" style={{color:C.navy}}>{p.price?formatPrice(p.price):'Consultar'}{p.operation_type==='rent_vacation'&&p.price_per_night&&<span className="text-sm font-normal text-gray-400"> / noche</span>}</p><div className="flex gap-3 mt-2 text-sm text-gray-400">{p.bedrooms!=null&&<span><Bed className="w-3 h-3 inline" /> {p.bedrooms}</span>}{p.bathrooms!=null&&<span><Bath className="w-3 h-3 inline" /> {p.bathrooms}</span>}{p.size_m2!=null&&<span>{p.size_m2}m²</span>}</div></div>
             </div>
           ))}
         </div>

@@ -6,7 +6,7 @@ const luxuryAgent: TemplateAgent = {
   business_name: 'Victoria Laurent Luxury Properties',
   slug: 'victoria-laurent',
   template: 'luxury',
-  bio: 'Especialista en propiedades de lujo en la costa sur de Tenerife. Con 12 anos de experiencia y una red exclusiva de clientes internacionales, ofrezco un servicio discreto y personalizado para compradores exigentes.',
+  bio: 'Especialista en propiedades de lujo en la costa sur de Tenerife. Con 12 años de experiencia y una red exclusiva de clientes internacionales, ofrezco un servicio discreto y personalizado para compradores exigentes.',
   phone: '+34 622 456 789',
   email: 'victoria@luxuryproperties.com',
   languages: ['Espanol', 'Frances', 'Ingles', 'Italiano'],
@@ -26,7 +26,7 @@ const luxuryProperties: TemplateProperty[] = [
 
 const luxuryHero: TemplateHero = {
   title: 'Propiedades exclusivas en Tenerife',
-  subtitle: '12 anos conectando compradores exigentes con las mejores residencias de la isla',
+  subtitle: '12 años conectando compradores exigentes con las mejores residencias de la isla',
   image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1600',
 };
 
@@ -36,7 +36,7 @@ const mediterraneanAgent: TemplateAgent = {
   business_name: 'Antonio Reyes Inmobiliaria',
   slug: 'antonio-reyes',
   template: 'mediterranean',
-  bio: '15 anos ayudando a familias a encontrar su hogar perfecto en Tenerife. Mas de 320 ventas realizadas. Mi compromiso es acompanarte en cada paso del proceso, desde la primera visita hasta la firma en notaria.',
+  bio: '15 años ayudando a familias a encontrar su hogar perfecto en Tenerife. Mas de 320 ventas realizadas. Mi compromiso es acompanarte en cada paso del proceso, desde la primera visita hasta la firma en notaria.',
   phone: '+34 666 123 456',
   email: 'antonio@reyesinmo.com',
   languages: ['Espanol', 'Ingles', 'Aleman'],
@@ -56,7 +56,7 @@ const mediterraneanProperties: TemplateProperty[] = [
 
 const mediterraneanHero: TemplateHero = {
   title: 'Tu hogar en Tenerife te espera',
-  subtitle: '15 anos de experiencia. 320+ familias felices. Tu proximo hogar esta aqui.',
+  subtitle: '15 años de experiencia. 320+ familias felices. Tu proximo hogar esta aqui.',
   image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600',
 };
 // ═══ CORPORATE DEMO ═══
@@ -65,7 +65,7 @@ const corporateAgent: TemplateAgent = {
   business_name: 'Tenerife Prime Real Estate',
   slug: 'tenerife-prime',
   template: 'corporate',
-  bio: 'Tenerife Prime es una agencia consolidada con 8 agentes especializados y mas de 20 anos en el mercado. Mas de 500 millones de euros en volumen de ventas gestionado.',
+  bio: 'Tenerife Prime es una agencia consolidada con 8 agentes especializados y mas de 20 años en el mercado. Mas de 500 millones de euros en volumen de ventas gestiónado.',
   phone: '+34 922 789 456',
   email: 'info@tenerifeprime.com',
   languages: ['Espanol', 'Ingles', 'Aleman', 'Frances', 'Ruso'],
@@ -85,7 +85,7 @@ const corporateProperties: TemplateProperty[] = [
 
 const corporateHero: TemplateHero = {
   title: 'Tu agencia inmobiliaria de confianza',
-  subtitle: '20 anos de experiencia. 8 agentes especializados. Mas de 500M EUR gestionados.',
+  subtitle: '20 años de experiencia. 8 agentes especializados. Mas de 500M EUR gestiónados.',
   image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600',
 };
 
@@ -104,7 +104,7 @@ const boutiqueAgent: TemplateAgent = {
   business_name: 'Maison Tenerife',
   slug: 'maison-tenerife',
   template: 'boutique',
-  bio: 'Somos pequenos por eleccion. Seleccionamos un maximo de 25 propiedades para ofrecer una atencion verdaderamente personalizada. Cada propiedad que aceptamos ha pasado nuestra curaduria personal.',
+  bio: 'Somos pequenos por eleccion. Seleccionamos un maximo de 25 propiedades para ofrecer una atención verdaderamente personalizada. Cada propiedad que aceptamos ha pasado nuestra curaduria personal.',
   phone: '+34 611 234 567',
   email: 'contact@maisontenerife.com',
   languages: ['Frances', 'Espanol', 'Ingles'],
@@ -124,16 +124,16 @@ const boutiqueProperties: TemplateProperty[] = [
 
 const boutiqueHero: TemplateHero = {
   title: 'Seleccion curada de propiedades unicas',
-  subtitle: 'Maximo 25 propiedades. Atencion absoluta. Calidad sobre cantidad.',
+  subtitle: 'Maximo 25 propiedades. Atención absoluta. Calidad sobre cantidad.',
   image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600',
 };
 // ═══ CLASSIC DEMO ═══
 const classicAgent: TemplateAgent = {
-  full_name: 'Roberto Fernandez',
-  business_name: 'Roberto Fernandez — Inmobiliaria desde 1999',
+  full_name: 'Roberto Fernández',
+  business_name: 'Roberto Fernández — Inmobiliaria desde 1999',
   slug: 'roberto-fernandez',
   template: 'classic',
-  bio: '27 anos en el sector inmobiliario de Tenerife. Mas de 600 operaciones de compraventa realizadas. Premio al Mejor Agente del ano 2019 y 2022. Nadie conoce este mercado como yo.',
+  bio: '27 años en el sector inmobiliario de Tenerife. Mas de 600 operaciones de compraventa realizadas. Premio al Mejor Agente del ano 2019 y 2022. Nadie conoce este mercado como yo.',
   phone: '+34 922 345 678',
   email: 'roberto@fernandezinmo.com',
   languages: ['Espanol', 'Ingles'],
@@ -152,7 +152,7 @@ const classicProperties: TemplateProperty[] = [
 ];
 
 const classicHero: TemplateHero = {
-  title: '27 anos de experiencia inmobiliaria',
+  title: '27 años de experiencia inmobiliaria',
   subtitle: 'Mas de 600 operaciones exitosas. Conocimiento profundo del mercado de Tenerife.',
   image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600',
 };
@@ -240,8 +240,8 @@ const sharedTestimonials = [
 
 const sharedServices = [
   { title: 'Compraventa', description: 'Asesoramiento integral en compra y venta de propiedades' },
-  { title: 'Valoracion gratuita', description: 'Tasacion profesional de tu propiedad sin compromiso' },
-  { title: 'Gestion integral', description: 'Acompanamiento desde la busqueda hasta la firma en notaria' },
+  { title: 'Valoración gratuita', description: 'Tasacion profesional de tu propiedad sin compromiso' },
+  { title: 'Gestión integral', description: 'Acompanamiento desde la busqueda hasta la firma en notaria' },
   { title: 'Asesoria legal', description: 'Red de abogados especializados en derecho inmobiliario' },
 ];
 
