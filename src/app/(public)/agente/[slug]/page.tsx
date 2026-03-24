@@ -1,2 +1,14 @@
-// Spanish URL redirect — /agente/[slug] → renders the same agent page
-export { default } from '../../agent/[slug]/page'
+'use client';
+
+import { useParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function AgenteRedirectPage() {
+  const params = useParams();
+  const router = useRouter();
+  useEffect(() => {
+    router.replace('/agent/' + params.slug);
+  }, [params.slug, router]);
+  return null;
+}
