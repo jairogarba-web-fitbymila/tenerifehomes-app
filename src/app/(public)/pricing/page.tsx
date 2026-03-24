@@ -94,8 +94,6 @@ export default function PricingPage() {
               const isSelected = selected.has(m.slug)
               return (
                 <button key={m.slug} onClick={() => toggle(m.slug)}
-                  className={`text-left p-6 rounded-xl border-2 transition-all $${'{'}isSelected ? 'border-[#c9a96e] bg-[#c9a96e]/5 shadow-lg' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
-                <button key={m.slug} onClick={() => toggle(m.slug)}
                   className={`text-left p-6 rounded-xl border-2 transition-all ${isSelected ? 'border-[#c9a96e] bg-[#c9a96e]/5 shadow-lg' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
                   <div className="flex items-center justify-between mb-3">
                     <Icon className={`w-6 h-6 ${isSelected ? 'text-[#c9a96e]' : 'text-gray-400'}`} />
