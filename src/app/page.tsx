@@ -816,7 +816,7 @@ export default function HomePage() {
         <div className="frame-body">
           <div className="frame-num">01</div>
           <h2>
-            7 plantillas.
+            6 plantillas.
             <br />
             Tu marca, <em>tu estilo</em>
           </h2>
@@ -826,7 +826,7 @@ export default function HomePage() {
             minutos.
           </p>
           <div className="frame-highlights">
-            <span className="highlight-chip">7 plantillas</span>
+            <span className="highlight-chip">6 plantillas</span>
             <span className="highlight-chip">Dominio propio</span>
             <span className="highlight-chip">SEO multiidioma</span>
             <span className="highlight-chip">100% responsive</span>
@@ -1058,7 +1058,7 @@ export default function HomePage() {
       {/* TEMPLATES GALLERY */}
       <section className="gallery" id="plantillas">
         <h2>Plantillas que venden</h2>
-        <p>7 plantillas interactivas. Haz clic para explorar cada demo en vivo.</p>
+        <p>6 plantillas interactivas. Haz clic para explorar cada demo en vivo.</p>
         <div className="gallery-grid">
           <a href="/demos/luxury" className="gal-item" style={{textDecoration:'none'}}>
             <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=800&fit=crop" alt="Luxury" />
@@ -1089,7 +1089,7 @@ export default function HomePage() {
             <div className="gal-cap"><h4>Data-Driven</h4><span>DataHomes Tenerife</span></div>
           </a>
           <a href="/demos" className="gal-item" style={{textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#0B1D3A,#1a3a5c)'}}>
-            <div style={{textAlign:'center',color:'white'}}><h4 style={{fontSize:'1.5rem',marginBottom:'0.5rem'}}>Ver todas</h4><span style={{opacity:0.7}}>7 plantillas</span></div>
+            <div style={{textAlign:'center',color:'white'}}><h4 style={{fontSize:'1.5rem',marginBottom:'0.5rem'}}>Ver todas</h4><span style={{opacity:0.7}}>6 plantillas</span></div>
           </a>
         </div>
       </section>
@@ -1126,7 +1126,7 @@ export default function HomePage() {
             <div className="p-sub">+ IGIC · El más elegido</div>
             <ul className="p-list">
               <li>100 propiedades</li>
-              <li>7 plantillas</li>
+              <li>6 plantillas</li>
               <li>5 portales</li>
               <li>Alquileres</li>
               <li>Email marketing</li>

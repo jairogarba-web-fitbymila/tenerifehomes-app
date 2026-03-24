@@ -20,7 +20,7 @@ export default function DemosGalleryPage() {
       {/* Hero */}
       <section style={{ textAlign: 'center', padding: '5rem 2rem 3rem' }}>
         <div style={{ color: '#06B6D4', fontSize: 13, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 12 }}>PLANTILLAS PROFESIONALES</div>
-        <h1 style={{ fontSize: 48, fontWeight: 800, margin: '0 0 1rem', color: '#F8FAFC' }}>7 plantillas. Tu estilo.</h1>
+        <h1 style={{ fontSize: 48, fontWeight: 800, margin: '0 0 1rem', color: '#F8FAFC' }}>6 plantillas. Tu estilo.</h1>
         <p style={{ fontSize: 18, color: '#94A3B8', maxWidth: 600, margin: '0 auto 3rem', lineHeight: 1.7 }}>Cada plantilla esta disenada para un perfil de agente diferente. Explora las demos interactivas y elige la tuya.</p>
       </section>
 
