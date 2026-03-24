@@ -1,6 +1,4 @@
 // Module Engine - Central module access control and feature rendering
-// Checks agent's active modules and controls feature visibility
-
 import { createClient } from '@/lib/supabase-server'
 
 export interface ActiveModule {
@@ -24,7 +22,6 @@ export function hasModule(modules: ActiveModule[], slug: string): boolean {
   return modules.some(m => m.module_slug === slug && m.is_active)
 }
 
-// Module slugs as constants for type safety
 export const MODULE = {
   DOMINIO: 'dominio',
   SEO: 'seo',
@@ -41,25 +38,58 @@ export const MODULE = {
   PLANTILLAS_PREMIUM: 'plantillas_premium',
 } as const
 
-// Check property limit based on modules
 export function getPropertyLimit(modules: ActiveModule[]): number {
-  return hasModule(modules, MODULE.PROPIEDADES_ILIMITADAS) ? Infinity : 20
+  return hasModule(modules, MODULE.PROPIEDADES_ILIMITADAS) ? Infinity : 15
 }
 
-// Check available templates based on modules
 export function getAvailableTemplates(modules: ActiveModule[]): string[] {
-  const base = ['elegante']
+  const base = ['luxury']
   if (hasModule(modules, MODULE.PLANTILLAS_PREMIUM)) {
-    return ['elegante', 'moderno', 'clasico', 'minimalista', 'lujo', 'mediterraneo', 'data']
+    return ['luxury', 'mediterranean', 'corporate', 'boutique', 'network', 'classic', 'data']
   }
   return base
 }
 
-// Get enabled languages based on modules
 export function getEnabledLanguages(modules: ActiveModule[]): string[] {
-  const base = ['es']
   if (hasModule(modules, MODULE.MULTIIDIOMA)) {
-    return ['es', 'en', 'de', 'fr', 'it', 'pt', 'nl', 'ru', 'zh', 'ar']
+    return ['es', 'en', 'de', 'fr', 'it', 'pt', 'nl', 'ru', 'sv', 'no']
   }
-  return base
+  return ['es']
+}
+
+export async function canAddProperty(agentId: string): Promise<{ allowed: boolean; current: number; limit: number }> {
+  const supabase = createClient()
+  const modules = await getAgentModules(agentId)
+  const limit = getPropertyLimit(modules)
+
+  const { count } = await supabase
+    .from('properties')
+    .select('id', { count: 'exact', head: true })
+    .eq('agent_id', agentId)
+    .eq('is_active', true)
+
+  const current = count || 0
+  return { allowed: current < limit, current, limit: limit === Infinity ? -1 : limit }
+}
+
+export function getModuleSummary(modules: ActiveModule[]) {
+  return {
+    hasPortales: hasModule(modules, MODULE.PORTALES),
+    hasMultiidioma: hasModule(modules, MODULE.MULTIIDIOMA),
+    hasCRM: hasModule(modules, MODULE.CRM),
+    hasSEO: hasModule(modules, MODULE.SEO),
+    hasAnalytics: hasModule(modules, MODULE.ANALYTICS),
+    hasPlantillasPremium: hasModule(modules, MODULE.PLANTILLAS_PREMIUM),
+    hasPropiedadesIlimitadas: hasModule(modules, MODULE.PROPIEDADES_ILIMITADAS),
+    hasChatbot: hasModule(modules, MODULE.CHATBOT),
+    hasValoracion: hasModule(modules, MODULE.VALORACION),
+    hasFotografiaIA: hasModule(modules, MODULE.FOTOGRAFIA_IA),
+    hasFirmaDigital: hasModule(modules, MODULE.FIRMA_DIGITAL),
+    hasEmailMarketing: hasModule(modules, MODULE.EMAIL_MARKETING),
+    hasDominio: hasModule(modules, MODULE.DOMINIO),
+    propertyLimit: getPropertyLimit(modules),
+    availableTemplates: getAvailableTemplates(modules),
+    enabledLanguages: getEnabledLanguages(modules),
+    activeCount: modules.length,
+  }
 }
