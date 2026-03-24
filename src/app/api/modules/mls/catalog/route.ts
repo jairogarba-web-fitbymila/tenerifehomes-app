@@ -5,7 +5,6 @@ import { getAgentModules, hasModule, MODULE } from '@/lib/module-engine'
 export const dynamic = 'force-dynamic'
 
 // MLS-0: Basic shared catalog between agents
-
 export async function GET(req: NextRequest) {
   const agentId = req.nextUrl.searchParams.get('agent_id')
   const type = req.nextUrl.searchParams.get('type')
@@ -30,10 +29,14 @@ export async function GET(req: NextRequest) {
   let query = supabase
     .from('mls_listings')
     .select(`
-      id, property_id, listing_agent_id, commission_percent, commission_split,
-      status, listed_at,
-      properties!inner(id, title, slug, description, property_type, operation_type,
-        price, bedrooms, bathrooms, size_m2, location, images, badge)
+      id,
+      property_id,
+      listing_agent_id,
+      commission_percent,
+      commission_split,
+      status,
+      listed_at,
+      properties!inner(id, title, slug, description, property_type, operation_type, price, bedrooms, bathrooms, size_m2, location, images, badge)
     `)
     .eq('status', 'active')
     .neq('listing_agent_id', agentId)
@@ -48,6 +51,7 @@ export async function GET(req: NextRequest) {
   const { data: listings, count, error } = await query
 
   const agentIds = [...new Set((listings || []).map(l => l.listing_agent_id))]
+
   const { data: agents } = await supabase
     .from('agent_profiles')
     .select('id, business_name, slug, phone')
@@ -71,9 +75,12 @@ export async function GET(req: NextRequest) {
     .eq('listing_agent_id', agentId)
     .eq('status', 'active')
 
+  // Track usage - ignore errors
   await supabase.from('module_usage').insert({
-    agent_id: agentId, module_slug: 'mls', action: 'browse_catalog'
-  }).catch(() => {})
+    agent_id: agentId,
+    module_slug: 'mls',
+    action: 'browse_catalog'
+  })
 
   return NextResponse.json({
     listings: enrichedListings,
