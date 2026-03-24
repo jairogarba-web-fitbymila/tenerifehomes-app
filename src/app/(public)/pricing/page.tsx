@@ -1,99 +1,141 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Globe, Search, Camera, Share2, Users, Languages, TrendingUp, FileSignature, MessageSquare, Mail, BarChart3, Building2, Palette, Check } from 'lucide-react'
 import Link from 'next/link'
-import { Check, Star, Globe, Search, Camera, Share2, Users, Languages, TrendingUp, FileSignature, MessageSquare, Mail, BarChart3, Building2, Palette } from 'lucide-react'
 
-const BASE_PLAN = {
-  name: 'Plan Base HabiBook',
-  price: 19,
-  features: [
-    'Web profesional personalizable',
-    'Hasta 20 propiedades',
-    '1 plantilla incluida',
-    'Panel de gesti\u00f3n completo',
-    'Soporte por email',
-    'SSL y hosting incluido',
-    'Subdominio *.habibook.com',
-  ],
+const MODULE_ICONS: Record<string, any> = {
+  dominio: Globe, seo: Search, fotografia_ia: Camera, portales: Share2,
+  crm: Users, multiidioma: Languages, valoracion: TrendingUp,
+  firma_digital: FileSignature, chatbot: MessageSquare, email_marketing: Mail,
+  analytics: BarChart3, propiedades_ilimitadas: Building2, plantillas_premium: Palette,
 }
 
-interface Module { slug: string; name: string; description: string; price_monthly: number; features: string[] }
+interface ModuleDef {
+  slug: string; name: string; description: string;
+  price_monthly: number; features: string[]; sort_order: number;
+}
 
-const ICONS: Record<string, any> = { dominio: Globe, seo: Search, fotografia_ia: Camera, portales: Share2, crm: Users, multiidioma: Languages, valoracion: TrendingUp, firma_digital: FileSignature, chatbot: MessageSquare, email_marketing: Mail, analytics: BarChart3, propiedades_ilimitadas: Building2, plantillas_premium: Palette }
+const BASE_FEATURES = [
+  'Web profesional personalizable',
+  'Hasta 20 propiedades',
+  '1 plantilla incluida',
+  'Panel de gestión completo',
+  'Soporte por email',
+  'SSL y hosting incluido',
+  'Subdominio *.habibook.com',
+]
 
 export default function PricingPage() {
-  const [modules, setModules] = useState<Module[]>([])
+  const [modules, setModules] = useState<ModuleDef[]>([])
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/pricing').then(r => r.json()).then(d => { setModules(d.modules || []); setLoading(false) }).catch(() => setLoading(false))
+    fetch('/api/pricing')
+      .then(r => r.json())
+      .then(d => { setModules(d.modules || []); setLoading(false) })
+      .catch(() => setLoading(false))
   }, [])
 
-  const toggle = (slug: string) => setSelected(prev => { const n = new Set(prev); n.has(slug) ? n.delete(slug) : n.add(slug); return n })
-  const total = BASE_PLAN.price + modules.filter(m => selected.has(m.slug)).reduce((s, m) => s + m.price_monthly, 0)
+  const toggle = (slug: string) => {
+    setSelected(prev => {
+      const next = new Set(prev)
+      next.has(slug) ? next.delete(slug) : next.add(slug)
+      return next
+    })
+  }
+
+  const total = 19 + modules.filter(m => selected.has(m.slug)).reduce((s, m) => s + Number(m.price_monthly), 0)
 
   return (
-    <div className='min-h-screen bg-gray-50'>
-      <header className='bg-[#061225] py-4'>
-        <div className='max-w-6xl mx-auto px-6 flex justify-between items-center'>
-          <Link href='/' className='text-white font-bold text-xl'>HabiBook</Link>
-          <Link href='/register' className='bg-[#c8a45e] text-[#061225] px-6 py-2 rounded-lg font-semibold hover:bg-[#b8944e] transition'>Empieza gratis</Link>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <nav className="bg-[#0a1628] text-white px-6 py-4 flex justify-between items-center">
+        <Link href="/" className="text-xl font-bold">HabiBook</Link>
+        <Link href="/register" className="bg-[#c9a96e] text-white px-5 py-2 rounded-lg font-medium hover:bg-[#b8944d] transition">Empieza gratis</Link>
+      </nav>
 
-      <section className='text-center py-16 px-6'>
-        <h1 className='text-4xl md:text-5xl font-extrabold text-[#061225] mb-4'>Plan Base + M\u00f3dulos a tu medida</h1>
-        <p className='text-lg text-gray-500 max-w-xl mx-auto'>Empieza con lo esencial y a\u00f1ade solo lo que necesitas. Sin permanencia.</p>
+      {/* Hero */}
+      <section className="text-center py-16 px-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-[#0a1628] mb-4">Plan Base + Módulos a tu medida</h1>
+        <p className="text-gray-500 text-lg max-w-2xl mx-auto">Empieza con lo esencial y añade solo lo que necesitas. Sin permanencia.</p>
       </section>
 
-      <section className='max-w-lg mx-auto px-6 pb-12'>
-        <div className='bg-[#061225] rounded-2xl p-10 text-white text-center'>
-          <span className='bg-[#c8a45e] text-[#061225] px-4 py-1 rounded-full font-bold text-sm'>PLAN BASE</span>
-          <h2 className='text-5xl font-extrabold mt-4 mb-1'>{BASE_PLAN.price}\u20ac<span className='text-lg font-normal text-gray-400'>/mes</span></h2>
-          <p className='text-gray-400 mb-6'>Todo lo que necesitas para empezar</p>
-          <div className='text-left max-w-xs mx-auto space-y-2'>
-            {BASE_PLAN.features.map((f, i) => (<div key={i} className='flex items-center gap-2'><Check size={16} className='text-[#c8a45e]' /><span className='text-sm'>{f}</span></div>))}
+      {/* Base Plan Card */}
+      <section className="max-w-xl mx-auto px-4 mb-16">
+        <div className="bg-[#0a1628] text-white rounded-2xl p-8 text-center shadow-xl">
+          <span className="inline-block bg-[#c9a96e]/20 text-[#c9a96e] text-sm font-semibold px-4 py-1 rounded-full mb-4">PLAN BASE</span>
+          <div className="flex items-baseline justify-center gap-1 mb-2">
+            <span className="text-5xl font-bold">19€</span>
+            <span className="text-gray-400">/mes</span>
           </div>
-          <Link href='/register' className='inline-block mt-6 bg-[#c8a45e] text-[#061225] px-8 py-3 rounded-lg font-bold hover:bg-[#b8944e] transition'>Empezar ahora</Link>
+          <p className="text-gray-400 mb-6">Todo lo que necesitas para empezar</p>
+          <ul className="text-left space-y-3 mb-8">
+            {BASE_FEATURES.map(f => (
+              <li key={f} className="flex items-center gap-2"><Check className="w-5 h-5 text-[#c9a96e] flex-shrink-0" /><span>{f}</span></li>
+            ))}
+          </ul>
+          <Link href="/register" className="block w-full bg-[#c9a96e] text-white py-3 rounded-xl font-semibold hover:bg-[#b8944d] transition text-center">Empezar ahora</Link>
         </div>
       </section>
 
-      <section className='max-w-6xl mx-auto px-6 pb-12'>
-        <h2 className='text-3xl font-extrabold text-center text-[#061225] mb-2'>M\u00f3dulos disponibles</h2>
-        <p className='text-center text-gray-500 mb-8'>Selecciona m\u00f3dulos para calcular tu precio mensual</p>
-        {loading ? <p className='text-center'>Cargando...</p> : (
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-            {modules.map(mod => {
-              const Icon = ICONS[mod.slug] || Star
-              const on = selected.has(mod.slug)
+      {/* Modules Grid */}
+      <section className="max-w-6xl mx-auto px-4 mb-32">
+        <h2 className="text-3xl font-bold text-center text-[#0a1628] mb-2">Módulos disponibles</h2>
+        <p className="text-gray-500 text-center mb-10">Selecciona módulos para calcular tu precio mensual</p>
+
+        {loading ? (
+          <div className="text-center py-12 text-gray-400">Cargando módulos...</div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {modules.map(m => {
+              const Icon = MODULE_ICONS[m.slug] || Globe
+              const isSelected = selected.has(m.slug)
               return (
-                <div key={mod.slug} onClick={() => toggle(mod.slug)} className={`bg-white rounded-xl p-6 cursor-pointer border-2 transition-all ${on ? 'border-[#c8a45e] shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
-                  <div className='flex justify-between items-start mb-3'>
-                    <div className={`p-2 rounded-lg ${on ? 'bg-[#c8a45e]' : 'bg-gray-100'}`}><Icon size={20} className={on ? 'text-white' : 'text-gray-500'} /></div>
-                    <div className='text-xl font-extrabold text-[#061225]'>{mod.price_monthly}\u20ac<span className='text-xs font-normal text-gray-400'>/mes</span></div>
+                <button key={m.slug} onClick={() => toggle(m.slug)}
+                  className={`text-left p-6 rounded-xl border-2 transition-all $${'{'}isSelected ? 'border-[#c9a96e] bg-[#c9a96e]/5 shadow-lg' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
+                <button key={m.slug} onClick={() => toggle(m.slug)}
+                  className={`text-left p-6 rounded-xl border-2 transition-all ${isSelected ? 'border-[#c9a96e] bg-[#c9a96e]/5 shadow-lg' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <Icon className={`w-6 h-6 ${isSelected ? 'text-[#c9a96e]' : 'text-gray-400'}`} />
+                    <span className="font-bold text-lg">{m.price_monthly}€<span className="text-sm font-normal text-gray-400">/mes</span></span>
                   </div>
-                  <h3 className='font-bold text-[#061225] mb-1'>{mod.name}</h3>
-                  <p className='text-xs text-gray-500 mb-3 leading-relaxed'>{mod.description}</p>
-                  <div className='space-y-1'>
-                    {(mod.features || []).slice(0, 3).map((f: string, i: number) => (<div key={i} className='flex items-center gap-1'><Check size={12} className={on ? 'text-[#c8a45e]' : 'text-gray-400'} /><span className='text-xs text-gray-500'>{f}</span></div>))}
-                  </div>
-                </div>)
+                  <h3 className="font-bold text-[#0a1628] mb-1">{m.name}</h3>
+                  <p className="text-gray-500 text-sm mb-3">{m.description}</p>
+                  {Array.isArray(m.features) && m.features.length > 0 && (
+                    <ul className="space-y-1">
+                      {m.features.map((f: string) => (
+                        <li key={f} className="flex items-center gap-2 text-sm text-gray-600"><Check className="w-4 h-4 text-[#c9a96e]" />{f}</li>
+                      ))}
+                    </ul>
+                  )}
+                </button>
+              )
             })}
-          </div>)}
+          </div>
+        )}
       </section>
 
+      {/* Sticky Calculator Bar */}
       {selected.size > 0 && (
-        <div className='fixed bottom-0 left-0 right-0 bg-[#061225] border-t-2 border-[#c8a45e] py-4 px-6 flex justify-center items-center gap-6 z-50'>
-          <div className='text-white'>
-            <span className='text-gray-400'>Plan Base + {selected.size} m\u00f3dulo{selected.size > 1 ? 's' : ''} = </span>
-            <span className='text-3xl font-extrabold'>{total.toFixed(2)}\u20ac</span>
-            <span className='text-gray-400'>/mes</span>
+        <div className="fixed bottom-0 left-0 right-0 bg-[#0a1628] text-white py-4 px-6 shadow-2xl z-50">
+          <div className="max-w-4xl mx-auto flex items-center justify-between">
+            <div>
+              <span className="text-gray-400">Plan Base 19€ + {selected.size} módulo{selected.size > 1 ? 's' : ''}</span>
+              <div className="text-3xl font-bold">{total.toFixed(2)}€<span className="text-sm font-normal text-gray-400">/mes</span></div>
+            </div>
+            <Link href="/register" className="bg-[#c9a96e] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#b8944d] transition">
+              Empezar ahora
+            </Link>
           </div>
-          <Link href='/register' className='bg-[#c8a45e] text-[#061225] px-8 py-3 rounded-lg font-bold'>Empezar ahora</Link>
-        </div>)}
+        </div>
+      )}
 
-      <footer className='text-center py-12 text-gray-400 text-sm'>\u00a9 2026 HabiBook. Todos los derechos reservados.</footer>
-    </div>)
+      {/* Footer */}
+      <footer className="text-center py-8 text-gray-400 text-sm">
+        © 2026 HabiBook. Todos los derechos reservados.
+      </footer>
+    </div>
+  )
 }
