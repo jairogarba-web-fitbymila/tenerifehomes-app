@@ -74,6 +74,5 @@ export const TEMPLATE_LIST = [
   { id: 'corporate', name: 'Corporate', desc: 'Profesional y s\u00f3lido. Azul, blanco, equipo.', color: '#0B2545', bg: '#FFFFFF', persona: 'Tenerife Prime Real Estate' },
   { id: 'boutique', name: 'Boutique', desc: 'Editorial y selectivo. Rose, sage, whitespace.', color: '#C08B7F', bg: '#FAF8F5', persona: 'Maison Tenerife' },
   { id: 'classic', name: 'Classic', desc: 'Veterano y premiado. Marr\u00f3n, crema, serif.', color: '#8B6F47', bg: '#FBF7F2', persona: 'Roberto Fern\u00e1ndez' },
-  { id: 'network', name: 'Network', desc: 'Multi-oficina, volumen. Navy, coral, buscador.', color: '#E8614D', bg: '#FFFFFF', persona: 'Island Properties Group' },
   { id: 'data', name: 'Data-Driven', desc: 'Tecnol\u00f3gico, dashboards. Slate, cyan, datos.', color: '#06B6D4', bg: '#0F172A', persona: 'DataHomes Tenerife' },
 ];

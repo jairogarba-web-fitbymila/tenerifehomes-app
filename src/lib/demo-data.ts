@@ -158,57 +158,7 @@ const classicHero: TemplateHero = {
 };
 
 // ═══ NETWORK DEMO ═══
-const networkAgent: TemplateAgent = {
-  full_name: 'James Morrison',
-  business_name: 'Island Properties Group',
-  slug: 'island-properties',
-  template: 'network',
-  bio: 'La mayor red inmobiliaria del sur de Tenerife. 3 oficinas, 15 agentes, mas de 400 propiedades en cartera. Si esta en venta en Tenerife, lo tenemos.',
-  phone: '+34 922 567 890',
-  email: 'info@islandproperties.es',
-  languages: ['Ingles', 'Espanol', 'Aleman', 'Frances', 'Ruso', 'Holandes'],
-  experience_years: 25,
-  photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
-  location: 'Costa Adeje, Tenerife',
-};
 
-const networkProperties: TemplateProperty[] = [
-  { title: 'Apartamento Turistico Renovado', price: 245000, location: 'Playa de las Americas', bedrooms: 2, bathrooms: 1, area_m2: 72, operation_type: 'sale', images: ['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800'] },
-  { title: 'Villa Familiar con Jardin Tropical', price: 680000, location: 'Callao Salvaje', bedrooms: 4, bathrooms: 3, area_m2: 240, operation_type: 'sale', images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800'] },
-  { title: 'Estudio con Licencia Vacacional', price: 185000, location: 'Los Cristianos', bedrooms: 1, bathrooms: 1, area_m2: 42, operation_type: 'sale', images: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800'] },
-  { title: 'Chalet de Montana con Vistas', price: 390000, location: 'Vilaflor', bedrooms: 3, bathrooms: 2, area_m2: 160, operation_type: 'sale', images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800'] },
-  { title: 'Apartamento Vacacional Premium', price: 1500, location: 'Costa Adeje', bedrooms: 2, bathrooms: 2, area_m2: 80, operation_type: 'rent_vacation', images: ['https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800'] },
-  { title: 'Local + Vivienda Comercial', price: 1800, location: 'Las Americas Centro', bedrooms: 2, bathrooms: 1, area_m2: 110, operation_type: 'rent_long', images: ['https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=800'] },
-];
-
-const networkHero: TemplateHero = {
-  title: 'La mayor red inmobiliaria de Tenerife Sur',
-  subtitle: '3 oficinas. 15 agentes. 400+ propiedades. Si existe, lo encontramos.',
-  image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600',
-};
-
-const networkTeam = [
-  { name: 'James Morrison', role: 'CEO & Fundador', photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200' },
-  { name: 'Maria Santos', role: 'Directora Oficina Adeje', photo: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200' },
-  { name: 'Klaus Weber', role: 'Director Oficina Americas', photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200' },
-  { name: 'Laura Martinez', role: 'Directora Oficina Cristianos', photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200' },
-  { name: 'David Chen', role: 'Marketing Digital', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200' },
-  { name: 'Natalia Petrova', role: 'Mercado Ruso', photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200' },
-];
-// ═══ DATA-DRIVEN DEMO ═══
-const dataAgent: TemplateAgent = {
-  full_name: 'Miguel Torres',
-  business_name: 'DataHomes Tenerife',
-  slug: 'datahomes',
-  template: 'data',
-  bio: 'No adivinamos precios, los sabemos. Mas de 10.000 transacciones analizadas con IA. Usamos tecnologia avanzada y analisis de mercado en tiempo real para tomar decisiones basadas en datos, no en intuicion.',
-  phone: '+34 611 987 654',
-  email: 'info@datahomes.es',
-  languages: ['Espanol', 'Ingles', 'Aleman'],
-  experience_years: 5,
-  photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400',
-  location: 'Santa Cruz, Tenerife',
-};
 
 const dataProperties: TemplateProperty[] = [
   { title: 'Penthouse Smart Home Automatizado', price: 485000, location: 'Costa Adeje', bedrooms: 3, bathrooms: 2, area_m2: 140, operation_type: 'sale', images: ['https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800'] },
@@ -270,7 +220,6 @@ export const DEMO_DATA: Record<string, TemplateData> = {
   corporate: buildDemo(corporateAgent, corporateProperties, corporateHero, corporateTeam),
   boutique: buildDemo(boutiqueAgent, boutiqueProperties, boutiqueHero),
   classic: buildDemo(classicAgent, classicProperties, classicHero),
-  network: buildDemo(networkAgent, networkProperties, networkHero, networkTeam),
   data: buildDemo(dataAgent, dataProperties, dataHero, dataTeam),
 };
 

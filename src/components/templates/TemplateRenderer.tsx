@@ -21,7 +21,7 @@ function LuxuryTemplate({ data }: { data: TemplateData }) {
         </div>
       </header>
       {/* Hero fullscreen */}
-      <section className="relative h-[85vh] flex items-end" style={{backgroundImage:`url(${hero?.background_image_url})`,backgroundSize:'cover',backgroundPosition:'center'}}>
+      <section className="relative h-[85vh] flex items-end" style={{backgroundImage:`url(${(hero?.background_image_url||hero?.image)})`,backgroundSize:'cover',backgroundPosition:'center'}}>
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-6 pb-20 w-full">
           <div className="flex items-end gap-8">
@@ -93,7 +93,7 @@ function MediterraneanTemplate({ data }: { data: TemplateData }) {
           {/* Stats inline */}
           {agent.stats && <div className="flex flex-wrap gap-6 mt-10">{Object.entries(agent.stats).slice(0,3).map(([k,v])=>(<div key={k}><span className="text-2xl font-bold" style={{color:C.primary}}>{typeof v==='number'?v:0}</span><span className="text-sm ml-1 opacity-50">{k.replace(/_/g,' ')}</span></div>))}</div>}
         </div>
-        <div className="hidden md:block" style={{backgroundImage:`url(${hero?.background_image_url})`,backgroundSize:'cover',backgroundPosition:'center'}} />
+        <div className="hidden md:block" style={{backgroundImage:`url(${(hero?.background_image_url||hero?.image)})`,backgroundSize:'cover',backgroundPosition:'center'}} />
       </section>
       {/* Properties */}
       <section id="propiedades" className="max-w-7xl mx-auto px-6 py-16">
@@ -148,7 +148,7 @@ function CorporateTemplate({ data }: { data: TemplateData }) {
       {/* Stats Bar */}
       {agent.stats && <div style={{backgroundColor:C.accent}} className="text-white"><div className="max-w-7xl mx-auto px-6 py-4 flex flex-wrap justify-center gap-8 md:gap-16">{Object.entries(agent.stats).map(([k,v])=>(<div key={k} className="text-center"><span className="text-2xl font-bold">{typeof v==='number'?v.toLocaleString():'—'}</span><span className="text-xs ml-2 uppercase opacity-70">{k.replace(/_/g,' ')}</span></div>))}</div></div>}
       {/* Hero */}
-      <section className="relative h-[60vh] flex items-center" style={{backgroundImage:`url(${hero?.background_image_url})`,backgroundSize:'cover',backgroundPosition:'center'}}>
+      <section className="relative h-[60vh] flex items-center" style={{backgroundImage:`url(${(hero?.background_image_url||hero?.image)})`,backgroundSize:'cover',backgroundPosition:'center'}}>
         <div className="absolute inset-0" style={{backgroundColor:C.primary,opacity:0.7}} />
         <div className="relative max-w-7xl mx-auto px-6">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{hero?.headline}</h1>
@@ -199,7 +199,7 @@ function BoutiqueTemplate({ data }: { data: TemplateData }) {
       {/* Hero - large image with text overlay bottom */}
       <section className="max-w-6xl mx-auto px-6 mb-20">
         <div className="relative rounded-lg overflow-hidden" style={{height:'75vh'}}>
-          {hero?.background_image_url && <img src={(hero.background_image_url||hero.image)} alt="" className="w-full h-full object-cover" />}
+          {(hero?.background_image_url||hero?.image) && <img src={(hero.background_image_url||hero.image)} alt="" className="w-full h-full object-cover" />}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-10 md:p-16">
             <p className="text-sm tracking-[0.2em] uppercase mb-4" style={{color:C.sage}}>{agent.city}</p>
@@ -259,7 +259,7 @@ function ClassicTemplate({ data }: { data: TemplateData }) {
         </div>
       </header>
       {/* Hero - classic banner */}
-      <section className="relative h-[55vh]" style={{backgroundImage:`url(${hero?.background_image_url})`,backgroundSize:'cover',backgroundPosition:'center'}}>
+      <section className="relative h-[55vh]" style={{backgroundImage:`url(${(hero?.background_image_url||hero?.image)})`,backgroundSize:'cover',backgroundPosition:'center'}}>
         <div className="absolute inset-0" style={{backgroundColor:C.brown,opacity:0.65}} />
         <div className="relative h-full flex flex-col justify-center max-w-7xl mx-auto px-6">
           <h1 className="text-4xl md:text-5xl text-white font-bold mb-3">{hero?.headline}</h1>
@@ -296,69 +296,6 @@ function ClassicTemplate({ data }: { data: TemplateData }) {
   )
 }
 // ========== NETWORK TEMPLATE ==========
-function NetworkTemplate({ data }: { data: TemplateData }) {
-  const { agent, properties, hero, testimonials, team, zones } = data
-  const C = { navy: '#0B1D3A', coral: '#E8614D', light: '#F5F7FA' }
-  const [tab, setTab] = useState<string>('sale')
-  const filtered = properties.filter(p=>p.is_active!==false&&(tab==='all'||p.operation_type===tab))
-  return (
-    <div className="min-h-screen bg-white" style={{fontFamily:'system-ui,-apple-system,sans-serif'}}>
-      {/* Nav */}
-      <header style={{backgroundColor:C.navy}} className="text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <span className="text-xl font-bold">{agent.business_name}</span>
-          <nav className="hidden md:flex gap-6 text-sm text-white/60"><a href="#propiedades" className="hover:text-white">Propiedades</a><a href="#oficinas" className="hover:text-white">Oficinas</a><a href="#equipo" className="hover:text-white">Equipo</a><a href="#contacto" className="hover:text-white">Contacto</a></nav>
-          {agent.phone&&<a href={`tel:${agent.phone}`} className="hidden md:inline-flex px-4 py-2 rounded text-sm font-medium" style={{backgroundColor:C.coral}}><Phone className="w-4 h-4 inline mr-1" />{agent.phone}</a>}
-        </div>
-      </header>
-      {/* Hero with search */}
-      <section className="relative py-24" style={{backgroundImage:`url(${hero?.background_image_url})`,backgroundSize:'cover',backgroundPosition:'center'}}>
-        <div className="absolute inset-0" style={{backgroundColor:C.navy,opacity:0.8}} />
-        <div className="relative max-w-4xl mx-auto px-6 text-center text-white">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{hero?.headline}</h1>
-          <p className="text-xl text-white/70 mb-10">{hero?.subtitle}</p>
-          {/* Fake search bar */}
-          <div className="bg-white rounded-lg p-2 flex flex-col md:flex-row gap-2 shadow-xl">
-            <div className="flex-1 px-4 py-3 text-left text-gray-400 text-sm"><Search className="w-4 h-4 inline mr-2" />Buscar por zona, tipo o referencia...</div>
-            <button className="px-8 py-3 rounded text-white text-sm font-medium" style={{backgroundColor:C.coral}}>Buscar</button>
-          </div>
-        </div>
-      </section>
-      {/* Stats */}
-      {agent.stats&&<div style={{backgroundColor:C.navy}} className="text-white -mt-1"><div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">{Object.entries(agent.stats).map(([k,v])=>(<div key={k}><div className="text-3xl font-bold">{typeof v==='number'?v.toLocaleString():'—'}</div><div className="text-xs uppercase text-white/50 mt-1">{k.replace(/_/g,' ')}</div></div>))}</div></div>}
-      {/* Properties with tabs */}
-      <section id="propiedades" className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold mb-6" style={{color:C.navy}}>Nuestras Propiedades</h2>
-        <div className="flex gap-2 mb-8">{[{id:'sale',l:'Venta'},{id:'rent_long',l:'Alquiler'},{id:'rent_vacation',l:'Vacacional'},{id:'all',l:'Todas'}].map(t=>(<button key={t.id} onClick={()=>setTab(t.id)} className={`px-5 py-2 rounded-full text-sm font-medium transition ${tab===t.id?'text-white':'text-gray-500 bg-gray-100 hover:bg-gray-200'}`} style={tab===t.id?{backgroundColor:C.coral}:{}}>{t.l}</button>))}</div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map(p=>(
-            <div key={p.id} className="rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow group">
-              <div className="aspect-[4/3] overflow-hidden relative">
-                {p.images?.[0]&&<img src={p.images[0]} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />}
-                {p.badge&&<span className="absolute top-3 left-3 px-3 py-1 rounded-full text-white text-xs" style={{backgroundColor:C.coral}}>{p.badge}</span>}
-                <span className="absolute bottom-3 right-3 px-3 py-1 rounded text-xs font-medium text-white" style={{backgroundColor:C.navy+'CC'}}>{p.operation_type==='sale'?'Venta':p.operation_type==='rent_vacation'?'Vacacional':'Alquiler'}</span>
-              </div>
-              <div className="p-5"><h3 className="font-semibold mb-1">{p.title}</h3><p className="text-sm text-gray-400 mb-2"><MapPin className="w-3 h-3 inline" /> {p.location}</p><p className="text-xl font-bold" style={{color:C.navy}}>{p.price?formatPrice(p.price):'Consultar'}{p.operation_type==='rent_vacation'&&p.price_per_night&&<span className="text-sm font-normal text-gray-400"> / noche</span>}</p><div className="flex gap-3 mt-2 text-sm text-gray-400">{p.bedrooms!=null&&<span><Bed className="w-3 h-3 inline" /> {p.bedrooms}</span>}{p.bathrooms!=null&&<span><Bath className="w-3 h-3 inline" /> {p.bathrooms}</span>}{p.size_m2!=null&&<span>{p.size_m2}m²</span>}</div></div>
-            </div>
-          ))}
-        </div>
-      </section>
-      {/* Zones / Offices */}
-      {zones.length>0&&<section id="oficinas" className="py-16" style={{backgroundColor:C.light}}><div className="max-w-7xl mx-auto px-6"><h2 className="text-3xl font-bold mb-8" style={{color:C.navy}}>Nuestras Oficinas</h2><div className="grid md:grid-cols-3 gap-6">{zones.map(z=>(<div key={z.id} className="bg-white rounded-xl overflow-hidden shadow-sm">{z.image_url&&<img src={z.image_url} alt={z.name} className="w-full h-40 object-cover" />}<div className="p-5"><h3 className="font-bold" style={{color:C.navy}}>{z.name}</h3><p className="text-sm text-gray-500 mt-1">{z.description}</p><p className="text-sm font-medium mt-2" style={{color:C.coral}}>{z.property_count} propiedades</p></div></div>))}</div></div></section>}
-      {/* Team */}
-      {team.length>0&&<section id="equipo" className="max-w-7xl mx-auto px-6 py-16"><h2 className="text-3xl font-bold mb-8" style={{color:C.navy}}>Equipo</h2><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">{team.map(m=>(<div key={m.id} className="text-center"><div className="w-20 h-20 mx-auto rounded-full overflow-hidden mb-2">{m.photo_url&&<img src={m.photo_url} alt={m.name} className="w-full h-full object-cover" />}</div><p className="text-sm font-semibold">{m.name}</p><p className="text-xs" style={{color:C.coral}}>{m.role}</p></div>))}</div></section>}
-      {/* Contact */}
-      <section id="contacto" className="py-16" style={{backgroundColor:C.navy}}><div className="max-w-2xl mx-auto px-6 text-center text-white"><h2 className="text-3xl font-bold mb-3">Contactar</h2><p className="text-white/60 mb-8">Estamos en toda la isla para atenderle</p><div className="flex flex-col sm:flex-row gap-4 justify-center">{agent.phone&&<a href={`tel:${agent.phone}`} className="px-6 py-3 rounded-lg border border-white/30 text-sm"><Phone className="w-4 h-4 inline mr-2" />Llamar</a>}{agent.whatsapp&&<a href={`https://wa.me/${agent.whatsapp}`} className="px-6 py-3 rounded-lg text-sm font-medium" style={{backgroundColor:C.coral}}>WhatsApp</a>}</div></div></section>
-      <footer className="py-6 text-center text-xs text-gray-400" style={{backgroundColor:C.light}}>Powered by <span style={{color:C.coral}}>HabiBook</span></footer>
-    </div>
-  )
-}
-
-// ═══════════════════════════════════════════
-// 7. DATA-DRIVEN TEMPLATE
-// Dark slate + cyan, dashboard analytics feel
-// ═══════════════════════════════════════════
-
 function DataTemplate({ data }: { data: TemplateData }) {
   const { agent, properties, hero, testimonials, team, services, zones } = data;
   const [filter, setFilter] = useState<string>("all");
@@ -544,7 +481,6 @@ const TEMPLATE_MAP: Record<string, React.FC<{ data: TemplateData }>> = {
   corporate: CorporateTemplate,
   boutique: BoutiqueTemplate,
   classic: ClassicTemplate,
-  network: NetworkTemplate,
   data: DataTemplate,
 };
 
