@@ -1058,17 +1058,39 @@ export default function HomePage() {
       {/* TEMPLATES GALLERY */}
       <section className="gallery" id="plantillas">
         <h2>Plantillas que venden</h2>
-        <p>7 diseños interactivos. Haz clic para explorar cada demo.</p>
-        <div className="gallery-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
-            <a href="/demos/luxury" className="gal-item" style={{ textDecoration: 'none', color: 'inherit' }}><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500&q=80" alt="Luxury" /><div className="gal-cap"><span>Premium</span><h4>Luxury</h4></div></a>
-            <a href="/demos/mediterranean" className="gal-item" style={{ textDecoration: 'none', color: 'inherit' }}><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80" alt="Mediterranean" /><div className="gal-cap"><span>Cálido</span><h4>Mediterranean</h4></div></a>
-            <a href="/demos/corporate" className="gal-item" style={{ textDecoration: 'none', color: 'inherit' }}><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=500&q=80" alt="Corporate" /><div className="gal-cap"><span>Profesional</span><h4>Corporate</h4></div></a>
-            <a href="/demos/boutique" className="gal-item" style={{ textDecoration: 'none', color: 'inherit' }}><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80" alt="Boutique" /><div className="gal-cap"><span>Exclusivo</span><h4>Boutique</h4></div></a>
-            <a href="/demos/classic" className="gal-item" style={{ textDecoration: 'none', color: 'inherit' }}><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&q=80" alt="Classic" /><div className="gal-cap"><span>Clásico</span><h4>Classic</h4></div></a>
-            <a href="/demos/network" className="gal-item" style={{ textDecoration: 'none', color: 'inherit' }}><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80" alt="Network" /><div className="gal-cap"><span>Multi-oficina</span><h4>Network</h4></div></a>
-            <a href="/demos/data" className="gal-item" style={{ textDecoration: 'none', color: 'inherit' }}><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80" alt="Data" /><div className="gal-cap"><span>Analytics</span><h4>Data-Driven</h4></div></a>
-            <a href="/demos" className="gal-item" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(201,168,76,0.05)', border: '1px solid rgba(201,168,76,0.2)' }}><div style={{ textAlign: 'center', padding: '2rem' }}><div style={{ fontSize: '2rem', color: 'var(--gold)', marginBottom: '0.5rem' }}>&rarr;</div><h4 style={{ fontFamily: 'var(--serif)', fontSize: '1.2rem' }}>Ver todas</h4><span style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>7 demos interactivas</span></div></a>
-          </div>
+        <p>7 plantillas interactivas. Haz clic para explorar cada demo en vivo.</p>
+        <div className="gallery-grid">
+          <a href="/demos/luxury" className="gal-item" style={{textDecoration:'none'}}>
+            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=800&fit=crop" alt="Luxury" />
+            <div className="gal-cap"><h4>Luxury</h4><span>Victoria Laurent</span></div>
+          </a>
+          <a href="/demos/mediterranean" className="gal-item" style={{textDecoration:'none'}}>
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&h=800&fit=crop" alt="Mediterranean" />
+            <div className="gal-cap"><h4>Mediterranean</h4><span>Antonio Reyes</span></div>
+          </a>
+          <a href="/demos/corporate" className="gal-item" style={{textDecoration:'none'}}>
+            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=800&fit=crop" alt="Corporate" />
+            <div className="gal-cap"><h4>Corporate</h4><span>Tenerife Prime</span></div>
+          </a>
+          <a href="/demos/boutique" className="gal-item" style={{textDecoration:'none'}}>
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=800&fit=crop" alt="Boutique" />
+            <div className="gal-cap"><h4>Boutique</h4><span>Maison Tenerife</span></div>
+          </a>
+          <a href="/demos/classic" className="gal-item" style={{textDecoration:'none'}}>
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=800&fit=crop" alt="Classic" />
+            <div className="gal-cap"><h4>Classic</h4><span>Roberto Fernandez</span></div>
+          </a>
+          <a href="/demos/network" className="gal-item" style={{textDecoration:'none'}}>
+            <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=800&fit=crop" alt="Network" />
+            <div className="gal-cap"><h4>Network</h4><span>Island Properties</span></div>
+          </a>
+          <a href="/demos/data" className="gal-item" style={{textDecoration:'none'}}>
+            <img src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&h=800&fit=crop" alt="Data-Driven" />
+            <div className="gal-cap"><h4>Data-Driven</h4><span>DataHomes Tenerife</span></div>
+          </a>
+          <a href="/demos" className="gal-item" style={{textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#0B1D3A,#1a3a5c)'}}>
+            <div style={{textAlign:'center',color:'white'}}><h4 style={{fontSize:'1.5rem',marginBottom:'0.5rem'}}>Ver todas</h4><span style={{opacity:0.7}}>7 plantillas</span></div>
+          </a>
         </div>
       </section>
 
