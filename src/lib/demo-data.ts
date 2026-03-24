@@ -158,7 +158,19 @@ const classicHero: TemplateHero = {
 };
 
 // ═══ NETWORK DEMO ═══
-
+const dataAgent: TemplateAgent = {
+  full_name: 'Miguel Torres',
+  business_name: 'DataHomes Tenerife',
+  slug: 'datahomes',
+  template: 'data',
+  bio: 'No adivinamos precios, los sabemos. Mas de 10.000 transacciones analizadas con IA. Usamos tecnologia avanzada y analisis de mercado en tiempo real para tomar decisiones basadas en datos, no en intuicion.',
+  phone: '+34 611 987 654',
+  email: 'info@datahomes.es',
+  languages: ['Espanol', 'Ingles', 'Aleman'],
+  experience_years: 5,
+  photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400',
+  location: 'Santa Cruz, Tenerife',
+};
 
 const dataProperties: TemplateProperty[] = [
   { title: 'Penthouse Smart Home Automatizado', price: 485000, location: 'Costa Adeje', bedrooms: 3, bathrooms: 2, area_m2: 140, operation_type: 'sale', images: ['https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800'] },
