@@ -40,7 +40,7 @@ function LuxuryTemplate({ data }: { data: TemplateData }) {
       <section id="collection" className="max-w-7xl mx-auto px-6 py-20">
         <h2 className="text-sm tracking-[0.3em] uppercase mb-12" style={{color:'#C9A84C'}}>Colección Exclusiva</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {properties.filter(p=>p.is_active).map(p=>(
+          {properties.filter(p=>p.is_active!==false).map(p=>(
             <div key={p.id} className="group cursor-pointer">
               <div className="aspect-[16/10] overflow-hidden mb-4 relative">
                 {p.images?.[0] && <img src={p.images[0]} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
@@ -100,7 +100,7 @@ function MediterraneanTemplate({ data }: { data: TemplateData }) {
         <h2 className="text-3xl font-bold mb-2" style={{color:C.primary}}>Propiedades Disponibles</h2>
         <p className="opacity-60 mb-10">Encuentra tu hogar ideal en el sur de Tenerife</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {properties.filter(p=>p.is_active).map(p=>(
+          {properties.filter(p=>p.is_active!==false).map(p=>(
             <div key={p.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow group">
               <div className="aspect-[4/3] overflow-hidden relative">
                 {p.images?.[0] && <img src={p.images[0]} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
@@ -160,7 +160,7 @@ function CorporateTemplate({ data }: { data: TemplateData }) {
       <section id="properties" className="max-w-7xl mx-auto px-6 py-16">
         <div className="flex items-center justify-between mb-8"><h2 className="text-3xl font-bold" style={{color:C.primary}}>Propiedades Destacadas</h2></div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {properties.filter(p=>p.is_active).map(p=>(
+          {properties.filter(p=>p.is_active!==false).map(p=>(
             <div key={p.id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow group">
               <div className="aspect-[4/3] overflow-hidden relative">
                 {p.images?.[0]&&<img src={p.images[0]} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />}
@@ -199,7 +199,7 @@ function BoutiqueTemplate({ data }: { data: TemplateData }) {
       {/* Hero - large image with text overlay bottom */}
       <section className="max-w-6xl mx-auto px-6 mb-20">
         <div className="relative rounded-lg overflow-hidden" style={{height:'75vh'}}>
-          {hero?.background_image_url && <img src={hero.background_image_url} alt="" className="w-full h-full object-cover" />}
+          {hero?.background_image_url && <img src={(hero.background_image_url||hero.image)} alt="" className="w-full h-full object-cover" />}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-10 md:p-16">
             <p className="text-sm tracking-[0.2em] uppercase mb-4" style={{color:C.sage}}>{agent.city}</p>
@@ -214,7 +214,7 @@ function BoutiqueTemplate({ data }: { data: TemplateData }) {
       <section id="portfolio" className="max-w-6xl mx-auto px-6 mb-20">
         <h2 className="text-sm tracking-[0.2em] uppercase mb-10" style={{color:C.sage,fontFamily:'system-ui'}}>Portfolio Selecto</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {properties.filter(p=>p.is_active).map((p,i)=>(
+          {properties.filter(p=>p.is_active!==false).map((p,i)=>(
             <div key={p.id} className={`group cursor-pointer ${i===0?'md:col-span-2':''}`}>
               <div className={`overflow-hidden rounded-lg mb-4 ${i===0?'aspect-[21/9]':'aspect-[4/3]'}`}>
                 {p.images?.[0]&&<img src={p.images[0]} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
@@ -274,7 +274,7 @@ function ClassicTemplate({ data }: { data: TemplateData }) {
         <h2 className="text-3xl font-bold mb-2" style={{color:C.brown}}>Propiedades Seleccionadas</h2>
         <div className="w-16 h-1 mb-10" style={{backgroundColor:C.gold}} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {properties.filter(p=>p.is_active).map(p=>(
+          {properties.filter(p=>p.is_active!==false).map(p=>(
             <div key={p.id} className="bg-white border overflow-hidden group" style={{borderColor:C.caramel+'40'}}>
               <div className="aspect-[4/3] overflow-hidden relative">
                 {p.images?.[0]&&<img src={p.images[0]} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
@@ -300,7 +300,7 @@ function NetworkTemplate({ data }: { data: TemplateData }) {
   const { agent, properties, hero, testimonials, team, zones } = data
   const C = { navy: '#0B1D3A', coral: '#E8614D', light: '#F5F7FA' }
   const [tab, setTab] = useState<string>('sale')
-  const filtered = properties.filter(p=>p.is_active&&(tab==='all'||p.operation_type===tab))
+  const filtered = properties.filter(p=>p.is_active!==false&&(tab==='all'||p.operation_type===tab))
   return (
     <div className="min-h-screen bg-white" style={{fontFamily:'system-ui,-apple-system,sans-serif'}}>
       {/* Nav */}
