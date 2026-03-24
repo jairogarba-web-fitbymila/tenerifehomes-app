@@ -1,30 +1,70 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { detectSubdomain, getSubdomainRewriteUrl } from '@/lib/subdomain'
 
 const SITE_PASSWORD = process.env.SITE_PASSWORD || 'Jairo300585'
 
 export async function middleware(request: NextRequest) {
-  // --- SITE-WIDE PASSWORD PROTECTION ---
-  // Allow the password page and its API to load without check
-  if (
-    request.nextUrl.pathname === '/password' ||
-    request.nextUrl.pathname === '/api/password' ||
-    request.nextUrl.pathname.startsWith('/_next') ||
-    request.nextUrl.pathname.startsWith('/favicon')
-  ) {
-    return NextResponse.next()
+  const { pathname } = request.nextUrl
+  
+  // === SUBDOMAIN DETECTION ===
+  const host = request.headers.get('host') || ''
+  const subdomain = detectSubdomain(host)
+  
+  if (subdomain.isSubdomain && subdomain.slug) {
+    // Rewrite subdomain requests to agent page
+    // Skip rewrite for API routes and static assets
+    if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
+      const rewriteUrl = getSubdomainRewriteUrl(subdomain.slug, pathname)
+      const url = request.nextUrl.clone()
+      url.pathname = rewriteUrl
+      const response = NextResponse.rewrite(url)
+      response.headers.set('x-subdomain-slug', subdomain.slug)
+      return response
+    }
   }
-
-  // Check for site access cookie
-  const siteAccess = request.cookies.get('site-access')?.value
-  if (siteAccess !== 'granted') {
-    const url = request.nextUrl.clone()
-    url.pathname = '/password'
-    return NextResponse.redirect(url)
+  
+  // === SITE-WIDE PASSWORD PROTECTION ===
+  // Skip password check for certain paths
+  const isPublicPath = pathname.startsWith('/api/') || 
+    pathname.startsWith('/_next/') || 
+    pathname === '/favicon.ico' ||
+    pathname.startsWith('/auth/')
+  
+  if (!isPublicPath) {
+    const siteAuthCookie = request.cookies.get('site_auth')
+    if (!siteAuthCookie || siteAuthCookie.value !== 'authenticated') {
+      // Check if this is a password submission
+      if (request.method === 'POST' && pathname === '/verify-password') {
+        try {
+          const formData = await request.formData()
+          const password = formData.get('password')
+          if (password === SITE_PASSWORD) {
+            const response = NextResponse.redirect(new URL('/', request.url))
+            response.cookies.set('site_auth', 'authenticated', {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              maxAge: 60 * 60 * 24 * 30, // 30 days
+            })
+            return response
+          }
+        } catch (e) {
+          // Fall through to password page
+        }
+      }
+      
+      // Show password page if not authenticated
+      if (pathname !== '/password' && !pathname.startsWith('/agent/')) {
+        return NextResponse.redirect(new URL('/password', request.url))
+      }
+    }
   }
-
-  // --- EXISTING SUPABASE AUTH LOGIC ---
-  let supabaseResponse = NextResponse.next({ request })
+  
+  // === SUPABASE AUTH ===
+  let response = NextResponse.next({
+    request: { headers: request.headers },
+  })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,13 +74,15 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll()
         },
-        setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
-          cookiesToSet.forEach(({ name, value }) =>
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
             request.cookies.set(name, value)
           )
-          supabaseResponse = NextResponse.next({ request })
+          response = NextResponse.next({
+            request: { headers: request.headers },
+          })
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            response.cookies.set(name, value, options)
           )
         },
       },
@@ -49,27 +91,17 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Allow root path for all users (cinematic landing page, no auth required)
-  if (request.nextUrl.pathname === '/') {
-    return supabaseResponse
+  // Protect dashboard routes
+  if (pathname.startsWith('/dashboard') && !user) {
+    return NextResponse.redirect(new URL('/auth/login', request.url))
   }
 
-  // Protected routes — redirect to login if not authenticated
-  if (!user && (request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/admin'))) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    url.searchParams.set('redirect', request.nextUrl.pathname)
-    return NextResponse.redirect(url)
+  // Protect admin routes
+  if (pathname.startsWith('/admin') && !user) {
+    return NextResponse.redirect(new URL('/auth/login', request.url))
   }
 
-  // Already logged in — redirect away from auth pages
-  if (user && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register')) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
-  }
-
-  return supabaseResponse
+  return response
 }
 
 export const config = {
