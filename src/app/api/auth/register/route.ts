@@ -17,6 +17,8 @@ const HERO_IMAGES: Record<string, string> = {
   corporate: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1920&q=80',
   boutique: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
   network: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80',
+  classic: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80',
+  data: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80',
 }
 
 const PROPERTY_IMAGES = {
@@ -347,6 +349,116 @@ const TEMPLATE_CONTENT: Record<string, {
     ],
     activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'team', 'testimonials', 'services', 'zones', 'contact_form'],
   },
+
+  classic: {
+    hero: {
+      headline: 'Experiencia y Confianza en el Mercado Inmobiliario',
+      subtitle: 'Más de 20 años vendiendo propiedades en Tenerife. Un nombre sinónimo de seriedad y resultados.',
+      cta_text: 'Ver Propiedades',
+    },
+    bio: 'Con más de dos décadas de experiencia en el mercado inmobiliario de Tenerife, ofrezco un servicio basado en la confianza, el conocimiento profundo del mercado y la dedicación personal a cada cliente. He acompañado a cientos de familias en la compra y venta de sus propiedades, construyendo relaciones duraderas basadas en resultados.',
+    quote: 'La experiencia no se improvisa, se construye propiedad a propiedad',
+    stats: { propiedades_vendidas: 500, anos_experiencia: 22, clientes_recomiendan: 98, premios: 5 },
+    properties: [
+      {
+        title: 'Villa clásica con jardín en La Orotava',
+        description: 'Elegante villa de estilo canario con amplios jardines, piscina y vistas al Valle de La Orotava y al Teide. Materiales nobles, techos de madera y acabados artesanales.',
+        property_type: 'villa', operation_type: 'sale', price: 485000,
+        bedrooms: 4, bathrooms: 3, size_m2: 250, location: 'La Orotava',
+        badge: 'featured', images: PROPERTY_IMAGES.villa,
+        features: ['jardín', 'piscina', 'vistas al Teide', 'estilo canario'],
+      },
+      {
+        title: 'Piso reformado en zona residencial de Santa Cruz',
+        description: 'Amplio piso de 3 habitaciones totalmente reformado. Zona residencial tranquila, garaje y trastero incluidos. Excelente comunicación.',
+        property_type: 'apartment', operation_type: 'sale', price: 225000,
+        bedrooms: 3, bathrooms: 2, size_m2: 110, location: 'Santa Cruz de Tenerife',
+        badge: null, images: PROPERTY_IMAGES.apartment,
+        features: ['reformado', 'garaje', 'trastero', 'zona residencial'],
+      },
+      {
+        title: 'Ático con terraza panorámica en Los Cristianos',
+        description: 'Ático luminoso con gran terraza y vistas al mar. Cocina equipada, aire acondicionado y plaza de garaje. Complejo con piscina.',
+        property_type: 'penthouse', operation_type: 'sale', price: 345000,
+        bedrooms: 2, bathrooms: 2, size_m2: 95, location: 'Los Cristianos',
+        badge: 'new', images: PROPERTY_IMAGES.penthouse,
+        features: ['terraza panorámica', 'vistas al mar', 'garaje', 'piscina comunitaria'],
+      },
+    ],
+    testimonials: [
+      { quote: 'Un profesional de la vieja escuela, en el mejor sentido. Serio, cumplidor y con un conocimiento del mercado que solo dan los años. Vendió nuestra casa en un mes.', client_name: 'Fernando y Lucía M.', client_location: 'Santa Cruz de Tenerife', rating: 5 },
+      { quote: 'Nos lo recomendó un amigo hace 10 años y desde entonces no trabajamos con nadie más. Ha gestionado 3 operaciones nuestras sin un solo problema.', client_name: 'Javier P.', client_location: 'La Laguna', rating: 5 },
+      { quote: 'En un mercado lleno de improvisados, encontrar a alguien con su trayectoria y reputación fue un alivio. Compra segura y sin sorpresas.', client_name: 'Heinrich & Petra S.', client_location: 'Hamburgo, Alemania', rating: 5 },
+    ],
+    services: [
+      { title: 'Compraventa Inmobiliaria', description: 'Servicio completo de compraventa con más de 500 operaciones exitosas. Valoración precisa, negociación experta y cierre seguro.', icon: 'building' },
+      { title: 'Valoración Profesional', description: 'Valoraciones basadas en 20 años de datos de mercado propios. Precisión demostrada y análisis comparativo detallado.', icon: 'briefcase' },
+      { title: 'Asesoría Legal y Fiscal', description: 'Red de abogados, notarios y asesores fiscales de confianza. Coordinación integral de toda la documentación.', icon: 'users' },
+      { title: 'Gestión de Patrimonio', description: 'Administración de propiedades, gestión de alquileres y mantenimiento preventivo para propietarios nacionales e internacionales.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Santa Cruz de Tenerife', description: 'Capital de la isla con amplia oferta residencial y comercial. Precios competitivos y excelentes infraestructuras.', image_url: ZONE_IMAGES[0], property_count: 25 },
+      { name: 'La Orotava', description: 'Valle histórico con propiedades de carácter. Casas señoriales, fincas y villas con encanto en un entorno natural privilegiado.', image_url: ZONE_IMAGES[1], property_count: 12 },
+      { name: 'Los Cristianos', description: 'Zona turística consolidada del sur. Alta demanda de compra e inversión. Excelente para alquiler vacacional.', image_url: ZONE_IMAGES[2], property_count: 18 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  data: {
+    hero: {
+      headline: 'Inmobiliaria Inteligente Basada en Datos',
+      subtitle: 'Decisiones informadas con análisis de mercado en tiempo real. Tecnología al servicio de tu inversión.',
+      cta_text: 'Explorar Mercado',
+    },
+    bio: 'Somos la primera agencia inmobiliaria data-driven de Tenerife. Utilizamos análisis de datos, inteligencia artificial y tecnología avanzada para ofrecer valoraciones precisas, identificar tendencias de mercado y maximizar el retorno de inversión de nuestros clientes. Cada decisión está respaldada por datos reales, no por intuiciones.',
+    quote: 'Los datos no mienten. Tu inversión tampoco debería basarse en suposiciones.',
+    stats: { propiedades_analizadas: 5000, precision_valoracion: 97, clientes_inversores: 180, roi_medio: 8 },
+    properties: [
+      {
+        title: 'Oportunidad de inversión: Apartamento en zona de alta demanda',
+        description: 'Datos de mercado confirman crecimiento del 12% anual en esta zona. Apartamento con licencia VV y rentabilidad neta demostrada del 7.5%. Análisis completo disponible.',
+        property_type: 'apartment', operation_type: 'sale', price: 195000,
+        bedrooms: 1, bathrooms: 1, size_m2: 55, location: 'Costa Adeje',
+        badge: 'investment', images: PROPERTY_IMAGES.apartment,
+        features: ['licencia VV', 'ROI 7.5%', 'zona crecimiento', 'datos verificados'],
+      },
+      {
+        title: 'Villa con potencial de revalorización en La Caleta',
+        description: 'Análisis predictivo indica potencial de revalorización del 15% en 3 años. Villa en zona emergente con todos los indicadores positivos de mercado.',
+        property_type: 'villa', operation_type: 'sale', price: 780000,
+        bedrooms: 4, bathrooms: 3, size_m2: 220, location: 'La Caleta, Adeje',
+        badge: 'trending', images: PROPERTY_IMAGES.villa,
+        features: ['zona emergente', 'revalorización', 'análisis predictivo', 'piscina'],
+      },
+      {
+        title: 'Ático smart home con domótica integral',
+        description: 'Propiedad tecnológica con sistema domótico completo, paneles solares y certificación energética A. Monitorización remota y eficiencia máxima.',
+        property_type: 'penthouse', operation_type: 'sale', price: 420000,
+        bedrooms: 2, bathrooms: 2, size_m2: 100, location: 'Playa de las Américas',
+        badge: 'new', images: PROPERTY_IMAGES.penthouse,
+        features: ['domótica', 'paneles solares', 'eficiencia A', 'smart home'],
+      },
+    ],
+    testimonials: [
+      { quote: 'Por primera vez sentí que compraba con información real. Me mostraron datos de rentabilidad, tendencias de zona y comparativas que ningún otro agente tenía. Inversión perfecta.', client_name: 'Alex R.', client_location: 'Madrid', rating: 5 },
+      { quote: 'Su análisis predictivo de mercado fue certero. Compramos donde nos recomendaron y en 2 años la propiedad se ha revalorizado un 18%. Datos, no humo.', client_name: 'Investment Group Nordic', client_location: 'Helsinki, Finlandia', rating: 5 },
+      { quote: 'La transparencia de datos es total. Dashboard con toda la información de mi propiedad en tiempo real: ocupación, ingresos, gastos, rentabilidad neta. Gestión del siglo XXI.', client_name: 'Patricia & Marco G.', client_location: 'Milán, Italia', rating: 5 },
+    ],
+    services: [
+      { title: 'Análisis de Mercado con IA', description: 'Valoraciones precisas al 97% basadas en machine learning y datos de miles de transacciones reales en Tenerife.', icon: 'briefcase' },
+      { title: 'Dashboard de Inversión', description: 'Panel de control en tiempo real con métricas de tu propiedad: ocupación, rentabilidad, comparativa de zona y proyecciones.', icon: 'building' },
+      { title: 'Alertas de Oportunidad', description: 'Sistema automatizado que detecta oportunidades de inversión basándose en tus criterios y envía alertas antes de que salgan al mercado.', icon: 'users' },
+      { title: 'Reportes Predictivos', description: 'Informes trimestrales con predicción de tendencias de mercado, zonas de crecimiento y recomendaciones de inversión respaldadas por datos.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Costa Adeje', description: 'Zona con mayor crecimiento del sur (+12% anual). Alta demanda turística, ocupación media del 82% y rentabilidad líder en Canarias.', image_url: ZONE_IMAGES[0], property_count: 35 },
+      { name: 'El Médano', description: 'Zona emergente con potencial de revalorización. Tendencia alcista confirmada. Perfil joven-deportivo con creciente demanda internacional.', image_url: ZONE_IMAGES[1], property_count: 18 },
+      { name: 'Puerto de la Cruz', description: 'Mercado infravalorado según nuestros modelos. Potencial de crecimiento del 20% en 5 años. Oportunidad para inversores con visión a largo plazo.', image_url: ZONE_IMAGES[2], property_count: 22 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
 }
 
 // ─────────────────────────────────────────────
@@ -360,8 +472,8 @@ export async function POST(request: Request) {
     if (!business_name || !email || !password) {
       return NextResponse.json({ error: 'Nombre, email y contraseña son obligatorios' }, { status: 400 })
     }
-    if (password.length < 6) {
-      return NextResponse.json({ error: 'La contraseña debe tener al menos 6 caracteres' }, { status: 400 })
+    if (password.length < 8) {
+      return NextResponse.json({ error: 'La contraseña debe tener al menos 8 caracteres' }, { status: 400 })
     }
 
     // 1. Create auth user

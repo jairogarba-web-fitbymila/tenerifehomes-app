@@ -6,14 +6,15 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase-browser'
 import { Loader2, Check } from 'lucide-react'
 
-type TemplateType = 'luxury' | 'mediterranean' | 'corporate' | 'boutique' | 'network'
+type TemplateType = 'luxury' | 'mediterranean' | 'corporate' | 'boutique' | 'classic' | 'data'
 
 const TEMPLATES = [
   { id: 'luxury' as TemplateType, name: 'Luxury', desc: 'Elegancia y exclusividad. Villas premium, alto standing.', color1: '#1A1A1A', color2: '#C9A84C', img: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400&q=60' },
   { id: 'mediterranean' as TemplateType, name: 'Mediterranean', desc: 'Cercanía y confianza. Agente familiar, mercado medio.', color1: '#C4652E', color2: '#F5E6D3', img: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&q=60' },
   { id: 'corporate' as TemplateType, name: 'Corporate', desc: 'Agencia profesional con equipo. Imagen corporativa.', color1: '#0B2545', color2: '#4A90D9', img: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=400&q=60' },
   { id: 'boutique' as TemplateType, name: 'Boutique', desc: 'Selección exclusiva. Fincas, casas con historia.', color1: '#C08B7F', color2: '#8B9D77', img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=60' },
-  { id: 'network' as TemplateType, name: 'Network', desc: 'Multi-oficina, gran volumen. Red de agentes.', color1: '#0B1D3A', color2: '#E8614D', img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=60' },
+  { id: 'classic' as TemplateType, name: 'Classic', desc: 'Veterano y premiado. Años de experiencia en el mercado.', color1: '#8B6F47', color2: '#FBF7F2', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=60' },
+  { id: 'data' as TemplateType, name: 'Data-Driven', desc: 'Tecnológico y analítico. Dashboards y datos en tiempo real.', color1: '#0F172A', color2: '#06B6D4', img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=60' },
 ]
 
 export default function RegisterPage() {
@@ -38,7 +39,7 @@ export default function RegisterPage() {
   function goToStep2() {
     if (!form.business_name.trim()) { setError('Escribe el nombre de tu negocio'); return }
     if (!form.email.trim()) { setError('Escribe tu email'); return }
-    if (form.password.length < 6) { setError('La contraseña debe tener al menos 6 caracteres'); return }
+    if (form.password.length < 8) { setError('La contraseña debe tener al menos 8 caracteres'); return }
     setStep(2)
     setError('')
   }
@@ -144,7 +145,7 @@ export default function RegisterPage() {
                       value={form.password}
                       onChange={e => update('password', e.target.value)}
                       className="input-field"
-                      placeholder="Mínimo 6 caracteres"
+                      placeholder="Mínimo 8 caracteres"
                     />
                   </div>
                   <div>
