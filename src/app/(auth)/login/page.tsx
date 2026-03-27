@@ -105,7 +105,7 @@ function LoginForm() {
         <div className="absolute inset-0 bg-gradient-to-br from-brand-800/90 to-brand-950/90" />
         <div className="relative z-10 flex items-center justify-center h-full p-12">
           <div className="text-center">
-            <div className="text-6xl font-display font-bold text-white">TH</div>
+            <div className="text-5xl font-display font-bold text-white">HabiBook</div>
             <p className="mt-4 text-white/60 text-lg max-w-md">
               Tu plataforma inmobiliaria integral. Web profesional, CRM, portales y MLS en un solo lugar.
             </p>

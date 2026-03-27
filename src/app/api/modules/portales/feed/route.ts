@@ -33,7 +33,7 @@ function mapType(t: string): string {
 }
 
 function generateKyeroXML(agent: any, properties: any[]) {
-  const baseUrl = 'https://tenerifehomes-app.vercel.app'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://habibook.com'
   const props = properties.map(p => {
     const imgs = (p.images || []).map((url: string, i: number) => `      <image id="${i+1}"><url>${esc(url)}</url></image>`).join('\n')
     return `  <property>
