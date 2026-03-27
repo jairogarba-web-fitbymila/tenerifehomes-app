@@ -46,6 +46,50 @@ export interface StripeCustomer {
   current_period_end: string | null
 }
 
+// Plan system
+export type PlanType = 'starter' | 'pro' | 'premium' | 'agency'
+
+export const PLAN_LABELS: Record<PlanType, string> = {
+  starter: 'Starter',
+  pro: 'Pro',
+  premium: 'Premium',
+  agency: 'Agency',
+}
+
+export const PLAN_PRICES: Record<PlanType, number> = {
+  starter: 19,
+  pro: 49,
+  premium: 99,
+  agency: 199,
+}
+
+export const PLAN_HIERARCHY: Record<PlanType, number> = {
+  starter: 1,
+  pro: 2,
+  premium: 3,
+  agency: 4,
+}
+
+export interface PlatformModule {
+  id: string
+  name: string
+  description: string
+  min_plan: PlanType
+  is_addon: boolean
+  price_monthly?: number
+}
+
+export interface ModuleOverride {
+  module_id: string
+  is_enabled: boolean
+  expires_at?: string
+  reason?: string
+}
+
+export function planMeetsRequirement(userPlan: PlanType, requiredPlan: PlanType): boolean {
+  return PLAN_HIERARCHY[userPlan] >= PLAN_HIERARCHY[requiredPlan]
+}
+
 // Module category icons for UI
 export const MODULE_ICONS: Record<string, string> = {
   dominio: 'Globe',
