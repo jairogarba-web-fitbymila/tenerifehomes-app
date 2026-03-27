@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import Footer from '@/components/Footer';
 
 export const dynamic = 'force-dynamic';
@@ -709,9 +710,13 @@ export default function HomePage() {
       {/* HERO */}
       <section className="hero">
         <div className="hero-bg">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1526948531399-320e7e40f0ca?w=1920&q=85"
             alt="Profesionales inmobiliarios en oficina moderna con vistas panorámicas"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: 'cover' }}
           />
           <div
             style={{
@@ -1061,31 +1066,31 @@ export default function HomePage() {
         <p>6 plantillas interactivas. Haz clic para explorar cada demo en vivo.</p>
         <div className="gallery-grid">
           <a href="/demos/luxury" className="gal-item" style={{textDecoration:'none'}}>
-            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=800&fit=crop" alt="Luxury" />
+            <Image src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=800&fit=crop" alt="Luxury" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Luxury</h4><span>Victoria Laurent</span></div>
           </a>
           <a href="/demos/mediterranean" className="gal-item" style={{textDecoration:'none'}}>
-            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&h=800&fit=crop" alt="Mediterranean" />
+            <Image src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&h=800&fit=crop" alt="Mediterranean" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Mediterranean</h4><span>Antonio Reyes</span></div>
           </a>
           <a href="/demos/corporate" className="gal-item" style={{textDecoration:'none'}}>
-            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=800&fit=crop" alt="Corporate" />
+            <Image src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=800&fit=crop" alt="Corporate" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Corporate</h4><span>Tenerife Prime</span></div>
           </a>
           <a href="/demos/boutique" className="gal-item" style={{textDecoration:'none'}}>
-            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=800&fit=crop" alt="Boutique" />
+            <Image src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=800&fit=crop" alt="Boutique" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Boutique</h4><span>Maison Tenerife</span></div>
           </a>
           <a href="/demos/classic" className="gal-item" style={{textDecoration:'none'}}>
-            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=800&fit=crop" alt="Classic" />
+            <Image src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=800&fit=crop" alt="Classic" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Classic</h4><span>Roberto Fernandez</span></div>
           </a>
           <a href="/demos/network" className="gal-item" style={{textDecoration:'none'}}>
-            <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=800&fit=crop" alt="Network" />
+            <Image src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=800&fit=crop" alt="Network" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Network</h4><span>Island Properties</span></div>
           </a>
           <a href="/demos/data" className="gal-item" style={{textDecoration:'none'}}>
-            <img src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&h=800&fit=crop" alt="Data-Driven" />
+            <Image src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&h=800&fit=crop" alt="Data-Driven" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Data-Driven</h4><span>DataHomes Tenerife</span></div>
           </a>
           <a href="/demos" className="gal-item" style={{textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#0B1D3A,#1a3a5c)'}}>
