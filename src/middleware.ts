@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { detectSubdomain, getSubdomainRewriteUrl } from '@/lib/subdomain'
 
-const SITE_PASSWORD = process.env.SITE_PASSWORD || 'Jairo300585'
+const SITE_PASSWORD = process.env.SITE_PASSWORD
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
     pathname === '/favicon.ico' ||
     pathname.startsWith('/auth/')
   
-  if (!isPublicPath) {
+  if (!isPublicPath && SITE_PASSWORD) {
     const siteAuthCookie = request.cookies.get('site_auth')
     if (!siteAuthCookie || siteAuthCookie.value !== 'authenticated') {
       // Check if this is a password submission
