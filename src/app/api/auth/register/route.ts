@@ -527,7 +527,7 @@ export async function POST(request: Request) {
 
     if (profileError) {
       await supabaseAdmin.auth.admin.deleteUser(userId)
-      console.error('Profile creation error:', profileError)
+      console.error('Profile creation error:', profileError?.message)
       return NextResponse.json({ error: 'Error creando perfil de agente' }, { status: 500 })
     }
 
@@ -577,7 +577,7 @@ export async function POST(request: Request) {
       is_featured: i === 0,
     }))
     const { error: propError } = await supabaseAdmin.from('properties').insert(propertyInserts)
-    if (propError) console.error('Properties insert error:', propError)
+    if (propError) console.error('Properties insert error:', propError?.message)
 
     // 7. Insert testimonials
     const testimonialInserts = content.testimonials.map(t => ({
@@ -623,7 +623,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, userId })
   } catch (err) {
-    console.error('Register error:', err)
+    console.error('Register error:', err instanceof Error ? err.message : 'Unknown error')
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })
   }
 }
