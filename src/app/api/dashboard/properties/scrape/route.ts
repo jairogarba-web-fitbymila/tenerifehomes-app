@@ -88,6 +88,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'URL no válida' }, { status: 400 })
     }
 
+    // Validate URL format and prevent SSRF
+    let parsedUrl: URL
+    try {
+      parsedUrl = new URL(url)
+    } catch {
+      return NextResponse.json({ error: 'URL no válida' }, { status: 400 })
+    }
+
+    // Only allow HTTPS and known portal domains
+    if (parsedUrl.protocol !== 'https:') {
+      return NextResponse.json({ error: 'Solo se permiten URLs HTTPS' }, { status: 400 })
+    }
+
+    const allowedDomains = ['idealista.com', 'fotocasa.es', 'kyero.com', 'pisos.com', 'yaencontre.com']
+    const isAllowedDomain = allowedDomains.some(d => parsedUrl.hostname === d || parsedUrl.hostname.endsWith('.' + d))
+    if (!isAllowedDomain) {
+      return NextResponse.json({ error: 'Portal no soportado. Portales válidos: Idealista, Fotocasa, Kyero, Pisos.com, Yaencontre' }, { status: 400 })
+    }
+
     const portal = detectPortal(url)
 
     // Try to fetch the page
