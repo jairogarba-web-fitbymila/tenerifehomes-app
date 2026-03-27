@@ -38,14 +38,14 @@ export default function AgentPublicPage() {
             photo: profile.photo || '',
             location: profile.location || '',
           },
-          properties: (json.properties || []).map((p: any) => ({
-            title: p.title || '',
-            price: p.price || 0,
-            location: p.location || '',
-            bedrooms: p.bedrooms || 0,
-            bathrooms: p.bathrooms || 0,
-            area_m2: p.area_m2 || 0,
-            operation_type: p.operation_type || 'sale',
+          properties: (json.properties || []).map((p: Record<string, unknown>) => ({
+            title: (p.title as string) || '',
+            price: (p.price as number) || 0,
+            location: (p.location as string) || '',
+            bedrooms: (p.bedrooms as number) || 0,
+            bathrooms: (p.bathrooms as number) || 0,
+            area_m2: (p.area_m2 as number) || 0,
+            operation_type: (p.operation_type as string) || 'sale',
             images: Array.isArray(p.images) ? p.images : [],
           })),
           hero: heroConfig ? {
@@ -53,31 +53,31 @@ export default function AgentPublicPage() {
             subtitle: heroConfig.subtitle || '',
             image: heroConfig.background_image || heroConfig.image || '',
           } : undefined,
-          testimonials: (json.testimonials || []).map((t: any) => ({
-            author: t.author || t.client_name || '',
-            text: t.text || t.content || '',
-            rating: t.rating || 5,
+          testimonials: (json.testimonials || []).map((t: Record<string, unknown>) => ({
+            author: (t.author as string) || (t.client_name as string) || '',
+            text: (t.text as string) || (t.content as string) || '',
+            rating: (t.rating as number) || 5,
           })),
-          team: (json.team || []).map((m: any) => ({
-            name: m.name || m.full_name || '',
-            role: m.role || m.position || '',
-            photo: m.photo || m.image || '',
+          team: (json.team || []).map((m: Record<string, unknown>) => ({
+            name: (m.name as string) || (m.full_name as string) || '',
+            role: (m.role as string) || (m.position as string) || '',
+            photo: (m.photo as string) || (m.image as string) || '',
           })),
-          services: (json.services || []).map((s: any) => ({
-            title: s.title || s.name || '',
-            description: s.description || '',
+          services: (json.services || []).map((s: Record<string, unknown>) => ({
+            title: (s.title as string) || (s.name as string) || '',
+            description: (s.description as string) || '',
           })),
-          zones: (json.zones || []).map((z: any) => ({
-            name: z.name || '',
-            description: z.description || '',
-            image: z.image || '',
+          zones: (json.zones || []).map((z: Record<string, unknown>) => ({
+            name: (z.name as string) || '',
+            description: (z.description as string) || '',
+            image: (z.image as string) || '',
           })),
         };
 
         setData(templateData);
         setTemplateId(profile.template || 'luxury');
-      } catch (err: any) {
-        setError(err.message || 'Error cargando agente');
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Error cargando agente');
       } finally {
         setLoading(false);
       }

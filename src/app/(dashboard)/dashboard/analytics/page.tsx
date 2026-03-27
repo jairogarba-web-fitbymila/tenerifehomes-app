@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { LockedModule } from '@/components/LockedModule'
+import { PlanType } from '@/lib/modules'
 import {
   BarChart3,
   TrendingUp,
@@ -64,7 +65,7 @@ export default function AnalyticsPage() {
         </div>
         <LockedModule
           moduleName="Analíticas"
-          requiredPlan={moduleData?.min_plan as any}
+          requiredPlan={moduleData?.min_plan as PlanType}
         />
       </div>
     )

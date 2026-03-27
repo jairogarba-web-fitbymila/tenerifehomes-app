@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
         converted: convertedLeads,
       },
       conversionRate: totalLeads > 0 ? ((convertedLeads / totalLeads) * 100).toFixed(1) + '%' : '0%',
-      bySource: leads?.reduce((acc: any, l) => { acc[l.source || 'unknown'] = (acc[l.source || 'unknown'] || 0) + 1; return acc }, {}) || {},
+      bySource: leads?.reduce((acc: Record<string, number>, l) => { acc[l.source || 'unknown'] = (acc[l.source || 'unknown'] || 0) + 1; return acc }, {}) || {},
     },
     properties: {
       total: properties?.length || 0,
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
       totalFavorites: properties?.reduce((sum, p) => sum + (p.favorites || 0), 0) || 0,
       topViewed: [...(properties || [])].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 5),
     },
-    moduleUsage: usage?.reduce((acc: any, u) => {
+    moduleUsage: usage?.reduce((acc: Record<string, number>, u) => {
       const key = `${u.module_slug}:${u.action}`
       acc[key] = (acc[key] || 0) + 1
       return acc

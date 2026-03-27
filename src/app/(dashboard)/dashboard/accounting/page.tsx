@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { LockedModule } from '@/components/LockedModule'
+import { PlanType } from '@/lib/modules'
 import {
   DollarSign,
   TrendingDown,
@@ -65,7 +66,7 @@ export default function AccountingPage() {
         </div>
         <LockedModule
           moduleName="Contabilidad"
-          requiredPlan={moduleData?.min_plan as any}
+          requiredPlan={moduleData?.min_plan as PlanType}
         />
       </div>
     )

@@ -1,4 +1,4 @@
-import { TemplateData, TemplateAgent, TemplateProperty, TemplateHero } from '@/components/templates/types';
+import { TemplateData, TemplateAgent, TemplateProperty, TemplateHero, TemplateTeamMember } from '@/components/templates/types';
 
 // ═══ LUXURY DEMO ═══
 const luxuryAgent: TemplateAgent = {
@@ -214,7 +214,7 @@ const sharedZones = [
 ];
 
 // ═══ BUILD TEMPLATE DATA ═══
-function buildDemo(agent: TemplateAgent, properties: TemplateProperty[], hero: TemplateHero, team?: any[]): TemplateData {
+function buildDemo(agent: TemplateAgent, properties: TemplateProperty[], hero: TemplateHero, team?: TemplateTeamMember[]): TemplateData {
   return {
     agent,
     properties,

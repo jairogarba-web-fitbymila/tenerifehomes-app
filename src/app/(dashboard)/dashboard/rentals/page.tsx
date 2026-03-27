@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { LockedModule } from '@/components/LockedModule'
+import { PlanType } from '@/lib/modules'
 import {
   Calendar,
   Users,
@@ -65,7 +66,7 @@ export default function RentalsPage() {
         </div>
         <LockedModule
           moduleName="Alquileres vacacionales"
-          requiredPlan={moduleData?.min_plan as any}
+          requiredPlan={moduleData?.min_plan as PlanType}
         />
       </div>
     )

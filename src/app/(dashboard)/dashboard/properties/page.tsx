@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import Link from 'next/link'
 import { LockedModule } from '@/components/LockedModule'
-import { PLAN_HIERARCHY } from '@/lib/modules'
+import { PLAN_HIERARCHY, PlanType } from '@/lib/modules'
 import {
   Plus,
   Search,
@@ -156,7 +156,7 @@ export default function PropertiesPage() {
         </div>
         <LockedModule
           moduleName={currentTabModule === 'properties_rent_vacation' ? 'Alquiler vacacional' : 'Propiedades'}
-          requiredPlan={moduleData?.min_plan as any}
+          requiredPlan={moduleData?.min_plan as PlanType}
         />
       </div>
     )

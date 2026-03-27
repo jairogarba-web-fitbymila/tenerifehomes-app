@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import { LockedModule } from '@/components/LockedModule'
+import { PlanType } from '@/lib/modules'
 import {
   Users,
   Search,
@@ -150,7 +151,7 @@ export default function LeadsPage() {
         </div>
         <LockedModule
           moduleName="Leads"
-          requiredPlan={moduleData?.min_plan as any}
+          requiredPlan={moduleData?.min_plan as PlanType}
         />
       </div>
     )
