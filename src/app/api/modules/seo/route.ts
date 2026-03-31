@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
 
 function generateKeywords(agent: any, properties: any[]): string {
   const base = ['inmobiliaria', 'propiedades', agent.location || 'Tenerife', 'comprar', 'alquilar', 'HabiBook']
-  const locations = [...new Set(properties.map(p => p.location).filter(Boolean))]
-  const types = [...new Set(properties.map(p => p.operation_type).filter(Boolean))]
+  const locations = Array.from(new Set(properties.map(p => p.location).filter(Boolean)))
+  const types = Array.from(new Set(properties.map(p => p.operation_type).filter(Boolean)))
   return [...base, ...locations, ...types.map(t => t === 'sale' ? 'venta' : 'alquiler')].join(', ')
 }

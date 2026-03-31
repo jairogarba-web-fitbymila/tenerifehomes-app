@@ -21,8 +21,8 @@ export function useModuleAccess({ userPlan, modules, overrides }: UseModuleAcces
   const overrideMap = new Map(overrides.map(o => [o.module_id, o]))
 
   const hasAccess = (moduleId: string): ModuleAccessResult => {
-    const module = modules.find(m => m.id === moduleId)
-    if (!module) {
+    const mod = modules.find(m => m.id === moduleId)
+    if (!mod) {
       return {
         allowed: false,
         reason: 'Módulo no encontrado',
@@ -41,7 +41,7 @@ export function useModuleAccess({ userPlan, modules, overrides }: UseModuleAcces
         return {
           allowed: false,
           reason: override.reason || 'Desactivado por admin',
-          requiredPlan: module.min_plan,
+          requiredPlan: mod.min_plan,
           status: 'disabled',
         }
       } else if (override.is_enabled) {
@@ -56,22 +56,22 @@ export function useModuleAccess({ userPlan, modules, overrides }: UseModuleAcces
     }
 
     // Check plan hierarchy
-    const planMeets = planMeetsRequirement(userPlan, module.min_plan)
+    const planMeets = planMeetsRequirement(userPlan, mod.min_plan)
 
     if (planMeets) {
       return {
         allowed: true,
         reason: 'Incluido en tu plan',
         requiredPlan: null,
-        status: module.is_addon ? 'addon' : 'active',
+        status: mod.is_addon ? 'addon' : 'active',
       }
     }
 
     return {
       allowed: false,
-      reason: `Se requiere el plan ${module.min_plan}`,
-      requiredPlan: module.min_plan,
-      status: module.is_addon ? 'addon' : 'locked',
+      reason: `Se requiere el plan ${mod.min_plan}`,
+      requiredPlan: mod.min_plan,
+      status: mod.is_addon ? 'addon' : 'locked',
     }
   }
 

@@ -68,13 +68,13 @@ export async function POST(req: NextRequest) {
 
   await supabase.from('property_portal_distribution').upsert({
     agent_id, portal_id, status: 'syncing', properties_count: count || 0, last_synced_at: new Date().toISOString()
-  }, { onConflict: 'agent_id,portal_id' }).catch(() => {})
+  }, { onConflict: 'agent_id,portal_id' })
 
-  await supabase.from('module_usage').insert({ agent_id, module_slug: 'portales', action: `sync_${portal_id}` }).catch(() => {})
+  await supabase.from('module_usage').insert({ agent_id, module_slug: 'portales', action: `sync_${portal_id}` })
 
   await supabase.from('property_portal_distribution').upsert({
     agent_id, portal_id, status: 'synced', properties_count: count || 0, last_synced_at: new Date().toISOString()
-  }, { onConflict: 'agent_id,portal_id' }).catch(() => {})
+  }, { onConflict: 'agent_id,portal_id' })
 
   return NextResponse.json({
     portal: portal_id,

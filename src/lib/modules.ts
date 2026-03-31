@@ -77,6 +77,9 @@ export interface PlatformModule {
   min_plan: PlanType
   is_addon: boolean
   price_monthly?: number
+  category: string
+  addon_price?: number
+  display_order?: number
 }
 
 export interface ModuleOverride {

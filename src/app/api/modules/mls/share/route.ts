@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
 
   await supabase.from('module_usage').insert({
     agent_id, module_slug: 'mls', action: 'share_property'
-  }).catch(() => {})
+  })
 
   return NextResponse.json({
     action: 'shared',

@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
 
   const { data: listings, count, error } = await query
 
-  const agentIds = [...new Set((listings || []).map(l => l.listing_agent_id))]
+  const agentIds = Array.from(new Set((listings || []).map(l => l.listing_agent_id)))
 
   const { data: agents } = await supabase
     .from('agent_profiles')

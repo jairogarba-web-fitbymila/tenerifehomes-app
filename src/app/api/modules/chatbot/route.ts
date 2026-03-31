@@ -29,12 +29,12 @@ export async function GET(req: NextRequest) {
       email: agent?.email,
       languages: agent?.languages,
       totalProperties: properties?.length || 0,
-      propertyTypes: [...new Set(properties?.map(p => p.property_type) || [])],
+      propertyTypes: Array.from(new Set(properties?.map(p => p.property_type) || [])),
       priceRange: properties?.length ? {
         min: Math.min(...properties.map(p => p.price)),
         max: Math.max(...properties.map(p => p.price))
       } : null,
-      locations: [...new Set(properties?.map(p => p.location) || [])]
+      locations: Array.from(new Set(properties?.map(p => p.location) || []))
     },
     capabilities: ['property_search', 'schedule_visit', 'price_info', 'contact_agent', 'area_info'],
     properties: properties || []

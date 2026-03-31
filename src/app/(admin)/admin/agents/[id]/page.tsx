@@ -77,10 +77,10 @@ export default function AgentDetailsPage() {
         }
 
         // Process modules with status
-        const modulesWithStatus = (allModulesData.modules || []).map((module: PlatformModule) => {
+        const modulesWithStatus = (allModulesData.modules || [] as PlatformModule[]).map((module: PlatformModule) => {
           const override = overridesMap.get(module.id)
           const agentPlan = foundAgent?.plan || agentData.plan
-          const canBeEnabledByPlan = PLAN_HIERARCHY[agentPlan] >= PLAN_HIERARCHY[module.min_plan]
+          const canBeEnabledByPlan = PLAN_HIERARCHY[agentPlan as PlanType] >= PLAN_HIERARCHY[module.min_plan]
 
           let isEnabled = canBeEnabledByPlan
 
@@ -102,7 +102,7 @@ export default function AgentDetailsPage() {
 
         // Group by category
         const grouped: GroupedModules = {}
-        modulesWithStatus.forEach((module) => {
+        modulesWithStatus.forEach((module: ModuleWithStatus) => {
           if (!grouped[module.category]) {
             grouped[module.category] = []
           }

@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
 
   await supabase.from('module_usage').insert({
     agent_id, module_slug: 'multiidioma', action: `property_${target_lang}`
-  }).catch(() => {})
+  })
 
   return NextResponse.json(result)
 }
