@@ -2,24 +2,6 @@
 
 import Link from 'next/link';
 import { TEMPLATE_LIST } from '@/components/templates/types';
-import { DEMO_DATA } from '@/lib/demo-data';
-
-// Map template id to real agent slug for live demos
-const DEMO_SLUGS: Record<string, string> = {
-  luxury: 'victoria-laurent',
-  mediterranean: 'antonio-reyes',
-  corporate: 'tenerife-prime',
-  boutique: 'maison-tenerife',
-  classic: 'roberto-fernandez',
-  data: 'island-properties',
-  'editorial-dark': 'julian-vega-dark',
-  'editorial-light': 'julian-vega-light',
-  'editorial-agent': 'julian-vega-agent',
-  'editorial-team': 'costa-realty',
-  'editorial-catalog': 'costa-properties',
-  'editorial-fullservice': 'costa-living',
-  monolith: 'monolith-tenerife',
-};
 
 export default function DemosGalleryPage() {
   return (
@@ -37,7 +19,7 @@ export default function DemosGalleryPage() {
       {/* Hero */}
       <section style={{ textAlign: 'center', padding: '5rem 2rem 3rem' }}>
         <div style={{ color: '#06B6D4', fontSize: 13, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 12 }}>PLANTILLAS PROFESIONALES</div>
-        <h1 style={{ fontSize: 48, fontWeight: 800, margin: '0 0 1rem', color: '#F8FAFC' }}>6 plantillas. Tu estilo.</h1>
+        <h1 style={{ fontSize: 48, fontWeight: 800, margin: '0 0 1rem', color: '#F8FAFC' }}>13 plantillas. Tu estilo.</h1>
         <p style={{ fontSize: 18, color: '#94A3B8', maxWidth: 600, margin: '0 auto 3rem', lineHeight: 1.7 }}>Cada plantilla esta disenada para un perfil de agente diferente. Explora las demos interactivas y elige la tuya.</p>
       </section>
 
@@ -45,14 +27,12 @@ export default function DemosGalleryPage() {
       <section style={{ maxWidth: 1200, margin: '0 auto', padding: '0 2rem 5rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2rem' }}>
           {TEMPLATE_LIST.map(t => {
-            const demo = DEMO_DATA[t.id];
             return (
-              <Link key={t.id} href={DEMO_SLUGS[t.id] ? '/agent/' + DEMO_SLUGS[t.id] : '/demos/' + t.id} style={{ textDecoration: 'none' }}>
+              <Link key={t.id} href={'/demos/' + t.id} style={{ textDecoration: 'none' }}>
                 <div style={{ background: '#111827', borderRadius: 16, overflow: 'hidden', border: '1px solid #1F2937', transition: 'all 0.3s', cursor: 'pointer' }}>
-                  {/* Preview strip */}
-                  <div style={{ height: 200, background: t.bg, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    <img src={demo?.hero?.image || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800'} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, ' + t.bg + 'CC 0%, transparent 60%)' }} />
+                  {/* Preview image */}
+                  <div style={{ height: 200, position: 'relative', overflow: 'hidden' }}>
+                    <img src={'/previews/' + t.id + '.png'} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     <div style={{ position: 'absolute', top: 16, left: 16 }}>
                       <span style={{ background: t.color, color: '#fff', padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' }}>{t.id}</span>
                     </div>
