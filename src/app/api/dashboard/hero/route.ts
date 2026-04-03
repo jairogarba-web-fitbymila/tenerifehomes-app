@@ -36,5 +36,42 @@ export async function PUT(request: NextRequest) {
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+
+  // Fire-and-forget: trigger translation for text fields that changed
+  const textFields = ['headline', 'subtitle', 'cta_text']
+  const fieldsToTranslate = textFields
+    .filter(f => f in updates && updates[f]?.trim())
+    .map(f => ({ field: f, text: updates[f] }))
+
+  if (fieldsToTranslate.length > 0 && data?.id) {
+    // Get agent's enabled languages
+    const { data: moduleData } = await supabase
+      .from('agent_modules')
+      .select('module_slug')
+      .eq('agent_id', user.id)
+      .eq('is_active', true)
+
+    const hasMultiidioma = (moduleData || []).some(
+      (m: { module_slug: string }) => m.module_slug === 'multiidioma'
+    )
+    const targetLanguages = hasMultiidioma
+      ? ['en', 'de', 'fr', 'it', 'pt', 'nl', 'ru', 'sv', 'no']
+      : ['en']
+
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin
+    void fetch(`${baseUrl}/api/translate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        agent_id: user.id,
+        source_table: 'hero_config',
+        source_id: data.id,
+        fields: fieldsToTranslate,
+        source_language: 'es',
+        target_languages: targetLanguages,
+      }),
+    }).catch(() => {})
+  }
+
   return NextResponse.json(data)
 }

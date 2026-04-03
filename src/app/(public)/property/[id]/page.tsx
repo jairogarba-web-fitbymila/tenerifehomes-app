@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Metadata } from 'next'
 import {
   MapPin,
   Bed,
@@ -16,6 +17,12 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
+import {
+  getPropertyTitle,
+  getPropertyCanonicalUrl,
+  truncateDescription,
+  getPropertyJsonLd,
+} from '@/lib/seo'
 
 function getSupabase() {
   return createClient(
@@ -38,6 +45,35 @@ async function getProperty(id: string) {
   return data
 }
 
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const property = await getProperty(params.id)
+  if (!property) return { title: 'Propiedad no encontrada' }
+
+  const title = getPropertyTitle(property)
+  const description = truncateDescription(property.description) || `${property.property_type || 'Propiedad'} en ${property.city || 'Tenerife'}`
+  const canonical = getPropertyCanonicalUrl(params.id, property.agents?.custom_domain)
+  const image = property.main_image_url || property.images?.[0]
+
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      images: image ? [{ url: image, width: 1200, height: 630, alt: title }] : [],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: image ? [image] : [],
+    },
+  }
+}
+
 function formatPrice(price: number, operationType: string) {
   const formatted = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price)
   return operationType === 'rent' ? `${formatted}/mes` : formatted
@@ -49,8 +85,17 @@ export default async function PropertyDetailPage({ params }: { params: { id: str
 
   const agent = property.agents
 
+  const jsonLd = getPropertyJsonLd({
+    ...property,
+    agent: property.agents ? { custom_domain: property.agents.custom_domain } : null,
+  })
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Top bar */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">

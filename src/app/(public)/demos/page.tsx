@@ -4,6 +4,23 @@ import Link from 'next/link';
 import { TEMPLATE_LIST } from '@/components/templates/types';
 import { DEMO_DATA } from '@/lib/demo-data';
 
+// Map template id to real agent slug for live demos
+const DEMO_SLUGS: Record<string, string> = {
+  luxury: 'victoria-laurent',
+  mediterranean: 'antonio-reyes',
+  corporate: 'tenerife-prime',
+  boutique: 'maison-tenerife',
+  classic: 'roberto-fernandez',
+  data: 'island-properties',
+  'editorial-dark': 'julian-vega-dark',
+  'editorial-light': 'julian-vega-light',
+  'editorial-agent': 'julian-vega-agent',
+  'editorial-team': 'costa-realty',
+  'editorial-catalog': 'costa-properties',
+  'editorial-fullservice': 'costa-living',
+  monolith: 'monolith-tenerife',
+};
+
 export default function DemosGalleryPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#0B1120', color: '#E2E8F0', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
@@ -30,7 +47,7 @@ export default function DemosGalleryPage() {
           {TEMPLATE_LIST.map(t => {
             const demo = DEMO_DATA[t.id];
             return (
-              <Link key={t.id} href={'/demos/' + t.id} style={{ textDecoration: 'none' }}>
+              <Link key={t.id} href={DEMO_SLUGS[t.id] ? '/agent/' + DEMO_SLUGS[t.id] : '/demos/' + t.id} style={{ textDecoration: 'none' }}>
                 <div style={{ background: '#111827', borderRadius: 16, overflow: 'hidden', border: '1px solid #1F2937', transition: 'all 0.3s', cursor: 'pointer' }}>
                   {/* Preview strip */}
                   <div style={{ height: 200, background: t.bg, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>

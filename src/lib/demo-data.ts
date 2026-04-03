@@ -214,17 +214,124 @@ const sharedZones = [
 ];
 
 // ═══ BUILD TEMPLATE DATA ═══
-function buildDemo(agent: TemplateAgent, properties: TemplateProperty[], hero: TemplateHero, team?: TemplateTeamMember[]): TemplateData {
+function buildDemo(agent: TemplateAgent, properties: TemplateProperty[], hero: TemplateHero, team?: TemplateTeamMember[], overrides?: { testimonials?: TemplateData['testimonials']; services?: TemplateData['services']; zones?: TemplateData['zones'] }): TemplateData {
   return {
     agent,
     properties,
     hero,
-    testimonials: sharedTestimonials,
+    testimonials: overrides?.testimonials || sharedTestimonials,
     team: team || [],
-    services: sharedServices,
-    zones: sharedZones,
+    services: overrides?.services || sharedServices,
+    zones: overrides?.zones || sharedZones,
   };
 }
+
+// ═══ EDITORIAL SHARED DATA ═══
+const editorialTestimonials = [
+  { author: 'James & Catherine Palmer', text: 'An impeccable service from start to finish. Julian found us our dream villa in Costa Adeje within two weeks.', rating: 5, quote: 'An impeccable service from start to finish. Julian found us our dream villa in Costa Adeje within two weeks.', client_name: 'James & Catherine Palmer', client_location: 'Surrey, UK' },
+  { author: 'Familie Hoffmann', text: 'Erstklassiger Service. Die gesamte Abwicklung war professionell und transparent.', rating: 5, quote: 'Erstklassiger Service. Die gesamte Abwicklung war professionell und transparent. Absolut empfehlenswert!', client_name: 'Familie Hoffmann', client_location: 'Hamburg, Alemania' },
+  { author: 'Jean-Pierre et Marie Leclerc', text: "Un service d'exception. Discrétion, professionnalisme et une connaissance parfaite du marché de Tenerife.", rating: 5, quote: "Un service d'exception. Discrétion, professionnalisme et une connaissance parfaite du marché de Tenerife.", client_name: 'Jean-Pierre & Marie Leclerc', client_location: 'Lyon, Francia' },
+];
+
+const editorialServices = [
+  { title: 'Compraventa Premium', description: 'Asesoramiento integral en compra y venta de propiedades exclusivas en Tenerife Sur' },
+  { title: 'Valoración de Mercado', description: 'Análisis profesional con datos actualizados para establecer el precio óptimo' },
+  { title: 'Asesoría Legal Internacional', description: 'Red de abogados especializados en compradores extranjeros, NIE e impuestos' },
+  { title: 'Gestión de Alquiler Vacacional', description: 'Servicio completo: reservas, limpieza, mantenimiento y atención al huésped' },
+  { title: 'Home Staging', description: 'Preparación profesional para maximizar el atractivo y valor de venta' },
+  { title: 'Trámites y Documentación', description: 'Gestión completa: escrituras, registro, certificado energético' },
+];
+
+const editorialZones = [
+  { name: 'Costa Adeje', description: 'La zona más exclusiva del sur de Tenerife', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600', image_url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600', property_count: 45 },
+  { name: 'Los Cristianos', description: 'Centro turístico consolidado con excelente infraestructura', image: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600', image_url: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600', property_count: 32 },
+  { name: 'Guía de Isora', description: 'Naturaleza y tranquilidad. Abama Resort y fincas exclusivas', image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600', image_url: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600', property_count: 18 },
+  { name: 'El Médano', description: 'Ambiente deportivo y natural. La playa más larga de Tenerife', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600', image_url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600', property_count: 22 },
+];
+
+const editorialOverrides = { testimonials: editorialTestimonials, services: editorialServices, zones: editorialZones };
+
+// ═══ EDITORIAL DARK DEMO ═══
+const editorialDarkAgent: TemplateAgent = {
+  full_name: 'Julián Vega', business_name: 'Julián Vega — Real Estate', slug: 'julian-vega-dark', template: 'editorial-dark',
+  bio: 'Más de 15 años especializándome en propiedades exclusivas del sur de Tenerife. Mi enfoque combina conocimiento profundo del mercado local con estándares internacionales de servicio.',
+  phone: '+34 922 123 456', email: 'julian@julianvega.com', languages: ['Español', 'Inglés', 'Alemán', 'Francés'],
+  experience_years: 15, photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400', bio_photo_url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400',
+  location: 'Costa Adeje, Tenerife', city: 'Tenerife Sur', stats: { sales: 320, years: 15, clients: 450 },
+  quote: 'Cada propiedad cuenta una historia. Mi trabajo es encontrar la que se ajusta a la tuya.',
+};
+
+const editorialDarkProperties: TemplateProperty[] = [
+  { title: 'Villa Alisios', price: 1850000, location: 'Costa Adeje', bedrooms: 4, bathrooms: 3, area_m2: 380, operation_type: 'sale', badge: 'exclusive', images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800'] },
+  { title: 'Penthouse Las Américas', price: 920000, location: 'Playa de las Américas', bedrooms: 3, bathrooms: 2, area_m2: 180, operation_type: 'sale', badge: 'new', images: ['https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800'] },
+  { title: 'Residencial Abama', price: 2400000, location: 'Guía de Isora', bedrooms: 5, bathrooms: 4, area_m2: 450, operation_type: 'sale', images: ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800'] },
+  { title: 'Suite El Duque', price: 150, location: 'El Duque, Costa Adeje', bedrooms: 2, bathrooms: 2, area_m2: 120, operation_type: 'rent_vacation', images: ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800'] },
+  { title: 'Chalet San Eugenio', price: 680000, location: 'San Eugenio Alto', bedrooms: 3, bathrooms: 2, area_m2: 220, operation_type: 'sale', badge: 'reduced', images: ['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800'] },
+  { title: 'Apartamento Fañabé', price: 1200, location: 'Fañabé, Adeje', bedrooms: 2, bathrooms: 1, area_m2: 85, operation_type: 'rent_long', images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800'] },
+];
+
+const editorialDarkHero: TemplateHero = { headline: 'Experiencia en Cada Detalle', subtitle: 'Propiedades exclusivas en el sur de Tenerife — conocimiento local, estándares internacionales.', image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920', background_image_url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920', cta_text: 'Ver Propiedades' };
+
+// ═══ EDITORIAL LIGHT DEMO ═══
+const editorialLightAgent: TemplateAgent = { ...editorialDarkAgent, slug: 'julian-vega-light', template: 'editorial-light' };
+const editorialLightProperties: TemplateProperty[] = [...editorialDarkProperties];
+const editorialLightHero: TemplateHero = { ...editorialDarkHero };
+
+// ═══ EDITORIAL AGENT DEMO ═══
+const editorialAgentAgent: TemplateAgent = { ...editorialDarkAgent, slug: 'julian-vega-agent', template: 'editorial-agent' };
+const editorialAgentProperties: TemplateProperty[] = [...editorialDarkProperties];
+const editorialAgentHero: TemplateHero = { ...editorialDarkHero };
+
+// ═══ EDITORIAL TEAM DEMO ═══
+const editorialTeamAgent: TemplateAgent = {
+  full_name: 'Costa Realty', business_name: 'Costa Realty — Equipo de Expertos', slug: 'costa-realty', template: 'editorial-team',
+  bio: 'Tres perfiles complementarios que cubren compraventa, alquileres vacacionales e inversión inmobiliaria en el sur de Tenerife.',
+  phone: '+34 922 123 456', email: 'info@costarealty.es', languages: ['Español', 'Inglés', 'Alemán', 'Francés', 'Italiano'],
+  experience_years: 15, photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400',
+  location: 'Costa Adeje, Tenerife', city: 'Tenerife Sur',
+};
+const editorialTeamMembers: TemplateTeamMember[] = [
+  { name: 'Julián Vega', role: 'Director Comercial', photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400', languages: ['Español', 'Inglés'] },
+  { name: 'Elena Martín', role: 'Directora de Alquileres', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400', languages: ['Español', 'Francés', 'Italiano'] },
+  { name: 'Marco Torres', role: 'Asesor de Inversiones', photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400', languages: ['Español', 'Alemán', 'Inglés'] },
+];
+const editorialTeamProperties: TemplateProperty[] = [...editorialDarkProperties];
+const editorialTeamHero: TemplateHero = { ...editorialDarkHero, headline: 'Trabaja con los Mejores' };
+
+// ═══ EDITORIAL CATALOG DEMO ═══
+const editorialCatalogAgent: TemplateAgent = { ...editorialDarkAgent, slug: 'costa-properties', template: 'editorial-catalog', business_name: 'Costa Properties' };
+const editorialCatalogProperties: TemplateProperty[] = [...editorialDarkProperties];
+const editorialCatalogHero: TemplateHero = { ...editorialDarkHero, subtitle: 'Catálogo completo de propiedades en el sur de Tenerife.' };
+
+// ═══ EDITORIAL FULLSERVICE DEMO ═══
+const editorialFullAgent: TemplateAgent = { ...editorialDarkAgent, slug: 'costa-living', template: 'editorial-fullservice', business_name: 'Costa Living' };
+const editorialFullProperties: TemplateProperty[] = [
+  ...editorialDarkProperties,
+  { title: 'Ático Panorámico', price: 200, location: 'Costa Adeje', bedrooms: 2, bathrooms: 1, area_m2: 90, operation_type: 'rent_vacation', images: ['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800'] },
+  { title: 'Villa Vacacional Premium', price: 350, location: 'La Caleta', bedrooms: 3, bathrooms: 2, area_m2: 200, operation_type: 'rent_vacation', images: ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800'] },
+  { title: 'Estudio Centro Adeje', price: 750, location: 'Adeje Centro', bedrooms: 1, bathrooms: 1, area_m2: 45, operation_type: 'rent_long', images: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800'] },
+  { title: 'Piso Familiar Los Cristianos', price: 950, location: 'Los Cristianos', bedrooms: 3, bathrooms: 2, area_m2: 110, operation_type: 'rent_long', images: ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800'] },
+];
+const editorialFullHero: TemplateHero = { ...editorialDarkHero };
+
+// ═══ MONOLITH DEMO ═══
+const monolithAgent: TemplateAgent = {
+  full_name: 'Elara Vance', business_name: 'MONOLITH', slug: 'monolith-tenerife', template: 'monolith',
+  bio: 'Propiedades de arquitectura contemporánea en Tenerife Sur. No son simples alquileres — son declaraciones de diseño.',
+  phone: '+34 922 123 456', email: 'studio@monolith.es', languages: ['Español', 'Inglés', 'Alemán'],
+  experience_years: 12, photo: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400', bio_photo_url: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400',
+  location: 'Tenerife Sur', city: 'Tenerife Sur',
+  quote: 'El minimalismo no es ausencia — es la honestidad del material y la pureza de la forma.',
+};
+const monolithProperties: TemplateProperty[] = [
+  { title: 'VILLA ALISIOS', price: 1850000, location: 'Costa Adeje', bedrooms: 4, bathrooms: 3, area_m2: 380, operation_type: 'sale', badge: 'exclusive', images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800'] },
+  { title: 'ABAMA ROYAL', price: 2950000, location: 'Guía de Isora', bedrooms: 5, bathrooms: 4, area_m2: 450, operation_type: 'sale', images: ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800'] },
+  { title: 'CASA BASALTO', price: 280, location: 'La Caleta', bedrooms: 3, bathrooms: 2, area_m2: 200, operation_type: 'rent_vacation', images: ['https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800'] },
+  { title: 'PENTHOUSE HORIZON', price: 150, location: 'Playa de las Américas', bedrooms: 2, bathrooms: 2, area_m2: 120, operation_type: 'rent_vacation', images: ['https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800'] },
+  { title: 'GEOMETRÍA VERDE', price: 890000, location: 'Golf del Sur', bedrooms: 3, bathrooms: 2, area_m2: 210, operation_type: 'sale', images: ['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800'] },
+  { title: 'LOFT INDUSTRIAL', price: 1600, location: 'Granadilla', bedrooms: 1, bathrooms: 1, area_m2: 95, operation_type: 'rent_long', images: ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800'] },
+];
+const monolithHero: TemplateHero = { headline: 'ESCAPA DE LO ORDINARIO.', subtitle: 'Propiedades de arquitectura contemporánea en Tenerife Sur.', image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920', background_image_url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920', cta_text: 'VER COLECCIÓN' };
 
 export const DEMO_DATA: Record<string, TemplateData> = {
   luxury: buildDemo(luxuryAgent, luxuryProperties, luxuryHero),
@@ -233,6 +340,13 @@ export const DEMO_DATA: Record<string, TemplateData> = {
   boutique: buildDemo(boutiqueAgent, boutiqueProperties, boutiqueHero),
   classic: buildDemo(classicAgent, classicProperties, classicHero),
   data: buildDemo(dataAgent, dataProperties, dataHero, dataTeam),
+  'editorial-dark': buildDemo(editorialDarkAgent, editorialDarkProperties, editorialDarkHero, undefined, editorialOverrides),
+  'editorial-light': buildDemo(editorialLightAgent, editorialLightProperties, editorialLightHero, undefined, editorialOverrides),
+  'editorial-agent': buildDemo(editorialAgentAgent, editorialAgentProperties, editorialAgentHero, undefined, editorialOverrides),
+  'editorial-team': buildDemo(editorialTeamAgent, editorialTeamProperties, editorialTeamHero, editorialTeamMembers, editorialOverrides),
+  'editorial-catalog': buildDemo(editorialCatalogAgent, editorialCatalogProperties, editorialCatalogHero, undefined, editorialOverrides),
+  'editorial-fullservice': buildDemo(editorialFullAgent, editorialFullProperties, editorialFullHero, undefined, editorialOverrides),
+  'monolith': buildDemo(monolithAgent, monolithProperties, monolithHero, undefined, editorialOverrides),
 };
 
 export default DEMO_DATA;

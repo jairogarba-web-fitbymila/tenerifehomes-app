@@ -98,4 +98,11 @@ export const TEMPLATE_LIST = [
   { id: 'boutique', name: 'Boutique', desc: 'Editorial y selectivo. Rose, sage, whitespace.', color: '#C08B7F', bg: '#FAF8F5', persona: 'Maison Tenerife' },
   { id: 'classic', name: 'Classic', desc: 'Veterano y premiado. Marr\u00f3n, crema, serif.', color: '#8B6F47', bg: '#FBF7F2', persona: 'Roberto Fern\u00e1ndez' },
   { id: 'data', name: 'Data-Driven', desc: 'Tecnol\u00f3gico, dashboards. Slate, cyan, datos.', color: '#06B6D4', bg: '#0F172A', persona: 'DataHomes Tenerife' },
+  { id: 'editorial-dark', name: 'Editorial Dark', desc: 'Scroll-snap inmersivo. Navy + dorado, serif editorial, dram\u00e1tico.', color: '#e9c176', bg: '#000d22', persona: 'Juli\u00e1n Vega' },
+  { id: 'editorial-light', name: 'Editorial Light', desc: 'Bento grid editorial. Fondo claro, tipograf\u00eda de revista.', color: '#000d22', bg: '#f8f9fa', persona: 'Juli\u00e1n Vega' },
+  { id: 'editorial-agent', name: 'Editorial Agent', desc: 'Centrado en el agente. Hero con retrato, firma, formulario.', color: '#e9c176', bg: '#f8f9fa', persona: 'Juli\u00e1n Vega' },
+  { id: 'editorial-team', name: 'Editorial Team', desc: 'Multi-agente. Galer\u00eda de equipo, propiedades curadas por experto.', color: '#e9c176', bg: '#f8f9fa', persona: 'Costa Realty' },
+  { id: 'editorial-catalog', name: 'Editorial Catalog', desc: 'Marketplace con filtros por tipo. Bottom nav m\u00f3vil, cat\u00e1logo.', color: '#000d22', bg: '#f8f9fa', persona: 'Costa Properties' },
+  { id: 'editorial-fullservice', name: 'Editorial Full', desc: 'Multi-secci\u00f3n: vacacional + venta + alquiler. Web completa.', color: '#e9c176', bg: '#f8f9fa', persona: 'Costa Living' },
+  { id: 'monolith', name: 'Monolith', desc: 'Brutalista dark. Lima #CAF300, Lexend, sin redondeos. Ultra-premium.', color: '#CAF300', bg: '#131313', persona: 'MONOLITH Tenerife' },
 ];

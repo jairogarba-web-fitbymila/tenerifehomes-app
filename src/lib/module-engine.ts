@@ -54,7 +54,7 @@ export function getEnabledLanguages(modules: ActiveModule[]): string[] {
   if (hasModule(modules, MODULE.MULTIIDIOMA)) {
     return ['es', 'en', 'de', 'fr', 'it', 'pt', 'nl', 'ru', 'sv', 'no']
   }
-  return ['es']
+  return ['es', 'en']
 }
 
 export async function canAddProperty(agentId: string): Promise<{ allowed: boolean; current: number; limit: number }> {

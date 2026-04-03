@@ -1,5 +1,6 @@
 {
   "extends": "next/core-web-vitals",
+  "ignorePatterns": ["src/types/database.ts"],
   "rules": {
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "react/no-unescaped-entities": "off"

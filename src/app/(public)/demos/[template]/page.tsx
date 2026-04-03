@@ -1,48 +1,60 @@
-'use client';
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { DEMO_DATA } from '@/lib/demo-data'
+import { TEMPLATE_LIST } from '@/components/templates/types'
+import DemoViewerClient from './DemoViewerClient'
 
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
-import { TemplateRenderer } from '@/components/templates/TemplateRenderer';
-import { DEMO_DATA } from '@/lib/demo-data';
-import { TEMPLATE_LIST } from '@/components/templates/types';
+const TEMPLATE_META: Record<string, { title: string; description: string }> = {
+  luxury: {
+    title: 'Plantilla Luxury — Web Inmobiliaria Premium',
+    description: 'Diseno elegante con fondo oscuro y dorado. Ideal para agentes de villas premium y propiedades exclusivas.',
+  },
+  mediterranean: {
+    title: 'Plantilla Mediterranean — Web Inmobiliaria Calida',
+    description: 'Diseno mediterraneo con tonos calidos. Perfecto para agentes generalistas y mercado medio-alto.',
+  },
+  corporate: {
+    title: 'Plantilla Corporate — Web para Agencias Inmobiliarias',
+    description: 'Diseno profesional azul corporativo. Ideal para agencias medianas con equipo.',
+  },
+  boutique: {
+    title: 'Plantilla Boutique — Web Inmobiliaria Editorial',
+    description: 'Diseno editorial con estetica de revista. Para agencias boutique que priorizan calidad.',
+  },
+  classic: {
+    title: 'Plantilla Classic — Web Inmobiliaria Elegante',
+    description: 'Diseno clasico con tonos tierra. Para agentes veteranos con trayectoria reconocida.',
+  },
+  data: {
+    title: 'Plantilla Data — Web Inmobiliaria con Analytics',
+    description: 'Diseno tech-forward con dashboard y datos. Para agencias que usan datos como ventaja competitiva.',
+  },
+}
 
-export default function DemoViewerPage() {
-  const params = useParams();
-  const templateId = params.template as string;
-  const data = DEMO_DATA[templateId];
-  const templateInfo = TEMPLATE_LIST.find(t => t.id === templateId);
+export async function generateMetadata({ params }: { params: { template: string } }): Promise<Metadata> {
+  const meta = TEMPLATE_META[params.template]
+  if (!meta) return { title: 'Plantilla no encontrada' }
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: { canonical: `https://habibook.com/demos/${params.template}` },
+  }
+}
+
+export default function DemoViewerPage({ params }: { params: { template: string } }) {
+  const templateId = params.template
+  const data = DEMO_DATA[templateId]
+  const templateInfo = TEMPLATE_LIST.find(t => t.id === templateId)
 
   if (!data || !templateInfo) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#0B1120', color: '#E2E8F0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'system-ui' }}>
-        <h1 style={{ fontSize: 36, fontWeight: 800, marginBottom: 16 }}>Plantilla no encontrada</h1>
-        <Link href='/demos' style={{ color: '#06B6D4', textDecoration: 'none', fontWeight: 600 }}>&larr; Volver a plantillas</Link>
-      </div>
-    );
+    notFound()
   }
 
   return (
-    <div>
-      {/* Floating toolbar */}
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, background: '#111827EE', backdropFilter: 'blur(12px)', borderBottom: '1px solid #1F2937', padding: '0 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <Link href='/demos' style={{ color: '#94A3B8', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>&larr; Plantillas</Link>
-          <div style={{ width: 1, height: 20, background: '#334155' }} />
-          <span style={{ color: '#F8FAFC', fontSize: 14, fontWeight: 700 }}>{templateInfo.name}</span>
-          <span style={{ background: templateInfo.color, color: '#fff', padding: '3px 10px', borderRadius: 12, fontSize: 11, fontWeight: 700 }}>{templateInfo.id.toUpperCase()}</span>
-        </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          {TEMPLATE_LIST.map(t => (
-            <Link key={t.id} href={'/demos/' + t.id} style={{ width: 28, height: 28, borderRadius: 6, background: t.id === templateId ? t.color : '#1F2937', border: t.id === templateId ? '2px solid #F8FAFC' : '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', fontSize: 10, fontWeight: 700, color: t.id === templateId ? '#fff' : '#64748B' }} title={t.name}>{t.id[0].toUpperCase()}</Link>
-          ))}
-          <div style={{ width: 1, height: 20, background: '#334155', marginLeft: 8 }} />
-          <Link href='/register' style={{ background: '#06B6D4', color: '#0B1120', padding: '6px 16px', borderRadius: 6, fontWeight: 700, fontSize: 13, textDecoration: 'none' }}>Usar esta plantilla</Link>
-        </div>
-      </div>
-      {/* Template content */}
-      <div style={{ paddingTop: 48 }}>
-        <TemplateRenderer templateId={templateId} data={data} />
-      </div>
-    </div>
-  );
+    <DemoViewerClient
+      templateId={templateId}
+      data={data}
+      templateInfo={{ id: templateInfo.id, name: templateInfo.name, color: templateInfo.color }}
+    />
+  )
 }
