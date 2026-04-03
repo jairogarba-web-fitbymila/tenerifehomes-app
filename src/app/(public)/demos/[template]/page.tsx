@@ -29,6 +29,34 @@ const TEMPLATE_META: Record<string, { title: string; description: string }> = {
     title: 'Plantilla Data — Web Inmobiliaria con Analytics',
     description: 'Diseno tech-forward con dashboard y datos. Para agencias que usan datos como ventaja competitiva.',
   },
+  'editorial-dark': {
+    title: 'Plantilla Editorial Dark — Web Inmobiliaria Inmersiva',
+    description: 'Scroll-snap dramatico con navy y dorado. Tipografia serif editorial para agentes premium.',
+  },
+  'editorial-light': {
+    title: 'Plantilla Editorial Light — Web Inmobiliaria Bento Grid',
+    description: 'Layout bento grid con fondo claro y estetica de revista. Elegante y moderna.',
+  },
+  'editorial-agent': {
+    title: 'Plantilla Editorial Agent — Web Centrada en el Agente',
+    description: 'Hero con retrato del agente, firma personal y formulario de contacto directo.',
+  },
+  'editorial-team': {
+    title: 'Plantilla Editorial Team — Web Multi-Agente',
+    description: 'Galeria de equipo con propiedades curadas por cada experto. Ideal para agencias de 2-5 personas.',
+  },
+  'editorial-catalog': {
+    title: 'Plantilla Editorial Catalog — Marketplace Inmobiliario',
+    description: 'Filtros por tipo de operacion, bottom nav movil y catalogo de propiedades estilo marketplace.',
+  },
+  'editorial-fullservice': {
+    title: 'Plantilla Editorial Full Service — Web Inmobiliaria Completa',
+    description: 'Tres secciones diferenciadas: vacacional, venta y alquiler largo plazo. Web integral.',
+  },
+  monolith: {
+    title: 'Plantilla Monolith — Web Inmobiliaria Brutalista',
+    description: 'Diseno brutalista dark con lima y tipografia masiva. Ultra-premium, sin redondeos.',
+  },
 }
 
 export async function generateMetadata({ params }: { params: { template: string } }): Promise<Metadata> {
