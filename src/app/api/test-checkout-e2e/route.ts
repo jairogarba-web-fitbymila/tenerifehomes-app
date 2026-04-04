@@ -17,32 +17,6 @@ export async function GET() {
     )
 
     // ─── Step 1: Get the test agent ─────────────────────────
-    // Ensure is_published column exists
-    await supabase.rpc('exec_sql', { query: '' }).catch(() => {})
-    // Add column if missing (safe to run multiple times)
-    const { error: alterError } = await supabase
-      .from('agent_profiles')
-      .select('is_published')
-      .limit(1)
-
-    if (alterError?.message?.includes('does not exist')) {
-      // Column doesn't exist — create it via a workaround: insert with the column via raw update
-      // Use fetch to call Supabase REST API directly for the ALTER
-      const pgRes = await fetch(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/rpc/`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY!,
-            'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY!}`,
-          },
-          body: JSON.stringify({}),
-        }
-      ).catch(() => null)
-      // Since we can't easily ALTER via REST, skip is_published for the test
-    }
-
     // Find first agent to test with
     const { data: agents, error: agentError } = await supabase
       .from('agent_profiles')
@@ -64,7 +38,6 @@ export async function GET() {
       agent_id: agent.id,
       email: agent.email,
       current_plan: agent.plan,
-      is_published: agent.is_published,
     })
 
     // ─── Step 2: Create Stripe customer with test card ──────
