@@ -26,7 +26,7 @@ export default function DemoViewerClient({ templateId, data, templateInfo }: Dem
             <Link key={t.id} href={'/demos/' + t.id} style={{ width: 28, height: 28, borderRadius: 6, background: t.id === templateId ? t.color : '#1F2937', border: t.id === templateId ? '2px solid #F8FAFC' : '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', fontSize: 10, fontWeight: 700, color: t.id === templateId ? '#fff' : '#64748B' }} title={t.name}>{t.id[0].toUpperCase()}</Link>
           ))}
           <div style={{ width: 1, height: 20, background: '#334155', marginLeft: 8 }} />
-          <Link href='/register' style={{ background: '#06B6D4', color: '#0B1120', padding: '6px 16px', borderRadius: 6, fontWeight: 700, fontSize: 13, textDecoration: 'none' }}>Usar esta plantilla</Link>
+          <Link href={'/register?template=' + templateId} style={{ background: '#06B6D4', color: '#0B1120', padding: '6px 16px', borderRadius: 6, fontWeight: 700, fontSize: 13, textDecoration: 'none' }}>Usar esta plantilla</Link>
         </div>
       </div>
       {/* Template content */}

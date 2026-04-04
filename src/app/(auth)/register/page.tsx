@@ -1,23 +1,39 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-browser'
 import { Loader2, Check } from 'lucide-react'
 
-type TemplateType = 'luxury' | 'mediterranean' | 'corporate' | 'boutique' | 'classic' | 'data'
+type TemplateType = 'luxury' | 'mediterranean' | 'corporate' | 'boutique' | 'classic' | 'data' | 'editorial-dark' | 'editorial-light' | 'editorial-agent' | 'editorial-team' | 'editorial-catalog' | 'editorial-fullservice' | 'monolith'
 
-const TEMPLATES = [
-  { id: 'luxury' as TemplateType, name: 'Luxury', desc: 'Elegancia y exclusividad. Villas premium, alto standing.', color1: '#1A1A1A', color2: '#C9A84C', img: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400&q=60' },
-  { id: 'mediterranean' as TemplateType, name: 'Mediterranean', desc: 'Cercanía y confianza. Agente familiar, mercado medio.', color1: '#C4652E', color2: '#F5E6D3', img: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&q=60' },
-  { id: 'corporate' as TemplateType, name: 'Corporate', desc: 'Agencia profesional con equipo. Imagen corporativa.', color1: '#0B2545', color2: '#4A90D9', img: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=400&q=60' },
-  { id: 'boutique' as TemplateType, name: 'Boutique', desc: 'Selección exclusiva. Fincas, casas con historia.', color1: '#C08B7F', color2: '#8B9D77', img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=60' },
-  { id: 'classic' as TemplateType, name: 'Classic', desc: 'Veterano y premiado. Años de experiencia en el mercado.', color1: '#8B6F47', color2: '#FBF7F2', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=60' },
-  { id: 'data' as TemplateType, name: 'Data-Driven', desc: 'Tecnológico y analítico. Dashboards y datos en tiempo real.', color1: '#0F172A', color2: '#06B6D4', img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=60' },
+const TEMPLATES: { id: TemplateType; name: string; desc: string; color1: string; color2: string; family?: string }[] = [
+  // ── Original 6 ──
+  { id: 'luxury', name: 'Luxury', desc: 'Elegancia y exclusividad. Villas premium, alto standing.', color1: '#1A1A1A', color2: '#C9A84C' },
+  { id: 'mediterranean', name: 'Mediterranean', desc: 'Cercanía y confianza. Agente familiar, mercado medio.', color1: '#C4652E', color2: '#F5E6D3' },
+  { id: 'corporate', name: 'Corporate', desc: 'Agencia profesional con equipo. Imagen corporativa.', color1: '#0B2545', color2: '#4A90D9' },
+  { id: 'boutique', name: 'Boutique', desc: 'Selección exclusiva. Fincas, casas con historia.', color1: '#C08B7F', color2: '#8B9D77' },
+  { id: 'classic', name: 'Classic', desc: 'Veterano y premiado. Años de experiencia en el mercado.', color1: '#8B6F47', color2: '#FBF7F2' },
+  { id: 'data', name: 'Data-Driven', desc: 'Tecnológico y analítico. Dashboards y datos en tiempo real.', color1: '#0F172A', color2: '#06B6D4' },
+  // ── Editorial family ──
+  { id: 'editorial-dark', name: 'Editorial Dark', desc: 'Inmersivo y dramático. Scroll-snap, navy + dorado.', color1: '#000d22', color2: '#e9c176', family: 'Editorial' },
+  { id: 'editorial-light', name: 'Editorial Light', desc: 'Bento grid editorial. Fondo claro, tipografía de revista.', color1: '#f8f9fa', color2: '#000d22', family: 'Editorial' },
+  { id: 'editorial-agent', name: 'Editorial Agent', desc: 'Centrado en ti. Hero con retrato, contacto directo.', color1: '#f8f9fa', color2: '#e9c176', family: 'Editorial' },
+  { id: 'editorial-team', name: 'Editorial Team', desc: 'Multi-agente. Galería de equipo, propiedades curadas.', color1: '#f8f9fa', color2: '#e9c176', family: 'Editorial' },
+  { id: 'editorial-catalog', name: 'Editorial Catalog', desc: 'Marketplace con filtros. Catálogo grande de propiedades.', color1: '#f8f9fa', color2: '#000d22', family: 'Editorial' },
+  { id: 'editorial-fullservice', name: 'Editorial Full', desc: 'Multi-sección: vacacional + venta + alquiler largo.', color1: '#f8f9fa', color2: '#e9c176', family: 'Editorial' },
+  // ── Monolith ──
+  { id: 'monolith', name: 'Monolith', desc: 'Brutalista y premium. Negro + lima, sin redondeos.', color1: '#131313', color2: '#CAF300', family: 'Monolith' },
 ]
 
+const VALID_IDS = new Set(TEMPLATES.map(t => t.id))
+
 export default function RegisterPage() {
+  const searchParams = useSearchParams()
+  const preselected = searchParams.get('template') || ''
+  const defaultTemplate: TemplateType = VALID_IDS.has(preselected as TemplateType) ? preselected as TemplateType : 'luxury'
+
   const [step, setStep] = useState(1)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -28,8 +44,15 @@ export default function RegisterPage() {
     email: '',
     password: '',
     phone: '',
-    template: 'luxury' as TemplateType,
+    template: defaultTemplate,
   })
+
+  // If template changes via URL, update form
+  useEffect(() => {
+    if (VALID_IDS.has(preselected as TemplateType)) {
+      setForm(prev => ({ ...prev, template: preselected as TemplateType }))
+    }
+  }, [preselected])
 
   function update(field: string, value: string) {
     setForm(prev => ({ ...prev, [field]: value }))
@@ -49,7 +72,6 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
-      // 1. Create account + full website
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -67,7 +89,6 @@ export default function RegisterPage() {
         return
       }
 
-      // 2. Auto-login immediately
       const supabase = createClient()
       const { error: loginError } = await supabase.auth.signInWithPassword({
         email: form.email,
@@ -75,18 +96,18 @@ export default function RegisterPage() {
       })
 
       if (loginError) {
-        // If auto-login fails, redirect to login page
         router.push('/login?registered=true')
         return
       }
 
-      // 3. Redirect to dashboard with onboarding flag
       router.push('/dashboard?welcome=true')
     } catch {
       setError('Error de conexión. Inténtalo de nuevo.')
       setLoading(false)
     }
   }
+
+  const selectedTemplate = TEMPLATES.find(t => t.id === form.template)
 
   return (
     <div className="min-h-screen flex">
@@ -102,68 +123,37 @@ export default function RegisterPage() {
               <h1 className="mt-6 text-3xl font-bold text-gray-900">Crea tu web inmobiliaria</h1>
               <p className="mt-2 text-gray-500">En 2 minutos tendrás tu web profesional lista con propiedades de ejemplo. Solo tendrás que cambiar las fotos y los textos por los tuyos.</p>
 
-              {/* Step dots */}
               <div className="mt-6 flex gap-2">
                 <div className="flex-1 h-1.5 rounded-full bg-brand-600" />
                 <div className="flex-1 h-1.5 rounded-full bg-gray-200" />
               </div>
 
               <div className="mt-6 space-y-4">
-                {error && (
-                  <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>
-                )}
+                {error && <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nombre de tu negocio</label>
-                  <input
-                    type="text"
-                    value={form.business_name}
-                    onChange={e => update('business_name', e.target.value)}
-                    className="input-field"
-                    placeholder="Ej: Victoria Laurent Real Estate"
-                    autoFocus
-                  />
+                  <input type="text" value={form.business_name} onChange={e => update('business_name', e.target.value)} className="input-field" placeholder="Ej: Victoria Laurent Real Estate" autoFocus />
                   <p className="text-xs text-gray-400 mt-1">Aparecerá como título de tu web</p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={form.email}
-                    onChange={e => update('email', e.target.value)}
-                    className="input-field"
-                    placeholder="tu@email.com"
-                  />
+                  <input type="email" value={form.email} onChange={e => update('email', e.target.value)} className="input-field" placeholder="tu@email.com" />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                    <input
-                      type="password"
-                      value={form.password}
-                      onChange={e => update('password', e.target.value)}
-                      className="input-field"
-                      placeholder="Mínimo 8 caracteres"
-                    />
+                    <input type="password" value={form.password} onChange={e => update('password', e.target.value)} className="input-field" placeholder="Mínimo 8 caracteres" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono <span className="text-gray-400">(opcional)</span></label>
-                    <input
-                      type="tel"
-                      value={form.phone}
-                      onChange={e => update('phone', e.target.value)}
-                      className="input-field"
-                      placeholder="+34 600 000 000"
-                    />
+                    <input type="tel" value={form.phone} onChange={e => update('phone', e.target.value)} className="input-field" placeholder="+34 600 000 000" />
                   </div>
                 </div>
 
-                <button
-                  onClick={goToStep2}
-                  className="w-full px-4 py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-medium transition text-base"
-                >
+                <button onClick={goToStep2} className="w-full px-4 py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-medium transition text-base">
                   Siguiente: elegir diseño
                 </button>
               </div>
@@ -171,83 +161,60 @@ export default function RegisterPage() {
           ) : (
             <>
               <h1 className="mt-6 text-3xl font-bold text-gray-900">Elige el estilo de tu web</h1>
-              <p className="mt-2 text-gray-500">Tu web se creará con propiedades, testimonios y contenido de ejemplo que podrás personalizar después.</p>
+              <p className="mt-2 text-gray-500">13 plantillas profesionales. Podrás personalizar todo después.</p>
 
-              {/* Step dots */}
               <div className="mt-6 flex gap-2">
                 <div className="flex-1 h-1.5 rounded-full bg-brand-600" />
                 <div className="flex-1 h-1.5 rounded-full bg-brand-600" />
               </div>
 
-              <div className="mt-6 space-y-3">
-                {error && (
-                  <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>
-                )}
+              <div className="mt-6 space-y-2 max-h-[60vh] overflow-y-auto pr-1">
+                {error && <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>}
 
                 {TEMPLATES.map(t => (
                   <button
                     key={t.id}
                     type="button"
                     onClick={() => update('template', t.id)}
-                    className={`w-full flex items-center gap-4 p-3 border-2 rounded-xl transition text-left ${
+                    className={`w-full flex items-center gap-3 p-3 border-2 rounded-xl transition text-left ${
                       form.template === t.id
                         ? 'border-brand-600 bg-brand-50 shadow-sm'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
-                    {/* Mini preview */}
-                    <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 relative">
-                      <img src={t.img} alt="" className="w-full h-full object-cover" />
-                      <div className="absolute inset-0" style={{ backgroundColor: t.color1, opacity: 0.4 }} />
-                    </div>
+                    {/* Color preview */}
+                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 relative border border-gray-200" style={{ background: `linear-gradient(135deg, ${t.color1} 50%, ${t.color2} 50%)` }} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold text-gray-900">{t.name}</p>
-                        <div className="flex gap-1">
-                          <span className="w-4 h-4 rounded-full border border-gray-200" style={{ backgroundColor: t.color1 }} />
-                          <span className="w-4 h-4 rounded-full border border-gray-200" style={{ backgroundColor: t.color2 }} />
-                        </div>
+                        <p className="font-semibold text-gray-900 text-sm">{t.name}</p>
+                        {t.family && <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">{t.family}</span>}
                       </div>
-                      <p className="text-sm text-gray-500 mt-0.5">{t.desc}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{t.desc}</p>
                     </div>
                     {form.template === t.id && (
-                      <div className="w-6 h-6 bg-brand-600 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Check className="w-4 h-4 text-white" />
+                      <div className="w-5 h-5 bg-brand-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Check className="w-3 h-3 text-white" />
                       </div>
                     )}
                   </button>
                 ))}
-
-                <div className="flex gap-3 mt-6">
-                  <button
-                    onClick={() => { setStep(1); setError('') }}
-                    className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition"
-                  >
-                    Atrás
-                  </button>
-                  <button
-                    onClick={handleRegister}
-                    disabled={loading}
-                    className="flex-1 px-4 py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-medium transition text-base disabled:opacity-50 flex items-center justify-center gap-2"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Creando tu web...
-                      </>
-                    ) : (
-                      'Crear mi web gratis'
-                    )}
-                  </button>
-                </div>
-
-                <p className="text-center text-xs text-gray-400 mt-2">
-                  Al crear tu cuenta aceptas los{' '}
-                  <Link href="/legal/terminos" className="text-brand-600 hover:underline">Términos</Link>
-                  {' '}y la{' '}
-                  <Link href="/legal/privacidad" className="text-brand-600 hover:underline">Privacidad</Link>
-                </p>
               </div>
+
+              <div className="flex gap-3 mt-4">
+                <button onClick={() => { setStep(1); setError('') }} className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition">
+                  Atrás
+                </button>
+                <button onClick={handleRegister} disabled={loading} className="flex-1 px-4 py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-medium transition text-base disabled:opacity-50 flex items-center justify-center gap-2">
+                  {loading ? (<><Loader2 className="w-5 h-5 animate-spin" />Creando tu web...</>) : 'Crear mi web gratis'}
+                </button>
+              </div>
+
+              <p className="text-center text-xs text-gray-400 mt-2">
+                Al crear tu cuenta aceptas los{' '}
+                <Link href="/legal/terminos" className="text-brand-600 hover:underline">Términos</Link>
+                {' '}y la{' '}
+                <Link href="/legal/privacidad" className="text-brand-600 hover:underline">Privacidad</Link>
+              </p>
             </>
           )}
 
@@ -271,61 +238,45 @@ export default function RegisterPage() {
                 <p className="text-gray-500 mt-2">Rellena tus datos y elige un diseño. Nosotros creamos tu web completa con contenido de ejemplo listo para personalizar.</p>
               </div>
               <div className="text-left space-y-3">
-                <div className="flex items-start gap-3 text-sm">
-                  <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Check className="w-3.5 h-3.5" /></div>
-                  <span className="text-gray-600">Web profesional con propiedades de ejemplo</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm">
-                  <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Check className="w-3.5 h-3.5" /></div>
-                  <span className="text-gray-600">Testimonios, servicios y zonas predefinidos</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm">
-                  <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Check className="w-3.5 h-3.5" /></div>
-                  <span className="text-gray-600">Solo sustituye los datos por los tuyos</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm">
-                  <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Check className="w-3.5 h-3.5" /></div>
-                  <span className="text-gray-600">Sube propiedades desde CSV o enlace de portal</span>
-                </div>
+                {['Web profesional con propiedades de ejemplo', 'Testimonios, servicios y zonas predefinidos', 'Solo sustituye los datos por los tuyos', 'Sube propiedades desde CSV o enlace de portal'].map(txt => (
+                  <div key={txt} className="flex items-start gap-3 text-sm">
+                    <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Check className="w-3.5 h-3.5" /></div>
+                    <span className="text-gray-600">{txt}</span>
+                  </div>
+                ))}
               </div>
             </div>
           ) : (
             <div className="space-y-4">
-              {/* Template preview mockup */}
               <p className="text-center text-sm font-medium text-gray-500 mb-2">Vista previa del estilo</p>
               <div className="rounded-xl overflow-hidden shadow-2xl border border-gray-200">
-                <div className="h-8 flex items-center gap-1.5 px-3" style={{ backgroundColor: TEMPLATES.find(t => t.id === form.template)?.color1 || '#1A1A1A' }}>
+                <div className="h-8 flex items-center gap-1.5 px-3" style={{ backgroundColor: selectedTemplate?.color1 || '#1A1A1A' }}>
                   <div className="w-2.5 h-2.5 rounded-full bg-white/30" />
                   <div className="w-2.5 h-2.5 rounded-full bg-white/30" />
                   <div className="w-2.5 h-2.5 rounded-full bg-white/30" />
                 </div>
-                <div className="relative h-48">
-                  <img
-                    src={TEMPLATES.find(t => t.id === form.template)?.img}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0" style={{ backgroundColor: TEMPLATES.find(t => t.id === form.template)?.color1, opacity: 0.5 }} />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <p className="text-xl font-bold">{form.business_name || 'Tu Nombre'}</p>
-                      <p className="text-sm opacity-80 mt-1">Propiedades en Tenerife</p>
+                {/* Preview image from /previews/ */}
+                <div className="relative h-52">
+                  <img src={`/previews/${form.template}.png`} alt="" className="w-full h-full object-cover object-top" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                    <div className="text-white">
+                      <p className="text-lg font-bold">{form.business_name || 'Tu Nombre'}</p>
+                      <p className="text-xs opacity-80 mt-0.5">Propiedades en Tenerife</p>
                     </div>
                   </div>
                 </div>
                 <div className="bg-white p-4">
-                  <div className="grid grid-cols-3 gap-2">
-                    {[1, 2, 3].map(i => (
-                      <div key={i} className="aspect-[4/3] bg-gray-100 rounded" />
-                    ))}
+                  <div className="flex gap-1 mb-2">
+                    <span className="w-4 h-4 rounded-full border border-gray-200" style={{ backgroundColor: selectedTemplate?.color1 }} />
+                    <span className="w-4 h-4 rounded-full border border-gray-200" style={{ backgroundColor: selectedTemplate?.color2 }} />
                   </div>
-                  <div className="mt-3 space-y-1.5">
-                    <div className="h-2 bg-gray-100 rounded w-3/4" />
-                    <div className="h-2 bg-gray-100 rounded w-1/2" />
-                  </div>
+                  <p className="text-xs font-semibold text-gray-900">{selectedTemplate?.name}</p>
+                  <p className="text-[11px] text-gray-500 mt-0.5">{selectedTemplate?.desc}</p>
                 </div>
               </div>
-              <p className="text-center text-xs text-gray-400">Tu web se creará con este estilo y contenido de ejemplo</p>
+              <p className="text-center text-xs text-gray-400">
+                <Link href={`/demos/${form.template}`} className="text-brand-600 hover:underline" target="_blank">Ver demo completa</Link>
+              </p>
             </div>
           )}
         </div>

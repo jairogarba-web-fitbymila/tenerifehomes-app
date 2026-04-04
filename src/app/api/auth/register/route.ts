@@ -19,6 +19,13 @@ const HERO_IMAGES: Record<string, string> = {
   network: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80',
   classic: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80',
   data: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80',
+  'editorial-dark': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
+  'editorial-light': 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c0?w=1920&q=80',
+  'editorial-agent': 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1920&q=80',
+  'editorial-team': 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80',
+  'editorial-catalog': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
+  'editorial-fullservice': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
+  monolith: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1920&q=80',
 }
 
 const PROPERTY_IMAGES = {
@@ -455,6 +462,220 @@ const TEMPLATE_CONTENT: Record<string, {
       { name: 'Costa Adeje', description: 'Zona con mayor crecimiento del sur (+12% anual). Alta demanda turística, ocupación media del 82% y rentabilidad líder en Canarias.', image_url: ZONE_IMAGES[0], property_count: 35 },
       { name: 'El Médano', description: 'Zona emergente con potencial de revalorización. Tendencia alcista confirmada. Perfil joven-deportivo con creciente demanda internacional.', image_url: ZONE_IMAGES[1], property_count: 18 },
       { name: 'Puerto de la Cruz', description: 'Mercado infravalorado según nuestros modelos. Potencial de crecimiento del 20% en 5 años. Oportunidad para inversores con visión a largo plazo.', image_url: ZONE_IMAGES[2], property_count: 22 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  'editorial-dark': {
+    hero: { headline: 'Experiencia en Cada Detalle', subtitle: 'Propiedades exclusivas en el sur de Tenerife — conocimiento local, estándares internacionales.', cta_text: 'Ver Propiedades' },
+    bio: 'Más de 15 años especializándome en propiedades exclusivas del sur de Tenerife. Mi enfoque combina conocimiento profundo del mercado local con estándares internacionales de servicio. Cada cliente recibe mi atención personal directa.',
+    quote: 'Cada propiedad cuenta una historia. Mi trabajo es encontrar la que se ajusta a la tuya.',
+    stats: { propiedades_exclusivas: 45, ventas_realizadas: 320, anos_experiencia: 15, idiomas: 4 },
+    properties: [
+      { title: 'Villa Alisios — Costa Adeje', description: 'Villa de diseño con piscina privada, 4 dormitorios y vistas panorámicas al mar. Acabados premium y jardín tropical.', property_type: 'villa', operation_type: 'sale', price: 1850000, bedrooms: 4, bathrooms: 3, size_m2: 380, location: 'Costa Adeje', badge: 'exclusive', images: PROPERTY_IMAGES.villa, features: ['piscina privada', 'vistas al mar', 'jardín tropical', 'garaje'] },
+      { title: 'Penthouse Las Américas', description: 'Ático de lujo con terraza de 60m² y jacuzzi privado. Acabados de primera calidad.', property_type: 'penthouse', operation_type: 'sale', price: 920000, bedrooms: 3, bathrooms: 2, size_m2: 180, location: 'Playa de las Américas', badge: 'new', images: PROPERTY_IMAGES.penthouse, features: ['terraza 60m²', 'jacuzzi', 'vistas al mar'] },
+      { title: 'Apartamento Fañabé', description: 'Apartamento reformado en zona residencial. Terraza con vistas, comunidad con piscina.', property_type: 'apartment', operation_type: 'rent_long', price: 1200, bedrooms: 2, bathrooms: 1, size_m2: 85, location: 'Fañabé, Adeje', badge: null, images: PROPERTY_IMAGES.apartment, features: ['reformado', 'terraza', 'piscina comunitaria'] },
+    ],
+    testimonials: [
+      { quote: 'An impeccable service from start to finish. Found us our dream villa in Costa Adeje within two weeks. Highly recommended.', client_name: 'James & Catherine P.', client_location: 'Surrey, UK', rating: 5 },
+      { quote: 'Erstklassiger Service. Die gesamte Abwicklung war professionell und transparent. Absolut empfehlenswert!', client_name: 'Familie Hoffmann', client_location: 'Hamburg, Alemania', rating: 5 },
+      { quote: "Un service d'exception. Discrétion, professionnalisme et une connaissance parfaite du marché de Tenerife.", client_name: 'Jean-Pierre & Marie L.', client_location: 'Lyon, Francia', rating: 5 },
+    ],
+    services: [
+      { title: 'Compraventa Premium', description: 'Asesoramiento integral en compra y venta de propiedades exclusivas en Tenerife Sur.', icon: 'briefcase' },
+      { title: 'Valoración de Mercado', description: 'Análisis profesional con datos actualizados para establecer el precio óptimo.', icon: 'building' },
+      { title: 'Asesoría Legal Internacional', description: 'Red de abogados especializados en compradores extranjeros, NIE e impuestos.', icon: 'users' },
+      { title: 'Home Staging', description: 'Preparación profesional para maximizar el atractivo y valor de venta.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Costa Adeje', description: 'La zona más exclusiva del sur de Tenerife. Villas de lujo y resorts 5 estrellas.', image_url: ZONE_IMAGES[0], property_count: 45 },
+      { name: 'Los Cristianos', description: 'Centro turístico consolidado con excelente infraestructura y ambiente internacional.', image_url: ZONE_IMAGES[1], property_count: 32 },
+      { name: 'Guía de Isora', description: 'Naturaleza y tranquilidad. Abama Resort y fincas exclusivas.', image_url: ZONE_IMAGES[2], property_count: 18 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  'editorial-light': {
+    hero: { headline: 'Propiedades con Alma', subtitle: 'Cada espacio tiene un potencial. Con ojo de arquitecta y corazón de asesora, te ayudo a descubrirlo.', cta_text: 'Descubrir' },
+    bio: 'Arquitecta de formación reconvertida en asesora inmobiliaria. Evalúo cada propiedad con ojo profesional: orientación, materiales, distribución, potencial de reforma. No vendo metros cuadrados, vendo calidad de vida.',
+    quote: 'Una buena casa no se vende. Se presenta, y el comprador se enamora solo.',
+    stats: { propiedades: 38, ventas_realizadas: 145, anos_experiencia: 9, idiomas: 3 },
+    properties: [
+      { title: 'Villa de Diseño con Jardín Zen', description: 'Arquitectura contemporánea con materiales nobles, espacios abiertos y jardín zen. Orientación sur.', property_type: 'villa', operation_type: 'sale', price: 1650000, bedrooms: 4, bathrooms: 3, size_m2: 320, location: 'La Caleta', badge: 'exclusive', images: PROPERTY_IMAGES.villa, features: ['jardín zen', 'orientación sur', 'materiales nobles'] },
+      { title: 'Ático Dúplex con Solárium', description: 'Dúplex luminoso con solárium privado de 40m². Vistas panorámicas y acabados de diseño.', property_type: 'penthouse', operation_type: 'sale', price: 780000, bedrooms: 3, bathrooms: 2, size_m2: 165, location: 'El Duque', badge: null, images: PROPERTY_IMAGES.penthouse, features: ['solárium 40m²', 'vistas panorámicas', 'acabados diseño'] },
+      { title: 'Apartamento Reformado de Autor', description: 'Reforma integral con proyecto de interiorismo. Cocina abierta, iluminación natural perfecta.', property_type: 'apartment', operation_type: 'sale', price: 420000, bedrooms: 2, bathrooms: 2, size_m2: 95, location: 'Costa Adeje', badge: 'new', images: PROPERTY_IMAGES.apartment, features: ['reforma de autor', 'cocina abierta', 'iluminación natural'] },
+    ],
+    testimonials: [
+      { quote: 'Ariadna vio potencial en un apartamento que casi descartamos. Ahora es nuestro hogar soñado. Su ojo de arquitecta marca la diferencia.', client_name: 'Claudia & Stefan W.', client_location: 'Viena, Austria', rating: 5 },
+      { quote: "Her architect's eye caught things we never would have noticed. She doesn't just sell properties — she transforms perspectives.", client_name: 'Rachel & Tom E.', client_location: 'Dublin, Irlanda', rating: 5 },
+      { quote: "Un'agente che capisce l'architettura e il design. Ci ha consigliato modifiche che hanno trasformato lo spazio.", client_name: 'Paolo & Chiara R.', client_location: 'Roma, Italia', rating: 5 },
+    ],
+    services: [
+      { title: 'Evaluación Arquitectónica', description: 'Análisis profesional de orientación, materiales, distribución y potencial de reforma.', icon: 'building' },
+      { title: 'Asesoría de Compra', description: 'Acompañamiento experto para encontrar la propiedad que encaja contigo.', icon: 'briefcase' },
+      { title: 'Proyecto de Reforma', description: 'Presupuesto y diseño conceptual para transformar cualquier espacio.', icon: 'users' },
+      { title: 'Home Staging Premium', description: 'Puesta en escena profesional para vender rápido y al mejor precio.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Costa Adeje', description: 'Zona premium con edificaciones modernas y buena orientación solar.', image_url: ZONE_IMAGES[0], property_count: 38 },
+      { name: 'El Duque', description: 'Primera línea con los acabados más cuidados del sur de Tenerife.', image_url: ZONE_IMAGES[1], property_count: 15 },
+      { name: 'La Caleta', description: 'Pueblo costero con villas de autor y mucha personalidad.', image_url: ZONE_IMAGES[2], property_count: 12 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  'editorial-agent': {
+    hero: { headline: 'Tu Guía Inmobiliario en Tenerife', subtitle: 'Expat specialist. 14 años ayudando a europeos a encontrar su hogar al sol.', cta_text: 'Contactar' },
+    bio: 'Sé lo que es comprar aquí siendo extranjero porque yo lo hice. Guío a compradores nórdicos y europeos por todo el proceso: desde la primera visita hasta tener las llaves en la mano. Sin sorpresas, sin letra pequeña.',
+    quote: 'Compré mi primera propiedad aquí hace 14 años. Sé exactamente qué necesitas saber porque yo pasé por lo mismo.',
+    stats: { propiedades: 52, ventas_realizadas: 280, anos_experiencia: 14, idiomas: 4 },
+    properties: [
+      { title: 'Villa Moderna con Piscina Privada', description: 'Villa contemporánea de 4 dormitorios con piscina infinity y jardín privado. Zona residencial exclusiva.', property_type: 'villa', operation_type: 'sale', price: 1450000, bedrooms: 4, bathrooms: 3, size_m2: 310, location: 'Costa Adeje', badge: 'exclusive', images: PROPERTY_IMAGES.villa, features: ['piscina infinity', 'jardín privado', 'zona exclusiva'] },
+      { title: 'Penthouse con Jacuzzi en Terraza', description: 'Ático de 3 dormitorios con jacuzzi privado y vistas panorámicas al océano Atlántico.', property_type: 'penthouse', operation_type: 'sale', price: 620000, bedrooms: 3, bathrooms: 2, size_m2: 150, location: 'Playa de las Américas', badge: 'new', images: PROPERTY_IMAGES.penthouse, features: ['jacuzzi privado', 'vistas panorámicas', 'terraza'] },
+      { title: 'Apartamento Vacacional Amueblado', description: 'Estudio completamente amueblado y equipado. Listo para alquilar o disfrutar. Comunidad con piscina.', property_type: 'apartment', operation_type: 'rent_vacation', price: 95, bedrooms: 1, bathrooms: 1, size_m2: 55, location: 'Fañabé', badge: null, images: PROPERTY_IMAGES.apartment, features: ['amueblado', 'equipado', 'piscina comunitaria'] },
+    ],
+    testimonials: [
+      { quote: 'Henrik förstod exakt vad vi letade efter. Hela processen var smidig och trygg. Rekommenderas varmt!', client_name: 'Erik & Anna J.', client_location: 'Gotemburgo, Suecia', rating: 5 },
+      { quote: 'Henrik made buying in Spain feel safe and simple. He handled everything — NIE, bank, notary. Brilliant service.', client_name: 'Knut & Ingrid O.', client_location: 'Oslo, Noruega', rating: 5 },
+      { quote: 'As Brits buying abroad, we were nervous. Henrik walked us through every step with patience and real expertise.', client_name: 'Michael & Sarah B.', client_location: 'Leeds, UK', rating: 5 },
+    ],
+    services: [
+      { title: 'Búsqueda Personalizada', description: 'Encuentro propiedades que encajan con tu estilo de vida, no solo con tu presupuesto.', icon: 'briefcase' },
+      { title: 'Trámites para Extranjeros', description: 'NIE, cuenta bancaria, gestoría fiscal, poder notarial — todo gestionado.', icon: 'users' },
+      { title: 'Negociación Experta', description: 'Consigo el mejor precio posible. Conozco el mercado y sus márgenes reales.', icon: 'building' },
+      { title: 'Postventa y Mudanza', description: 'Alta de suministros, seguros, reformas menores, conexión de internet.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Costa Adeje', description: 'La zona favorita de los compradores nórdicos y europeos.', image_url: ZONE_IMAGES[0], property_count: 52 },
+      { name: 'Los Cristianos', description: 'Ambiente internacional y servicios completos todo el año.', image_url: ZONE_IMAGES[1], property_count: 38 },
+      { name: 'Golf del Sur', description: 'Comunidad británica, campos de golf y tranquilidad.', image_url: ZONE_IMAGES[2], property_count: 25 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  'editorial-team': {
+    hero: { headline: 'Trabaja con los Mejores', subtitle: 'Compraventa, alquileres e inversión. Un equipo especializado para cada necesidad.', cta_text: 'Conoce al Equipo' },
+    bio: 'Tres perfiles complementarios que cubren compraventa, alquileres vacacionales e inversión inmobiliaria en el sur de Tenerife. Un equipo, todas las respuestas.',
+    quote: 'Tres cabezas piensan mejor que una. Y tres especialistas, aún mejor.',
+    stats: { propiedades_activas: 68, ventas_realizadas: 520, anos_experiencia: 18, idiomas: 5 },
+    properties: [
+      { title: 'Villa Premium Costa Adeje', description: 'Villa de lujo de 5 dormitorios con piscina infinity y jardín de 500m². Ubicación premium.', property_type: 'villa', operation_type: 'sale', price: 2100000, bedrooms: 5, bathrooms: 4, size_m2: 400, location: 'Costa Adeje', badge: 'exclusive', images: PROPERTY_IMAGES.villa, features: ['piscina infinity', 'jardín 500m²', '5 dormitorios'] },
+      { title: 'Apartamento Playa Primera Línea', description: 'Apartamento vacacional en primera línea de playa. 2 dormitorios con terraza y vistas al mar.', property_type: 'apartment', operation_type: 'rent_vacation', price: 130, bedrooms: 2, bathrooms: 1, size_m2: 75, location: 'Fañabé', badge: null, images: PROPERTY_IMAGES.apartment, features: ['primera línea', 'terraza', 'vistas al mar'] },
+      { title: 'Chalet Inversión Turística', description: 'Chalet con licencia VV lista. 3 dormitorios, piscina comunitaria. Rendimiento 7.5% neto.', property_type: 'villa', operation_type: 'sale', price: 550000, bedrooms: 3, bathrooms: 2, size_m2: 180, location: 'Los Cristianos', badge: 'investment', images: PROPERTY_IMAGES.villa, features: ['licencia VV', 'rendimiento 7.5%', 'piscina'] },
+    ],
+    testimonials: [
+      { quote: 'Marco hat uns perfekt beraten. Unsere Ferienwohnung bringt 7,5% Rendite. Besser als erwartet!', client_name: 'Die Familie Becker', client_location: 'Düsseldorf, Alemania', rating: 5 },
+      { quote: "Elena gère notre location saisonnière depuis 2 ans. Taux d'occupation de 85%. Service impeccable.", client_name: 'Famille Dupont', client_location: 'Nantes, Francia', rating: 5 },
+      { quote: 'The whole team is brilliant. Julián for buying, Elena for renting out. Truly a one-stop shop.', client_name: 'Robert & Jane M.', client_location: 'Cardiff, UK', rating: 5 },
+    ],
+    services: [
+      { title: 'Compraventa Residencial', description: 'Especialista en vivienda habitual y segunda residencia en el sur de Tenerife.', icon: 'building' },
+      { title: 'Alquiler Vacacional', description: 'Gestión integral: reservas, limpieza, mantenimiento y atención al huésped.', icon: 'briefcase' },
+      { title: 'Inversión Internacional', description: 'ROI, fiscalidad, Golden Visa y optimización fiscal para inversores.', icon: 'users' },
+      { title: 'Property Management', description: 'Mantenimiento, limpieza, check-in/out y reporting mensual completo.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Costa Adeje', description: 'Sede del equipo. Zona premium con máxima demanda turística.', image_url: ZONE_IMAGES[0], property_count: 68 },
+      { name: 'Las Américas', description: 'Centro turístico. Ideal para inversión vacacional de alto rendimiento.', image_url: ZONE_IMAGES[1], property_count: 45 },
+      { name: 'Los Cristianos', description: 'Mercado mixto: residencial e inversión con demanda constante.', image_url: ZONE_IMAGES[2], property_count: 52 },
+    ],
+    team: [
+      { name: 'Julián Vega', role: 'Director Comercial', photo_url: TEAM_PHOTOS[0], bio: 'Especialista en compraventa residencial con 15 años de experiencia en el sur de Tenerife.', languages: ['Español', 'Inglés'] },
+      { name: 'Elena Martín', role: 'Directora de Alquileres', photo_url: TEAM_PHOTOS[1], bio: 'Gestión integral de viviendas turísticas. Tasa de ocupación media del 85%.', languages: ['Español', 'Francés', 'Italiano'] },
+      { name: 'Marco Torres', role: 'Asesor de Inversiones', photo_url: TEAM_PHOTOS[2], bio: 'Especialista en inversión inmobiliaria internacional. ROI, fiscalidad, Golden Visa.', languages: ['Español', 'Alemán', 'Inglés'] },
+    ],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'team', 'contact_form'],
+  },
+
+  'editorial-catalog': {
+    hero: { headline: 'Encuentra tu Propiedad Ideal', subtitle: '+200 propiedades en venta y alquiler en el sur de Tenerife. Filtra por tipo, zona y precio.', cta_text: 'Explorar Catálogo' },
+    bio: 'El catálogo inmobiliario más completo del sur de Tenerife. Más de 200 propiedades activas entre venta, alquiler vacacional y alquiler de larga temporada. Filtra, compara y encuentra.',
+    quote: 'El catálogo más amplio. La búsqueda más fácil. La decisión, tuya.',
+    stats: { propiedades_activas: 200, ventas_realizadas: 400, anos_experiencia: 12, zonas: 8 },
+    properties: [
+      { title: 'Villa Moderna 4 Dormitorios', description: 'Villa de diseño contemporáneo con jardín privado y piscina. Zona residencial exclusiva de Costa Adeje.', property_type: 'villa', operation_type: 'sale', price: 1250000, bedrooms: 4, bathrooms: 3, size_m2: 300, location: 'Costa Adeje', badge: 'new', images: PROPERTY_IMAGES.villa, features: ['piscina', 'jardín privado', 'diseño contemporáneo'] },
+      { title: 'Estudio Vacacional Playa', description: 'Estudio reformado en primera línea. Ideal para inversión. Comunidad con piscina y jardines.', property_type: 'apartment', operation_type: 'rent_vacation', price: 85, bedrooms: 1, bathrooms: 1, size_m2: 40, location: 'Los Cristianos', badge: null, images: PROPERTY_IMAGES.apartment, features: ['primera línea', 'reformado', 'piscina comunitaria'] },
+      { title: 'Piso 3 Dorm. Larga Temporada', description: 'Amplio piso de 3 dormitorios en zona céntrica. Cerca de colegios, supermercados y transporte.', property_type: 'apartment', operation_type: 'rent_long', price: 1100, bedrooms: 3, bathrooms: 2, size_m2: 95, location: 'Los Cristianos', badge: null, images: PROPERTY_IMAGES.apartment, features: ['céntrico', 'cerca colegios', '3 dormitorios'] },
+    ],
+    testimonials: [
+      { quote: 'Das umfangreichste Immobilienportal für Teneriffa Süd. Wir haben unser Apartment in 2 Tagen gefunden.', client_name: 'Sandra & Michael H.', client_location: 'Stuttgart, Alemania', rating: 5 },
+      { quote: 'La web es súper fácil de usar. Filtré por zona y presupuesto y en 5 minutos ya tenía mis favoritos.', client_name: 'María José F.', client_location: 'Bilbao, España', rating: 5 },
+      { quote: 'We browsed 50 properties online before visiting just 3 in person. Bought the first one. Perfect filtering system!', client_name: 'Peter & Linda S.', client_location: 'Malmö, Suecia', rating: 5 },
+    ],
+    services: [
+      { title: 'Venta de Propiedades', description: 'Catálogo completo de viviendas en venta en Tenerife Sur.', icon: 'building' },
+      { title: 'Alquiler Vacacional', description: 'Apartamentos y villas para estancias cortas con todo incluido.', icon: 'briefcase' },
+      { title: 'Alquiler Larga Temporada', description: 'Pisos y casas para vivir todo el año en el sur de Tenerife.', icon: 'users' },
+      { title: 'Visitas Virtuales', description: 'Tours 360° de todas las propiedades para verlas desde cualquier lugar del mundo.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Costa Adeje', description: 'Premium. 85 propiedades activas en la zona más exclusiva del sur.', image_url: ZONE_IMAGES[0], property_count: 85 },
+      { name: 'Los Cristianos', description: 'Turístico. 52 propiedades activas con alta demanda todo el año.', image_url: ZONE_IMAGES[1], property_count: 52 },
+      { name: 'Las Américas', description: 'Inversión. 38 propiedades activas con máxima rentabilidad vacacional.', image_url: ZONE_IMAGES[2], property_count: 38 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  'editorial-fullservice': {
+    hero: { headline: 'Vive, Invierte, Disfruta', subtitle: 'Tres divisiones. Una misión: encontrarte el espacio perfecto en Tenerife.', cta_text: 'Explorar Opciones' },
+    bio: 'La agencia más completa del sur de Tenerife. Tres divisiones especializadas: venta residencial, alquiler vacacional y alquiler de larga temporada. Sea cual sea tu necesidad inmobiliaria, tenemos una solución.',
+    quote: 'No importa cómo quieras vivir Tenerife. Tenemos la llave.',
+    stats: { propiedades_activas: 92, ventas_realizadas: 480, anos_experiencia: 16, divisiones: 3 },
+    properties: [
+      { title: 'Villa Moderna con Piscina Infinity', description: 'Villa premium de 5 dormitorios con piscina infinity y jardín de 400m². La joya de Costa Adeje.', property_type: 'villa', operation_type: 'sale', price: 1950000, bedrooms: 5, bathrooms: 4, size_m2: 420, location: 'Costa Adeje', badge: 'exclusive', images: PROPERTY_IMAGES.villa, features: ['piscina infinity', 'jardín 400m²', '5 dormitorios'] },
+      { title: 'Ático Panorámico con Solárium', description: 'Ático vacacional con solárium y vistas 360°. Perfecto para estancias de lujo.', property_type: 'penthouse', operation_type: 'rent_vacation', price: 200, bedrooms: 2, bathrooms: 1, size_m2: 90, location: 'Costa Adeje', badge: null, images: PROPERTY_IMAGES.penthouse, features: ['solárium', 'vistas 360°', 'amueblado'] },
+      { title: 'Piso 3 Dorm. Adeje Centro', description: 'Piso amplio de 3 dormitorios en el centro de Adeje. Cerca de colegios y transporte. Larga temporada.', property_type: 'apartment', operation_type: 'rent_long', price: 950, bedrooms: 3, bathrooms: 2, size_m2: 110, location: 'Adeje Centro', badge: null, images: PROPERTY_IMAGES.apartment, features: ['centro Adeje', 'colegios cerca', '3 dormitorios'] },
+    ],
+    testimonials: [
+      { quote: 'Wir haben über sie gekauft UND vermieten jetzt über sie. Alles aus einer Hand. Perfekt und unkompliziert!', client_name: 'Patricia & Thomas K.', client_location: 'Colonia, Alemania', rating: 5 },
+      { quote: "Bought a flat for investment, they manage the holiday rental. 82% occupancy in year one. Couldn't ask for more.", client_name: 'David & Sophie T.', client_location: 'Brighton, UK', rating: 5 },
+      { quote: 'Alquilé mi piso de larga temporada con ellos. Buenos inquilinos, cero problemas, todo gestionado. Tranquilidad total.', client_name: 'Ana Belén M.', client_location: 'Madrid, España', rating: 5 },
+    ],
+    services: [
+      { title: 'Compraventa Residencial', description: 'Tu hogar permanente o segunda residencia en Tenerife Sur.', icon: 'building' },
+      { title: 'Alquiler Vacacional', description: 'Gestión integral: reservas, limpieza, mantenimiento y guest experience.', icon: 'briefcase' },
+      { title: 'Alquiler Larga Temporada', description: 'Búsqueda de inquilinos, contratos, cobros y gestión de incidencias.', icon: 'users' },
+      { title: 'Licencia Turística', description: 'Trámites completos para obtener tu licencia VV (Vivienda Vacacional).', icon: 'map' },
+    ],
+    zones: [
+      { name: 'Costa Adeje', description: 'Nuestra zona principal. Venta, vacacional y larga temporada.', image_url: ZONE_IMAGES[0], property_count: 92 },
+      { name: 'Los Cristianos', description: 'Alta demanda de alquiler todo el año. Excelente rentabilidad.', image_url: ZONE_IMAGES[1], property_count: 65 },
+      { name: 'Las Américas', description: 'Máxima rentabilidad vacacional en el sur de Tenerife.', image_url: ZONE_IMAGES[2], property_count: 48 },
+    ],
+    team: [],
+    activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
+  },
+
+  monolith: {
+    hero: { headline: 'ESCAPA DE LO ORDINARIO.', subtitle: 'Propiedades de arquitectura contemporánea en Tenerife Sur.', cta_text: 'VER COLECCIÓN' },
+    bio: 'Propiedades de arquitectura contemporánea en Tenerife Sur. No son simples inmuebles — son declaraciones de diseño. Selección extrema: solo aceptamos propiedades que cumplan nuestros estándares arquitectónicos.',
+    quote: 'El minimalismo no es ausencia — es la honestidad del material y la pureza de la forma.',
+    stats: { propiedades_curadas: 15, ventas_realizadas: 75, anos_experiencia: 12, arquitectos_red: 8 },
+    properties: [
+      { title: 'VILLA ALISIOS', description: 'Villa de diseño brutalista con hormigón visto, acero corten y cristal floor-to-ceiling. Piscina desbordante.', property_type: 'villa', operation_type: 'sale', price: 1850000, bedrooms: 4, bathrooms: 3, size_m2: 380, location: 'Costa Adeje', badge: 'exclusive', images: PROPERTY_IMAGES.villa, features: ['hormigón visto', 'acero corten', 'cristal floor-to-ceiling'] },
+      { title: 'ABAMA ROYAL', description: 'Residencia de firma en Abama. 5 dormitorios, diseño minimalista, materiales nobles. Obra de autor.', property_type: 'villa', operation_type: 'sale', price: 2950000, bedrooms: 5, bathrooms: 4, size_m2: 450, location: 'Guía de Isora', badge: null, images: PROPERTY_IMAGES.villa, features: ['diseño minimalista', 'materiales nobles', 'Abama Resort'] },
+      { title: 'CASA BASALTO', description: 'Casa vacacional de autor en basalto y madera. Terraza con vistas al Atlántico. Experiencia arquitectónica.', property_type: 'villa', operation_type: 'rent_vacation', price: 280, bedrooms: 3, bathrooms: 2, size_m2: 200, location: 'La Caleta', badge: null, images: PROPERTY_IMAGES.villa, features: ['basalto y madera', 'vistas Atlántico', 'diseño de autor'] },
+    ],
+    testimonials: [
+      { quote: 'MONOLITH versteht Architektur. Als Architekt sage ich: ihr Auge für Design ist außergewöhnlich. Höchste Standards.', client_name: 'Jens R., Architekt', client_location: 'Berlín, Alemania', rating: 5 },
+      { quote: 'They showed us just three properties. Each one was a masterpiece. We bought the first one immediately.', client_name: 'Victoria & James A.', client_location: 'London, UK', rating: 5 },
+      { quote: "Collaboriamo con MONOLITH per i nostri clienti che cercano architettura contemporanea. Standard altissimi.", client_name: 'Studio Forma', client_location: 'Milán, Italia', rating: 5 },
+    ],
+    services: [
+      { title: 'Curaduría Arquitectónica', description: 'Solo propiedades que cumplen nuestros estándares de diseño contemporáneo.', icon: 'building' },
+      { title: 'Comisión de Proyecto', description: 'Diseño a medida con nuestra red de arquitectos para tu parcela.', icon: 'briefcase' },
+      { title: 'Art Direction', description: 'Interiorismo y dirección artística para propiedades premium.', icon: 'users' },
+      { title: 'Inversión en Diseño', description: 'Propiedades de autor con alta revalorización. Arquitectura como activo.', icon: 'map' },
+    ],
+    zones: [
+      { name: 'La Caleta', description: 'Villas de autor. Arquitectura orgánica junto al mar.', image_url: ZONE_IMAGES[0], property_count: 6 },
+      { name: 'Abama', description: 'Resort exclusivo. Diseño de firma internacional.', image_url: ZONE_IMAGES[1], property_count: 4 },
+      { name: 'Golf del Sur', description: 'Líneas limpias. Minimalismo con vistas al campo.', image_url: ZONE_IMAGES[2], property_count: 5 },
     ],
     team: [],
     activeSections: ['nav', 'hero', 'footer', 'properties_sale', 'about', 'stats', 'testimonials', 'services', 'zones', 'contact_form'],
