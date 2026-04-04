@@ -749,7 +749,7 @@ export async function POST(request: Request) {
     if (profileError) {
       await supabaseAdmin.auth.admin.deleteUser(userId)
       console.error('Profile creation error:', profileError?.message)
-      return NextResponse.json({ error: 'Error creando perfil de agente', detail: profileError?.message, code: profileError?.code }, { status: 500 })
+      return NextResponse.json({ error: 'Error creando perfil de agente' }, { status: 500 })
     }
 
     // 4. Hero config — with background image
