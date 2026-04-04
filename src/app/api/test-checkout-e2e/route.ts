@@ -18,16 +18,20 @@ export async function GET() {
 
     // ─── Step 1: Get the test agent ─────────────────────────
     // Find first agent to test with
-    const { data: agents } = await supabase
+    const { data: agents, error: agentError } = await supabase
       .from('agent_profiles')
       .select('id, email, business_name, plan, is_published')
-      .limit(1)
+      .limit(5)
 
-    const agent = agents?.[0]
-
-    if (!agent) {
-      return NextResponse.json({ error: 'Test agent not found' }, { status: 404 })
+    if (agentError) {
+      return NextResponse.json({ error: 'DB query failed', detail: agentError.message, hint: agentError.hint }, { status: 500 })
     }
+
+    if (!agents || agents.length === 0) {
+      return NextResponse.json({ error: 'No agents in agent_profiles table', agents_count: agents?.length || 0 }, { status: 404 })
+    }
+
+    const agent = agents[0]
 
     results.push({
       step: '1. Agent found',
