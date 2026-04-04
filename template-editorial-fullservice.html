@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editorial Estate | Vacacional, Venta y Alquiler en Tenerife</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#000d22",
+        "primary-container": "#002349",
+        "on-primary": "#ffffff",
+        "on-primary-container": "#718bb7",
+        "tertiary-fixed": "#ffdea5",
+        "tertiary-fixed-dim": "#e9c176",
+        "on-tertiary-fixed": "#261900",
+        "on-tertiary-container": "#a78541",
+        "surface": "#f8f9fa",
+        "surface-container-low": "#f3f4f5",
+        "surface-container": "#edeeef",
+        "surface-container-high": "#e7e8e9",
+        "surface-container-highest": "#e1e3e4",
+        "surface-container-lowest": "#ffffff",
+        "surface-dim": "#d9dadb",
+        "on-surface": "#191c1d",
+        "on-surface-variant": "#43474e",
+        "secondary": "#51606b",
+        "secondary-container": "#d2e2ee",
+        "on-secondary-container": "#55656f",
+        "outline": "#74777f",
+        "outline-variant": "#c4c6cf",
+        "background": "#f8f9fa",
+      },
+      fontFamily: {
+        headline: ["Noto Serif", "Georgia", "serif"],
+        body: ["Manrope", "system-ui", "sans-serif"],
+        label: ["Manrope", "system-ui", "sans-serif"],
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem",
+      }
+    },
+  },
+}
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block; line-height: 1;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Manrope', sans-serif; }
+  h1, h2, h3, .serif { font-family: 'Noto Serif', serif; }
+  .glass-nav { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  .prop-img { transition: transform 0.7s ease; }
+  .group:hover .prop-img { transform: scale(1.05); }
+  .sale-img { transition: transform 1s ease; }
+  .group:hover .sale-img { transform: scale(1.1); }
+  .rental-img {
+    filter: grayscale(100%); transition: filter 0.5s ease, transform 0.5s ease;
+  }
+  .group:hover .rental-img { filter: grayscale(0%); transform: scale(1.03); }
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .mobile-menu { transform: translateX(100%); transition: transform 0.35s ease; }
+  .mobile-menu.open { transform: translateX(0); }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased selection:bg-tertiary-fixed selection:text-on-tertiary-fixed">
+
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<header class="fixed top-0 w-full z-50 bg-white/80 glass-nav border-b border-outline-variant/10">
+  <div class="flex justify-between items-center px-6 md:px-8 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-primary" style="font-size:24px">maps_home_work</span>
+      <span class="text-xl md:text-2xl font-bold tracking-tight text-primary font-headline">Costa Living</span>
+    </div>
+    <nav class="hidden md:flex items-center gap-8">
+      <a href="#vacacional" class="text-primary border-b-2 border-tertiary-fixed-dim pb-1 font-medium text-sm">Vacacional</a>
+      <a href="#venta" class="text-secondary font-medium hover:text-primary transition-colors text-sm">Venta</a>
+      <a href="#alquiler" class="text-secondary font-medium hover:text-primary transition-colors text-sm">Alquiler</a>
+      <a href="#agente" class="text-secondary font-medium hover:text-primary transition-colors text-sm">El Agente</a>
+    </nav>
+    <a href="#contacto" class="hidden md:inline-block bg-primary text-on-primary px-6 py-2.5 rounded-sm font-label text-sm uppercase tracking-wider hover:opacity-80 transition-opacity">
+      Contactar
+    </a>
+    <button onclick="document.getElementById('mobileMenu').classList.add('open')" class="md:hidden text-primary">
+      <span class="material-symbols-outlined" style="font-size:26px">menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-primary text-white">
+  <div class="flex justify-between items-center px-6 py-4">
+    <span class="text-lg font-bold font-headline">Costa Living</span>
+    <button onclick="document.getElementById('mobileMenu').classList.remove('open')">
+      <span class="material-symbols-outlined text-white" style="font-size:28px">close</span>
+    </button>
+  </div>
+  <div class="flex flex-col items-center justify-center h-[70vh] gap-8">
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#vacacional" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Vacacional</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#venta" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Venta</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#alquiler" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Alquiler</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#agente" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">El Agente</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#contacto" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Contacto</a>
+  </div>
+</div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<main class="pt-16 md:pt-24">
+<section class="relative h-[60vh] md:h-[80vh] flex items-center overflow-hidden px-6 md:px-8 mb-12 md:mb-16">
+  <div class="absolute inset-0 z-0">
+    <img class="w-full h-full object-cover"
+         src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80"
+         alt="Villa de lujo con piscina infinita en Costa Adeje"/>
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/60 to-transparent"></div>
+  </div>
+  <div class="relative z-10 max-w-screen-xl mx-auto w-full fade-up">
+    <div class="max-w-2xl text-white">
+      <span class="font-label text-sm uppercase tracking-[0.3em] text-tertiary-fixed-dim block mb-4">Tenerife Sur · Colección 2026</span>
+      <h1 class="font-headline text-4xl md:text-6xl lg:text-8xl leading-tight mb-6 md:mb-8">Tu Espacio en el Mundo.</h1>
+      <p class="text-base md:text-lg text-slate-200 font-light leading-relaxed max-w-lg mb-8 md:mb-10">
+        Desde villas frente al mar hasta apartamentos con encanto — propiedades que no son solo direcciones, sino historias esperando ser vividas.
+      </p>
+      <a href="#vacacional" class="inline-block bg-tertiary-fixed text-on-tertiary-fixed px-8 md:px-10 py-3 md:py-4 rounded-sm font-bold uppercase text-sm tracking-widest hover:bg-white transition-colors">
+        Explorar
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ VACATION RENTALS — BENTO GRID ═══════════════════ -->
+<section id="vacacional" class="max-w-screen-2xl mx-auto px-6 md:px-8 mb-16 md:mb-24">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-4 fade-up">
+    <div class="max-w-xl">
+      <h2 class="font-headline text-3xl md:text-5xl text-primary mb-4 md:mb-6">Alquiler Vacacional</h2>
+      <p class="text-secondary text-base md:text-lg">Escapadas de corta estancia en las mejores ubicaciones del sur de Tenerife.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
+    <!-- Featured: large card -->
+    <div class="md:col-span-8 group overflow-hidden fade-up">
+      <div class="relative aspect-[16/9] mb-5 md:mb-6 overflow-hidden">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80"
+             alt="Villa Alisios frente al mar"/>
+        <span class="absolute top-4 md:top-6 left-4 md:left-6 bg-tertiary-fixed px-3 md:px-4 py-1 text-xs font-bold tracking-widest uppercase text-on-tertiary-fixed">Destacada</span>
+      </div>
+      <div class="flex flex-col md:flex-row justify-between items-start gap-3">
+        <div>
+          <h3 class="font-headline text-xl md:text-2xl text-primary mb-1">Villa Alisios</h3>
+          <p class="text-secondary font-label flex items-center gap-1 mb-3 text-sm">
+            <span class="material-symbols-outlined text-sm">location_on</span> Costa Adeje, Tenerife
+          </p>
+          <div class="flex gap-4 md:gap-6 text-sm text-on-surface-variant font-medium">
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">bed</span> 4 Hab</span>
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">bathtub</span> 3 Baños</span>
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">square_foot</span> 380 m²</span>
+          </div>
+        </div>
+        <div class="md:text-right">
+          <span class="block text-primary font-headline text-2xl md:text-3xl">280 €</span>
+          <span class="text-secondary text-sm uppercase tracking-tight">por noche</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compact: tall card -->
+    <div class="md:col-span-4 group fade-up">
+      <div class="relative aspect-[3/4] md:aspect-[4/5] mb-5 md:mb-6 overflow-hidden">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
+             alt="Penthouse Las Américas"/>
+        <span class="absolute bottom-4 md:bottom-6 right-4 md:right-6 bg-primary text-white px-3 md:px-4 py-1 text-xs font-bold tracking-widest uppercase">Nuevo</span>
+      </div>
+      <h3 class="font-headline text-xl md:text-2xl text-primary mb-1">Penthouse Las Américas</h3>
+      <p class="text-secondary text-sm mb-3">Playa de las Américas</p>
+      <div class="flex justify-between items-center pt-3 border-t border-outline-variant/30">
+        <div class="flex gap-3 text-xs font-medium text-secondary">
+          <span>2 Hab</span><span>2 Baños</span><span>120 m²</span>
+        </div>
+        <span class="text-xl font-headline text-primary">150 €<span class="text-xs text-secondary font-body">/noche</span></span>
+      </div>
+    </div>
+
+    <!-- Bottom row: 2 equal cards with amenities -->
+    <div class="md:col-span-6 group fade-up">
+      <div class="relative aspect-[4/3] mb-5 md:mb-6 overflow-hidden">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=800&q=80"
+             alt="Casa El Médano"/>
+      </div>
+      <div class="p-4 bg-surface-container-low">
+        <h3 class="font-headline text-xl md:text-2xl text-primary mb-1">Casa El Médano</h3>
+        <p class="text-secondary text-sm mb-4">El Médano, Granadilla</p>
+        <div class="flex justify-between items-end">
+          <div class="text-sm space-y-1 text-on-surface-variant">
+            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">surfing</span> A 2 min de la playa</p>
+            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">deck</span> Terraza privada</p>
+          </div>
+          <span class="text-xl md:text-2xl font-headline text-primary">120 €<span class="text-sm font-body text-secondary">/noche</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:col-span-6 group fade-up">
+      <div class="relative aspect-[4/3] mb-5 md:mb-6 overflow-hidden">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80"
+             alt="Apartamento Torviscas"/>
+      </div>
+      <div class="p-4 bg-surface-container-low">
+        <h3 class="font-headline text-xl md:text-2xl text-primary mb-1">Suite Torviscas</h3>
+        <p class="text-secondary text-sm mb-4">Torviscas Alto, Adeje</p>
+        <div class="flex justify-between items-end">
+          <div class="text-sm space-y-1 text-on-surface-variant">
+            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">pool</span> Piscina comunitaria</p>
+            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">visibility</span> Vista al Teide</p>
+          </div>
+          <span class="text-xl md:text-2xl font-headline text-primary">95 €<span class="text-sm font-body text-secondary">/noche</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ SALES — DARK SECTION ═══════════════════ -->
+<section id="venta" class="bg-primary-container text-white py-20 md:py-32">
+  <div class="max-w-screen-2xl mx-auto px-6 md:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-start mb-12 md:mb-20 gap-6 fade-up">
+      <div class="max-w-2xl">
+        <span class="font-label text-sm uppercase tracking-[0.2em] text-on-primary-container block mb-4">Inversión y Patrimonio</span>
+        <h2 class="font-headline text-3xl md:text-5xl mb-4 md:mb-6">Propiedades en Venta</h2>
+        <p class="text-on-primary-container text-base md:text-lg font-light">Las mejores villas y chalets del sur de Tenerife para quienes buscan un hogar permanente o una inversión sólida.</p>
+      </div>
+      <a href="#contacto" class="border border-on-primary-container px-6 md:px-8 py-3 uppercase text-xs tracking-widest font-bold hover:bg-white hover:text-primary transition-all">
+        Ver Todas
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+      <!-- Sale 1 -->
+      <div class="group fade-up">
+        <div class="aspect-[3/4] mb-6 md:mb-8 overflow-hidden">
+          <img class="w-full h-full object-cover sale-img"
+               src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+               alt="Villa Abama"/>
+        </div>
+        <h4 class="font-headline text-xl md:text-2xl mb-2">Villa Abama Royal</h4>
+        <p class="text-on-primary-container text-sm mb-4 md:mb-6 uppercase tracking-widest">Guía de Isora</p>
+        <p class="font-headline text-2xl md:text-3xl mb-6 md:mb-8">2.950.000 €</p>
+        <div class="grid grid-cols-3 gap-3 text-xs font-label uppercase tracking-tight opacity-80 border-t border-white/20 pt-4 md:pt-6">
+          <span>5 Hab</span><span>4 Baños</span><span>450 m²</span>
+        </div>
+      </div>
+      <!-- Sale 2 -->
+      <div class="group fade-up">
+        <div class="aspect-[3/4] mb-6 md:mb-8 overflow-hidden">
+          <img class="w-full h-full object-cover sale-img"
+               src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80"
+               alt="Chalet La Caleta"/>
+        </div>
+        <h4 class="font-headline text-xl md:text-2xl mb-2">Chalet La Caleta</h4>
+        <p class="text-on-primary-container text-sm mb-4 md:mb-6 uppercase tracking-widest">La Caleta, Adeje</p>
+        <p class="font-headline text-2xl md:text-3xl mb-6 md:mb-8">1.650.000 €</p>
+        <div class="grid grid-cols-3 gap-3 text-xs font-label uppercase tracking-tight opacity-80 border-t border-white/20 pt-4 md:pt-6">
+          <span>4 Hab</span><span>3 Baños</span><span>320 m²</span>
+        </div>
+      </div>
+      <!-- Sale 3 -->
+      <div class="group fade-up">
+        <div class="aspect-[3/4] mb-6 md:mb-8 overflow-hidden">
+          <img class="w-full h-full object-cover sale-img"
+               src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80"
+               alt="Villa Golf del Sur"/>
+        </div>
+        <h4 class="font-headline text-xl md:text-2xl mb-2">Residencia Golf del Sur</h4>
+        <p class="text-on-primary-container text-sm mb-4 md:mb-6 uppercase tracking-widest">San Miguel de Abona</p>
+        <p class="font-headline text-2xl md:text-3xl mb-6 md:mb-8">890.000 €</p>
+        <div class="grid grid-cols-3 gap-3 text-xs font-label uppercase tracking-tight opacity-80 border-t border-white/20 pt-4 md:pt-6">
+          <span>3 Hab</span><span>2 Baños</span><span>210 m²</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ LONG-TERM RENTALS — 4-COL GRID ═══════════════════ -->
+<section id="alquiler" class="max-w-screen-2xl mx-auto px-6 md:px-8 py-16 md:py-24">
+  <h2 class="font-headline text-3xl md:text-5xl text-primary mb-10 md:mb-16 text-center fade-up">Alquiler de Larga Estancia</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+    <!-- Rental 1 -->
+    <div class="bg-surface-container-lowest p-3 md:p-4 group fade-up">
+      <div class="aspect-square mb-4 md:mb-6 overflow-hidden">
+        <img class="w-full h-full object-cover rental-img"
+             src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80"
+             alt="Piso Fañabé"/>
+      </div>
+      <h5 class="font-headline text-base md:text-xl text-primary">Piso Fañabé</h5>
+      <p class="text-secondary text-xs md:text-sm mb-2 md:mb-4">Fañabé, Adeje</p>
+      <p class="text-primary font-bold text-sm md:text-base">1.200 €/mes</p>
+    </div>
+    <!-- Rental 2 -->
+    <div class="bg-surface-container-lowest p-3 md:p-4 group fade-up">
+      <div class="aspect-square mb-4 md:mb-6 overflow-hidden">
+        <img class="w-full h-full object-cover rental-img"
+             src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80"
+             alt="Apartamento Los Cristianos"/>
+      </div>
+      <h5 class="font-headline text-base md:text-xl text-primary">Apt. Los Cristianos</h5>
+      <p class="text-secondary text-xs md:text-sm mb-2 md:mb-4">Los Cristianos</p>
+      <p class="text-primary font-bold text-sm md:text-base">950 €/mes</p>
+    </div>
+    <!-- Rental 3 -->
+    <div class="bg-surface-container-lowest p-3 md:p-4 group fade-up">
+      <div class="aspect-square mb-4 md:mb-6 overflow-hidden">
+        <img class="w-full h-full object-cover rental-img"
+             src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80"
+             alt="Estudio Palm-Mar"/>
+      </div>
+      <h5 class="font-headline text-base md:text-xl text-primary">Estudio Palm-Mar</h5>
+      <p class="text-secondary text-xs md:text-sm mb-2 md:mb-4">Palm-Mar, Arona</p>
+      <p class="text-primary font-bold text-sm md:text-base">750 €/mes</p>
+    </div>
+    <!-- Rental 4 -->
+    <div class="bg-surface-container-lowest p-3 md:p-4 group fade-up">
+      <div class="aspect-square mb-4 md:mb-6 overflow-hidden">
+        <img class="w-full h-full object-cover rental-img"
+             src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=80"
+             alt="Dúplex Callao Salvaje"/>
+      </div>
+      <h5 class="font-headline text-base md:text-xl text-primary">Dúplex Callao Salvaje</h5>
+      <p class="text-secondary text-xs md:text-sm mb-2 md:mb-4">Callao Salvaje, Adeje</p>
+      <p class="text-primary font-bold text-sm md:text-base">1.450 €/mes</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ AGENT ═══════════════════ -->
+<section id="agente" class="max-w-screen-2xl mx-auto px-6 md:px-8 py-12 md:py-16">
+  <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-10 md:gap-20 fade-up">
+    <div class="relative order-2 md:order-1">
+      <div class="absolute -top-6 md:-top-10 -left-6 md:-left-10 w-24 md:w-40 h-24 md:h-40 border-t-2 border-l-2 border-tertiary-fixed-dim"></div>
+      <img class="w-full h-auto object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-1000"
+           src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80"
+           alt="Julián Vega — Agente inmobiliario"/>
+      <div class="absolute -bottom-6 md:-bottom-10 -right-6 md:-right-10 w-24 md:w-40 h-24 md:h-40 bg-surface-container-high -z-10"></div>
+    </div>
+    <div class="order-1 md:order-2">
+      <span class="font-label text-sm uppercase tracking-[0.3em] text-secondary block mb-4 md:mb-6">Experiencia e Integridad</span>
+      <h2 class="font-headline text-3xl md:text-5xl text-primary mb-6 md:mb-8 leading-tight">Tu Agente.</h2>
+      <p class="text-base md:text-lg text-secondary mb-6 md:mb-8 leading-relaxed italic font-headline">
+        "El inmobiliario no son paredes y techos — es el legado que construimos y la forma en que vivimos cada día."
+      </p>
+      <p class="text-secondary mb-8 md:mb-10 leading-relaxed text-sm md:text-base">
+        Julián Vega lleva más de 15 años identificando propiedades que trascienden las tendencias del mercado en Tenerife Sur. Su ojo para la calidad arquitectónica y su conocimiento del mercado local le convierten en el consultor de referencia para compradores exigentes.
+      </p>
+      <div class="flex flex-col gap-4">
+        <a href="#contacto" class="flex items-center gap-4 group/link">
+          <span class="w-10 md:w-12 h-[1px] bg-primary group-hover/link:w-16 transition-all"></span>
+          <span class="font-bold text-primary tracking-widest uppercase text-xs">Reservar Consulta Privada</span>
+        </a>
+        <a href="https://wa.me/34622123456" class="flex items-center gap-4 group/link">
+          <span class="w-10 md:w-12 h-[1px] bg-primary group-hover/link:w-16 transition-all"></span>
+          <span class="font-bold text-primary tracking-widest uppercase text-xs">WhatsApp Directo</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACT CTA ═══════════════════ -->
+<section id="contacto" class="bg-primary py-16 md:py-24 px-6 md:px-8">
+  <div class="max-w-2xl mx-auto text-center fade-up">
+    <h2 class="font-headline text-3xl md:text-4xl text-white mb-6">¿Listo para encontrar tu propiedad?</h2>
+    <p class="text-on-primary-container text-base md:text-lg mb-8 md:mb-10 leading-relaxed">
+      Vacacional, venta o alquiler — cuéntame qué buscas y te envío opciones en 24h.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="tel:+34922123456" class="bg-tertiary-fixed text-on-tertiary-fixed px-8 py-4 rounded-sm font-label uppercase tracking-[0.15em] text-sm font-bold hover:bg-tertiary-fixed-dim transition-colors">
+        +34 922 123 456
+      </a>
+      <a href="https://wa.me/34622123456" target="_blank" class="border border-white/30 text-white px-8 py-4 rounded-sm font-label uppercase tracking-[0.15em] text-sm font-bold hover:bg-white/10 transition-colors">
+        WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="bg-slate-900 w-full py-12 md:py-16 px-6 md:px-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-screen-2xl mx-auto items-center">
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="material-symbols-outlined text-white" style="font-size:20px">maps_home_work</span>
+        <h3 class="text-xl md:text-2xl font-bold text-white font-headline">Costa Living</h3>
+      </div>
+      <p class="text-slate-400 text-xs md:text-sm max-w-sm">© 2026 Costa Living · Especialistas en propiedades exclusivas en Tenerife Sur.</p>
+    </div>
+    <div class="flex flex-wrap gap-6 md:gap-8 md:justify-end">
+      <a class="text-slate-400 hover:text-white transition-colors text-sm" href="#vacacional">Vacacional</a>
+      <a class="text-slate-400 hover:text-white transition-colors text-sm" href="#venta">Venta</a>
+      <a class="text-slate-400 hover:text-white transition-colors text-sm" href="#alquiler">Alquiler</a>
+      <a class="text-slate-400 hover:text-white transition-colors text-sm" href="#agente">Agente</a>
+      <a class="text-slate-400 hover:text-white transition-colors text-sm" href="#">Privacidad</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════ SCROLL ANIMATIONS ═══════════════════ -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+});
+</script>
+
+</body>
+</html>

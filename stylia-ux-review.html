@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stylia — Revisión UX · Ingrid Belleza</title>
+<style>
+  :root {
+    --critico: #DC2626;
+    --critico-bg: #FEF2F2;
+    --critico-border: #FECACA;
+    --alta: #EA580C;
+    --alta-bg: #FFF7ED;
+    --alta-border: #FED7AA;
+    --media: #CA8A04;
+    --media-bg: #FEFCE8;
+    --media-border: #FEF08A;
+    --baja: #2563EB;
+    --baja-bg: #EFF6FF;
+    --baja-border: #BFDBFE;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --text: #0F172A;
+    --text2: #475569;
+    --border: #E2E8F0;
+    --accent: #7C3AED;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #7C3AED 0%, #9333EA 50%, #A855F7 100%); color:#fff; padding:40px 0 32px; }
+  .header-inner { max-width:1100px; margin:0 auto; padding:0 24px; }
+  .header h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
+  .header p { opacity:0.85; font-size:15px; }
+  .header-meta { display:flex; gap:24px; margin-top:16px; flex-wrap:wrap; }
+  .header-meta span { background:rgba(255,255,255,0.18); padding:4px 14px; border-radius:20px; font-size:13px; font-weight:500; }
+
+  /* Stats bar */
+  .stats-bar { max-width:1100px; margin:-28px auto 0; padding:0 24px; display:grid; grid-template-columns:repeat(4,1fr); gap:12px; position:relative; z-index:2; }
+  .stat-card { background:var(--card); border-radius:12px; padding:16px 20px; box-shadow:0 1px 3px rgba(0,0,0,0.08); text-align:center; border-left:4px solid; }
+  .stat-card.critico { border-left-color:var(--critico); }
+  .stat-card.alta { border-left-color:var(--alta); }
+  .stat-card.media { border-left-color:var(--media); }
+  .stat-card.baja { border-left-color:var(--baja); }
+  .stat-num { font-size:32px; font-weight:800; }
+  .stat-card.critico .stat-num { color:var(--critico); }
+  .stat-card.alta .stat-num { color:var(--alta); }
+  .stat-card.media .stat-num { color:var(--media); }
+  .stat-card.baja .stat-num { color:var(--baja); }
+  .stat-label { font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text2); font-weight:600; }
+
+  /* Filters */
+  .filters { max-width:1100px; margin:28px auto 0; padding:0 24px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .filter-btn { padding:7px 16px; border-radius:20px; border:1.5px solid var(--border); background:var(--card); font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:6px; }
+  .filter-btn:hover { border-color:#94A3B8; }
+  .filter-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .filter-btn .dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .filter-btn .dot.critico { background:var(--critico); }
+  .filter-btn .dot.alta { background:var(--alta); }
+  .filter-btn .dot.media { background:var(--media); }
+  .filter-btn .dot.baja { background:var(--baja); }
+  .filter-btn.active .dot { background:#fff; }
+  .filter-label { font-size:13px; color:var(--text2); margin-right:4px; }
+
+  /* Progress */
+  .progress-section { max-width:1100px; margin:20px auto 0; padding:0 24px; }
+  .progress-bar-container { background:var(--card); border-radius:12px; padding:16px 20px; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+  .progress-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .progress-title { font-size:14px; font-weight:600; }
+  .progress-pct { font-size:14px; font-weight:700; color:var(--accent); }
+  .progress-track { height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg, var(--accent), #A855F7); border-radius:4px; transition:width 0.5s ease; }
+
+  /* Issues list */
+  .issues { max-width:1100px; margin:24px auto 60px; padding:0 24px; }
+  .issue-card { background:var(--card); border-radius:12px; margin-bottom:12px; box-shadow:0 1px 3px rgba(0,0,0,0.06); border:1px solid var(--border); overflow:hidden; transition:all 0.2s; }
+  .issue-card:hover { box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+  .issue-card.resolved { opacity:0.55; }
+  .issue-card.resolved .issue-title { text-decoration:line-through; }
+  .issue-header { display:flex; align-items:center; padding:16px 20px; cursor:pointer; gap:12px; user-select:none; }
+  .issue-number { font-size:12px; font-weight:700; color:var(--text2); min-width:28px; }
+  .issue-badge { padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; white-space:nowrap; }
+  .issue-badge.critico { background:var(--critico-bg); color:var(--critico); border:1px solid var(--critico-border); }
+  .issue-badge.alta { background:var(--alta-bg); color:var(--alta); border:1px solid var(--alta-border); }
+  .issue-badge.media { background:var(--media-bg); color:var(--media); border:1px solid var(--media-border); }
+  .issue-badge.baja { background:var(--baja-bg); color:var(--baja); border:1px solid var(--baja-border); }
+  .issue-title { flex:1; font-size:15px; font-weight:600; }
+  .issue-area { font-size:12px; color:var(--text2); background:#F1F5F9; padding:3px 10px; border-radius:6px; white-space:nowrap; }
+  .issue-toggle { font-size:18px; color:#94A3B8; transition:transform 0.2s; }
+  .issue-card.open .issue-toggle { transform:rotate(180deg); }
+  .issue-check { width:20px; height:20px; border-radius:6px; border:2px solid #CBD5E1; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
+  .issue-check.checked { background:var(--accent); border-color:var(--accent); }
+  .issue-check.checked::after { content:'✓'; color:#fff; font-size:12px; font-weight:700; }
+
+  .issue-body { display:none; padding:0 20px 20px; border-top:1px solid var(--border); margin-top:0; }
+  .issue-card.open .issue-body { display:block; padding-top:16px; }
+  .issue-section { margin-bottom:14px; }
+  .issue-section:last-child { margin-bottom:0; }
+  .issue-section-title { font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text2); font-weight:700; margin-bottom:4px; }
+  .issue-section p { font-size:14px; color:var(--text); }
+  .issue-impact { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:6px; font-size:12px; font-weight:600; }
+  .impact-high { background:#FEF2F2; color:#DC2626; }
+  .impact-medium { background:#FFF7ED; color:#EA580C; }
+  .impact-low { background:#EFF6FF; color:#2563EB; }
+
+  .issue-fix { background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:12px 16px; }
+  .issue-fix p { color:#166534; font-size:13px; }
+  .issue-fix code { background:#DCFCE7; padding:1px 6px; border-radius:4px; font-size:12px; font-family:'SF Mono',Consolas,monospace; }
+
+  /* Responsive */
+  @media (max-width:768px) {
+    .stats-bar { grid-template-columns:repeat(2,1fr); }
+    .header h1 { font-size:22px; }
+    .issue-area { display:none; }
+    .issue-header { padding:12px 16px; }
+    .issue-body { padding:0 16px 16px; }
+  }
+  @media (max-width:480px) {
+    .stats-bar { grid-template-columns:1fr 1fr; gap:8px; }
+    .filters { gap:6px; }
+    .filter-btn { padding:6px 12px; font-size:12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Revisión UX — Stylia</h1>
+    <p>Auditoría completa del panel de administración y web pública · Ingrid Belleza</p>
+    <div class="header-meta">
+      <span>📅 3 Abril 2026</span>
+      <span>🏪 Ingrid Belleza — Santa Cruz</span>
+      <span>🔗 saas-peluqueria.vercel.app</span>
+      <span>16 Issues detectados</span>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-card critico"><div class="stat-num">1</div><div class="stat-label">Crítico</div></div>
+  <div class="stat-card alta"><div class="stat-num">5</div><div class="stat-label">Alta</div></div>
+  <div class="stat-card media"><div class="stat-num">5</div><div class="stat-label">Media</div></div>
+  <div class="stat-card baja"><div class="stat-num">5</div><div class="stat-label">Baja</div></div>
+</div>
+
+<div class="filters">
+  <span class="filter-label">Filtrar:</span>
+  <button class="filter-btn active" data-filter="all">Todos <span style="font-weight:400">(16)</span></button>
+  <button class="filter-btn" data-filter="critico"><span class="dot critico"></span> Crítico</button>
+  <button class="filter-btn" data-filter="alta"><span class="dot alta"></span> Alta</button>
+  <button class="filter-btn" data-filter="media"><span class="dot media"></span> Media</button>
+  <button class="filter-btn" data-filter="baja"><span class="dot baja"></span> Baja</button>
+  <button class="filter-btn" data-filter="pending">⏳ Pendientes</button>
+  <button class="filter-btn" data-filter="resolved">✅ Resueltos</button>
+</div>
+
+<div class="progress-section">
+  <div class="progress-bar-container">
+    <div class="progress-header">
+      <span class="progress-title">Progreso de resolución</span>
+      <span class="progress-pct" id="progressPct">0 / 16 resueltos</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+</div>
+
+<div class="issues" id="issuesList">
+
+  <!-- ISSUE 1 — CRÍTICO -->
+  <div class="issue-card" data-priority="critico" data-id="1">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#01</span>
+      <span class="issue-badge critico">Crítico</span>
+      <span class="issue-title">Wizard de reservas: "No hay huecos disponibles" en todas las fechas</span>
+      <span class="issue-area">Booking</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>Al intentar reservar online, el wizard muestra "No hay huecos disponibles" para TODAS las fechas, incluso las que tienen citas reales en el panel admin. Bloquea el 100% de las reservas online.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-high">🔴 Bloquea ventas — 0% conversión online</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Causa raíz probable</div>
+        <p>El wizard de reservas usa una lógica de disponibilidad diferente (code path distinto) al que usa el asistente de voz Vapi. Vapi sí puede reservar correctamente, pero el wizard web no encuentra slots.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Unificar la lógica de disponibilidad del wizard con la de Vapi Tools. Verificar la query que busca <code>available_slots</code> para la fecha seleccionada — posible problema con timezone o formato de fecha. Comparar queries de <code>/api/booking/availability</code> vs <code>/api/vapi/check-slots</code>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 2 — ALTA -->
+  <div class="issue-card" data-priority="alta" data-id="2">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#02</span>
+      <span class="issue-badge alta">Alta</span>
+      <span class="issue-title">Roles del equipo en inglés: "owner", "stylist" en vez de español</span>
+      <span class="issue-area">Admin → Equipo</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>Los roles del equipo se muestran en inglés ("owner", "stylist") tanto en el panel admin como en la web pública. Para un SaaS enfocado en España, esto confunde a los dueños de salones que no hablan inglés.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-medium">🟠 UX confusa — aspecto poco profesional</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Crear un mapa de traducción de roles: <code>owner → Propietaria</code>, <code>stylist → Estilista</code>, <code>receptionist → Recepcionista</code>, etc. Aplicar en la tabla <code>team_members</code> o en la capa de presentación.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 3 — ALTA -->
+  <div class="issue-card" data-priority="alta" data-id="3">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#03</span>
+      <span class="issue-badge alta">Alta</span>
+      <span class="issue-title">Formato de moneda incorrecto: "15EUR" en vez de "15 €"</span>
+      <span class="issue-area">Web pública</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>Los precios se muestran como "15EUR" sin espacio y con código ISO. El formato español correcto es "15 €" (cifra + espacio + símbolo). Afecta a toda la sección de servicios y al wizard de reserva.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-medium">🟠 Aspecto amateur — poca confianza del cliente</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Usar <code>Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' })</code> o un helper <code>formatPrice(amount)</code> que devuelva siempre "XX €". Aplicar globalmente.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 4 — ALTA -->
+  <div class="issue-card" data-priority="alta" data-id="4">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#04</span>
+      <span class="issue-badge alta">Alta</span>
+      <span class="issue-title">Login muestra "SaaS Peluqueria" en vez de "Stylia"</span>
+      <span class="issue-area">Auth</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>La página de login/registro sigue mostrando el nombre interno "SaaS Peluqueria" en lugar del nombre comercial "Stylia". Da impresión de producto en desarrollo, no profesional.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-medium">🟠 Marca inconsistente — imagen no profesional</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Buscar todas las ocurrencias de "SaaS Peluqueria" en el código y reemplazar por "Stylia". Incluir logo en la página de login. Verificar emails de confirmación y reset de contraseña.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 5 — ALTA -->
+  <div class="issue-card" data-priority="alta" data-id="5">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#05</span>
+      <span class="issue-badge alta">Alta</span>
+      <span class="issue-title">Calendario permite seleccionar días cerrados</span>
+      <span class="issue-area">Booking</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>En el wizard de reserva, el calendario permite seleccionar cualquier día incluyendo los que el salón tiene marcados como cerrados (domingos, festivos). Debería deshabilitar y griselar esos días.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-medium">🟠 Frustración del cliente — intenta reservar y no hay horas</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Consultar <code>salon_schedules</code> para obtener los días operativos del salón. Pasar como <code>disabledDays</code> al componente de calendario. Los días cerrados se muestran en gris y no son clicables.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 6 — ALTA -->
+  <div class="issue-card" data-priority="alta" data-id="6">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#06</span>
+      <span class="issue-badge alta">Alta</span>
+      <span class="issue-title">Clientes duplicados por formato de teléfono</span>
+      <span class="issue-area">Admin → Clientes</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>El sistema crea clientes duplicados cuando el mismo teléfono se introduce con formatos distintos: "612345678", "+34612345678", "612 345 678". No hay normalización al guardar.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-medium">🟠 Datos sucios — historial fragmentado del cliente</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Normalizar teléfonos al guardar: eliminar espacios, guiones, paréntesis. Si no tiene prefijo internacional, añadir <code>+34</code> por defecto. Usar unique constraint en <code>phone_normalized</code>. Merge de duplicados existentes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 7 — MEDIA -->
+  <div class="issue-card" data-priority="media" data-id="7">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#07</span>
+      <span class="issue-badge media">Media</span>
+      <span class="issue-title">Avatares del equipo solo muestran iniciales, sin foto</span>
+      <span class="issue-area">Admin → Equipo</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>Los miembros del equipo muestran solo un círculo con iniciales en lugar de su foto de perfil. No hay opción de subir foto en el formulario de edición del equipo.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-low">🔵 Aspecto genérico — pierde personalización</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Añadir campo <code>avatar_url</code> a <code>team_members</code> y un input de upload de imagen en el formulario de equipo. Subir a Supabase Storage en el bucket del salón. Fallback a iniciales si no hay foto.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 8 — MEDIA -->
+  <div class="issue-card" data-priority="media" data-id="8">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#08</span>
+      <span class="issue-badge media">Media</span>
+      <span class="issue-title">CTA solo ofrece "Llamar", falta "Reservar online"</span>
+      <span class="issue-area">Web pública</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>El botón principal de acción (CTA) en la web pública solo ofrece "Llamar". Debería incluir un botón prominente de "Reservar Online" que lleve al wizard de reserva — ese es el objetivo principal del SaaS.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-medium">🟠 Pierde reservas online — principal fuente de valor</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Añadir botón CTA principal "Reservar Cita" que enlace a <code>/{slug}/reservar</code>. El botón de "Llamar" pasa a secundario. Considerar también un botón flotante sticky para móvil.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 9 — MEDIA -->
+  <div class="issue-card" data-priority="media" data-id="9">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#09</span>
+      <span class="issue-badge media">Media</span>
+      <span class="issue-title">Sección de ubicación sin mapa de Google Maps</span>
+      <span class="issue-area">Web pública</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>La sección de ubicación/contacto en la web pública muestra la dirección como texto pero no incluye un mapa interactivo. Los clientes necesitan saber cómo llegar.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-low">🔵 Pierde contexto visual — el cliente no sabe dónde está</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Embed de Google Maps iframe usando la dirección del salón. Almacenar <code>latitude</code> y <code>longitude</code> en <code>salons</code> o usar embed de Google Maps con dirección. No requiere API key si se usa iframe embed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 10 — MEDIA -->
+  <div class="issue-card" data-priority="media" data-id="10">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#10</span>
+      <span class="issue-badge media">Media</span>
+      <span class="issue-title">Confirmación de reserva promete email que no se envía</span>
+      <span class="issue-area">Booking</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>La pantalla final del wizard dice "Recibirás una confirmación por email" pero el email no llega (o no se envía). Genera desconfianza en el cliente que no sabe si su reserva se registró.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-medium">🟠 Desconfianza — cliente no sabe si se reservó bien</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Verificar el flujo de email con Resend. Si el email funciona, comprobar que se captura el email del cliente en el wizard. Si no está implementado, o quitar el mensaje o implementar el envío con template HTML profesional.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 11 — MEDIA -->
+  <div class="issue-card" data-priority="media" data-id="11">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#11</span>
+      <span class="issue-badge media">Media</span>
+      <span class="issue-title">"Mi Web" solo al 22% completada — faltan contenidos</span>
+      <span class="issue-area">Admin → Mi Web</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>La sección "Mi Web" en el admin muestra un progreso del 22%. Faltan textos, descripciones, imágenes y secciones por completar. No es un bug sino contenido pendiente de rellenar.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Impacto</div>
+        <span class="issue-impact impact-low">🔵 Web incompleta — no es error, es contenido pendiente</span>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Crear un checklist visual en el admin que guíe al dueño del salón paso a paso: "Sube tu logo", "Escribe tu descripción", "Añade fotos del salón". Considerar un asistente IA que genere textos automáticamente.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 12 — BAJA -->
+  <div class="issue-card" data-priority="baja" data-id="12">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#12</span>
+      <span class="issue-badge baja">Baja</span>
+      <span class="issue-title">Contacto del equipo vacío: sin teléfono, email, Instagram</span>
+      <span class="issue-area">Admin → Equipo</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>Los campos de contacto de cada miembro del equipo (teléfono, email, Instagram) están vacíos. No está claro si es porque no se han rellenado o porque el formulario no tiene estos campos.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Verificar que el formulario de edición de equipo incluye campos para teléfono, email e Instagram. Si no existen, añadirlos como opcionales. Mostrar en la web pública solo los que estén rellenados.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 13 — BAJA -->
+  <div class="issue-card" data-priority="baja" data-id="13">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#13</span>
+      <span class="issue-badge baja">Baja</span>
+      <span class="issue-title">Código postal vacío en Configuración</span>
+      <span class="issue-area">Admin → Config</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>El campo de código postal en la configuración del salón está vacío. Afecta a SEO local y a la sección de ubicación en la web pública.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Asegurar que el formulario de configuración valide campos requeridos como dirección completa y código postal. Marcar como campo requerido en el onboarding.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 14 — BAJA -->
+  <div class="issue-card" data-priority="baja" data-id="14">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#14</span>
+      <span class="issue-badge baja">Baja</span>
+      <span class="issue-title">Nombre del salón truncado en sidebar: "Peluqueria y Estetica In..."</span>
+      <span class="issue-area">Admin → UI</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>El nombre largo del salón se corta en la sidebar del admin sin tooltip ni elipsis elegante. Debería manejar nombres largos con truncado y tooltip.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>CSS: <code>text-overflow: ellipsis; overflow: hidden; white-space: nowrap;</code> con <code>title</code> attribute para tooltip nativo. Considerar usar la sidebar expandida si hay espacio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 15 — BAJA -->
+  <div class="issue-card" data-priority="baja" data-id="15">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#15</span>
+      <span class="issue-badge baja">Baja</span>
+      <span class="issue-title">Gráfico semanal muestra barras con 0 en días cerrados</span>
+      <span class="issue-area">Admin → Dashboard</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>El gráfico de reservas semanales muestra barras con valor 0 para domingos y otros días cerrados. Debería omitir esos días o marcarlos como "Cerrado" para que el gráfico sea más útil y no parezca que hubo un mal día.</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Filtrar días cerrados del gráfico o mostrar una etiqueta "Cerrado" en gris. Consultar <code>salon_schedules</code> para saber qué días están operativos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE 16 — BAJA -->
+  <div class="issue-card" data-priority="baja" data-id="16">
+    <div class="issue-header">
+      <div class="issue-check" onclick="event.stopPropagation();toggleResolved(this)"></div>
+      <span class="issue-number">#16</span>
+      <span class="issue-badge baja">Baja</span>
+      <span class="issue-title">"Ofertas" y "WhatsApp" en sidebar sin funcionalidad clara</span>
+      <span class="issue-area">Admin → Sidebar</span>
+      <span class="issue-toggle">▾</span>
+    </div>
+    <div class="issue-body">
+      <div class="issue-section">
+        <div class="issue-section-title">Problema</div>
+        <p>Las secciones "Ofertas" y "WhatsApp" aparecen en la sidebar del admin pero no está claro qué funcionalidad ofrecen. ¿Son módulos futuros? Si no están implementadas deberían ocultarse o marcar como "Próximamente".</p>
+      </div>
+      <div class="issue-section">
+        <div class="issue-section-title">Solución propuesta</div>
+        <div class="issue-fix">
+          <p>Si son módulos futuros: añadir badge "Próximamente" y deshabilitar el click. Si están parcialmente implementados: completar la funcionalidad mínima. No dejar secciones vacías sin explicación.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Toggle issue open/close
+  document.querySelectorAll('.issue-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const card = header.parentElement;
+      card.classList.toggle('open');
+    });
+  });
+
+  // Toggle resolved
+  function toggleResolved(el) {
+    el.classList.toggle('checked');
+    el.closest('.issue-card').classList.toggle('resolved');
+    updateProgress();
+  }
+
+  // Update progress
+  function updateProgress() {
+    const total = document.querySelectorAll('.issue-card').length;
+    const resolved = document.querySelectorAll('.issue-check.checked').length;
+    const pct = Math.round((resolved / total) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = resolved + ' / ' + total + ' resueltos';
+  }
+
+  // Filters
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.issue-card').forEach(card => {
+        if (filter === 'all') {
+          card.style.display = '';
+        } else if (filter === 'pending') {
+          card.style.display = card.classList.contains('resolved') ? 'none' : '';
+        } else if (filter === 'resolved') {
+          card.style.display = card.classList.contains('resolved') ? '' : 'none';
+        } else {
+          card.style.display = card.dataset.priority === filter ? '' : 'none';
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

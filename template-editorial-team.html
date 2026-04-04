@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editorial Estate | Nuestro Equipo de Expertos</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#000d22",
+        "primary-container": "#002349",
+        "on-primary": "#ffffff",
+        "on-primary-container": "#718bb7",
+        "tertiary-fixed": "#ffdea5",
+        "tertiary-fixed-dim": "#e9c176",
+        "on-tertiary-fixed": "#261900",
+        "on-tertiary-container": "#a78541",
+        "tertiary-container": "#302000",
+        "surface": "#f8f9fa",
+        "surface-container-low": "#f3f4f5",
+        "surface-container-high": "#e7e8e9",
+        "surface-container-highest": "#e1e3e4",
+        "surface-container-lowest": "#ffffff",
+        "on-surface": "#191c1d",
+        "on-surface-variant": "#43474e",
+        "secondary": "#51606b",
+        "secondary-container": "#d2e2ee",
+        "on-secondary-container": "#55656f",
+        "outline": "#74777f",
+        "outline-variant": "#c4c6cf",
+      },
+      fontFamily: {
+        headline: ["Noto Serif", "Georgia", "serif"],
+        body: ["Manrope", "system-ui", "sans-serif"],
+        label: ["Manrope", "system-ui", "sans-serif"],
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem",
+        lg: "0.25rem",
+        xl: "0.5rem",
+        full: "0.75rem",
+      }
+    },
+  },
+}
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    line-height: 1;
+  }
+  .hero-gradient {
+    background: linear-gradient(180deg, rgba(0,13,34,0.4) 0%, rgba(0,13,34,0.1) 50%, rgba(248,249,250,1) 100%);
+  }
+  /* Greyscale → color hover */
+  .agent-photo {
+    filter: grayscale(100%);
+    transform: scale(1.05);
+    transition: all 0.7s ease-in-out;
+  }
+  .group:hover .agent-photo {
+    filter: grayscale(0%);
+    transform: scale(1);
+  }
+  /* Smooth scroll for anchors */
+  html { scroll-behavior: smooth; }
+  /* Mobile menu overlay */
+  .mobile-menu { transform: translateX(100%); transition: transform 0.35s ease; }
+  .mobile-menu.open { transform: translateX(0); }
+  /* Property hover zoom */
+  .prop-img { transition: transform 1s ease; }
+  .group:hover .prop-img { transform: scale(1.05); }
+  /* Scroll-triggered fade-in */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-tertiary-fixed selection:text-on-tertiary-fixed">
+
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md">
+  <nav class="flex justify-between items-center px-6 md:px-8 py-5 max-w-full mx-auto">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-primary" style="font-size:28px">maps_home_work</span>
+      <span class="text-lg md:text-xl font-bold uppercase tracking-[0.15em] text-primary">Costa Realty</span>
+    </div>
+    <!-- Desktop nav -->
+    <div class="hidden md:flex gap-10 items-center">
+      <a href="#propiedades" class="text-secondary font-medium hover:text-primary transition-colors">Propiedades</a>
+      <a href="#equipo" class="text-primary font-bold border-b-2 border-primary pb-1">Nuestro Equipo</a>
+      <a href="#contacto" class="text-secondary font-medium hover:text-primary transition-colors">Contacto</a>
+    </div>
+    <button onclick="document.getElementById('mobileMenu').classList.add('open')"
+            class="md:hidden text-primary">
+      <span class="material-symbols-outlined" style="font-size:28px">menu</span>
+    </button>
+    <a href="#contacto" class="hidden md:inline-block bg-primary text-white px-6 py-2.5 rounded-sm font-label text-xs uppercase tracking-widest hover:opacity-70 transition-opacity">
+      Contactar
+    </a>
+  </nav>
+</header>
+
+<!-- Mobile menu -->
+<div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-primary text-white">
+  <div class="flex justify-between items-center px-6 py-5">
+    <span class="text-lg font-bold uppercase tracking-widest">Costa Realty</span>
+    <button onclick="document.getElementById('mobileMenu').classList.remove('open')">
+      <span class="material-symbols-outlined text-white" style="font-size:28px">close</span>
+    </button>
+  </div>
+  <div class="flex flex-col items-center justify-center h-[70vh] gap-8">
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#equipo" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Nuestro Equipo</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#propiedades" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Propiedades</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#contacto" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Contacto</a>
+    <div class="mt-8 flex gap-6">
+      <a href="tel:+34922123456" class="flex items-center gap-2 text-white/70 hover:text-tertiary-fixed text-sm">
+        <span class="material-symbols-outlined" style="font-size:18px">phone</span> +34 922 123 456
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="relative h-screen flex items-end justify-start overflow-hidden pt-24">
+  <div class="absolute inset-0 z-0">
+    <img class="w-full h-full object-cover"
+         src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80"
+         alt="Villa moderna con vistas al mar en Tenerife"/>
+    <div class="absolute inset-0 hero-gradient"></div>
+  </div>
+  <div class="relative z-10 px-6 md:px-8 pb-24 md:pb-32 max-w-7xl fade-up">
+    <span class="block font-label text-sm uppercase tracking-[0.2em] mb-4 text-primary">Desde 2008 · Tenerife Sur</span>
+    <h1 class="font-headline text-5xl md:text-7xl lg:text-9xl text-primary leading-none tracking-tighter max-w-4xl">
+      Experiencia en<br/>Cada Detalle
+    </h1>
+    <div class="mt-8 md:mt-12 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
+      <div class="hidden md:block h-[1px] w-32 bg-primary"></div>
+      <p class="font-body text-secondary max-w-md text-base md:text-lg leading-relaxed">
+        Un equipo de especialistas dedicados a encontrar las propiedades más exclusivas del sur de Tenerife. Conocimiento local, estándares internacionales.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ TEAM GALLERY ═══════════════════ -->
+<section id="equipo" class="py-20 md:py-32 px-6 md:px-8 bg-surface">
+  <div class="max-w-7xl mx-auto">
+    <!-- Section header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-24 gap-6 md:gap-8 fade-up">
+      <div class="max-w-2xl">
+        <span class="font-label text-xs uppercase tracking-[0.3em] text-on-tertiary-container bg-tertiary-fixed px-3 py-1 mb-6 inline-block">
+          Equipo Experto
+        </span>
+        <h2 class="font-headline text-4xl md:text-5xl lg:text-7xl text-primary tracking-tight">
+          Nuestros Especialistas
+        </h2>
+      </div>
+      <p class="font-body text-secondary md:text-right max-w-xs text-sm md:text-base">
+        Tres perfiles complementarios que cubren compraventa, alquileres vacacionales e inversión inmobiliaria en Tenerife.
+      </p>
+    </div>
+
+    <!-- Agent cards — 3-column grid with offset center -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-px md:bg-outline-variant/20 fade-up">
+
+      <!-- Agent 1: Julián Vega -->
+      <div class="bg-surface-container-lowest group cursor-pointer overflow-hidden pb-8 md:pb-12">
+        <div class="relative h-[450px] md:h-[600px] overflow-hidden mb-6 md:mb-8">
+          <img class="w-full h-full object-cover agent-photo"
+               src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80"
+               alt="Julián Vega — Director Comercial"/>
+        </div>
+        <div class="px-4 md:px-8">
+          <p class="font-label text-[10px] uppercase tracking-[0.4em] text-secondary mb-2">Director Comercial</p>
+          <h3 class="font-headline text-2xl md:text-3xl text-primary mb-3">Julián Vega</h3>
+          <div class="flex items-center justify-between">
+            <span class="font-body text-sm text-on-surface-variant italic">Villas de lujo · Costa Adeje</span>
+            <span class="material-symbols-outlined text-primary group-hover:translate-x-2 transition-transform">north_east</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent 2: Elena Martín (Offset) -->
+      <div class="bg-surface-container-lowest group cursor-pointer overflow-hidden pb-8 md:pb-12 md:translate-y-12">
+        <div class="relative h-[450px] md:h-[600px] overflow-hidden mb-6 md:mb-8">
+          <img class="w-full h-full object-cover agent-photo"
+               src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80"
+               alt="Elena Martín — Directora de Alquileres"/>
+        </div>
+        <div class="px-4 md:px-8">
+          <p class="font-label text-[10px] uppercase tracking-[0.4em] text-secondary mb-2">Directora de Alquileres</p>
+          <h3 class="font-headline text-2xl md:text-3xl text-primary mb-3">Elena Martín</h3>
+          <div class="flex items-center justify-between">
+            <span class="font-body text-sm text-on-surface-variant italic">Vacation Rentals · Los Cristianos</span>
+            <span class="material-symbols-outlined text-primary group-hover:translate-x-2 transition-transform">north_east</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent 3: Marco Torres -->
+      <div class="bg-surface-container-lowest group cursor-pointer overflow-hidden pb-8 md:pb-12">
+        <div class="relative h-[450px] md:h-[600px] overflow-hidden mb-6 md:mb-8">
+          <img class="w-full h-full object-cover agent-photo"
+               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&q=80"
+               alt="Marco Torres — Asesor de Inversiones"/>
+        </div>
+        <div class="px-4 md:px-8">
+          <p class="font-label text-[10px] uppercase tracking-[0.4em] text-secondary mb-2">Asesor de Inversiones</p>
+          <h3 class="font-headline text-2xl md:text-3xl text-primary mb-3">Marco Torres</h3>
+          <div class="flex items-center justify-between">
+            <span class="font-body text-sm text-on-surface-variant italic">Inversión · Golf del Sur</span>
+            <span class="material-symbols-outlined text-primary group-hover:translate-x-2 transition-transform">north_east</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PROPERTIES BY EXPERT ═══════════════════ -->
+<section id="propiedades" class="py-24 md:py-40 px-6 md:px-8 bg-surface-container-low">
+  <div class="max-w-7xl mx-auto">
+    <!-- Section header -->
+    <div class="flex flex-col md:flex-row items-baseline gap-4 mb-16 md:mb-20 fade-up">
+      <h2 class="font-headline text-3xl md:text-4xl text-primary">Selección Exclusiva</h2>
+      <div class="hidden md:block flex-grow h-[1px] bg-outline-variant/30"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+
+      <!-- Property 1 — 7 columns -->
+      <div class="md:col-span-7 group fade-up">
+        <div class="relative aspect-[16/10] overflow-hidden mb-5 md:mb-6">
+          <img class="w-full h-full object-cover prop-img"
+               src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80"
+               alt="Villa Alisios — Costa Adeje"/>
+          <div class="absolute top-4 md:top-6 left-4 md:left-6 bg-primary text-white font-label text-[10px] uppercase tracking-widest px-3 md:px-4 py-2">
+            Selección de Julián Vega
+          </div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-start gap-2">
+          <div>
+            <h4 class="font-headline text-xl md:text-2xl text-primary">Villa Alisios</h4>
+            <p class="text-secondary font-body text-sm">Costa Adeje · 4 hab · 380 m²</p>
+          </div>
+          <span class="font-headline text-xl md:text-2xl text-primary">1.850.000 €</span>
+        </div>
+      </div>
+
+      <!-- Property 2 — 5 columns offset -->
+      <div class="md:col-span-5 md:pt-24 group fade-up">
+        <div class="relative aspect-[4/5] overflow-hidden mb-5 md:mb-6">
+          <img class="w-full h-full object-cover prop-img"
+               src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
+               alt="Apartamento Playa Paraíso"/>
+          <div class="absolute top-4 md:top-6 left-4 md:left-6 bg-primary text-white font-label text-[10px] uppercase tracking-widest px-3 md:px-4 py-2">
+            Selección de Elena Martín
+          </div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-start gap-2">
+          <div>
+            <h4 class="font-headline text-xl md:text-2xl text-primary">Penthouse Las Américas</h4>
+            <p class="text-secondary font-body text-sm">Playa de las Américas · 2 hab · 120 m²</p>
+          </div>
+          <span class="font-headline text-xl md:text-2xl text-primary">95 €/noche</span>
+        </div>
+      </div>
+
+      <!-- Property 3 — centered 8 columns -->
+      <div class="md:col-span-8 md:col-start-3 group fade-up">
+        <div class="relative aspect-[21/9] overflow-hidden mb-5 md:mb-6">
+          <img class="w-full h-full object-cover prop-img"
+               src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80"
+               alt="Complejo Golf del Sur"/>
+          <div class="absolute top-4 md:top-6 left-4 md:left-6 bg-primary text-white font-label text-[10px] uppercase tracking-widest px-3 md:px-4 py-2">
+            Selección de Marco Torres
+          </div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-start gap-2">
+          <div>
+            <h4 class="font-headline text-xl md:text-2xl text-primary">Residencial Abama</h4>
+            <p class="text-secondary font-body text-sm">Guía de Isora · 3 hab · 210 m² · Rentabilidad 7.2%</p>
+          </div>
+          <span class="font-headline text-xl md:text-2xl text-primary">2.400.000 €</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CTA ═══════════════════ -->
+<section id="contacto" class="relative py-32 md:py-48 px-6 md:px-8 overflow-hidden bg-primary">
+  <div class="absolute inset-0 opacity-15">
+    <img class="w-full h-full object-cover mix-blend-overlay"
+         src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&q=60"
+         alt="Textura arquitectónica"/>
+  </div>
+  <div class="relative z-10 max-w-4xl mx-auto text-center fade-up">
+    <h2 class="font-headline text-4xl md:text-6xl lg:text-8xl text-white mb-8 md:mb-12 tracking-tight">
+      Trabaja con los Mejores
+    </h2>
+    <p class="font-body text-on-primary-container text-lg md:text-xl lg:text-2xl mb-12 md:mb-16 max-w-2xl mx-auto font-light leading-relaxed">
+      Tres especialistas, una visión común: encontrar la propiedad perfecta para cada cliente en Tenerife Sur.
+    </p>
+    <div class="flex flex-col md:flex-row gap-5 md:gap-6 justify-center items-center">
+      <a href="tel:+34922123456"
+         class="bg-tertiary-fixed text-on-tertiary-fixed px-10 md:px-12 py-4 md:py-5 rounded-sm font-label uppercase tracking-[0.2em] text-sm font-bold hover:bg-tertiary-fixed-dim transition-colors w-full md:w-auto text-center">
+        Reservar Consulta
+      </a>
+      <a href="https://wa.me/34622123456" target="_blank"
+         class="font-label text-white text-xs uppercase tracking-[0.3em] border-b border-white pb-2 hover:opacity-70 transition-opacity">
+        Escribir por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="bg-slate-900 w-full py-16 md:py-20 px-6 md:px-8">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 max-w-7xl mx-auto border-t border-white/10 pt-10 md:pt-12">
+    <!-- Brand -->
+    <div class="col-span-2 md:col-span-1 flex flex-col gap-4">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-white" style="font-size:20px">maps_home_work</span>
+        <span class="text-white font-headline text-lg">Costa Realty</span>
+      </div>
+      <p class="text-slate-400 font-body text-xs leading-loose">
+        Especialistas en propiedades exclusivas en el sur de Tenerife desde 2008.
+      </p>
+    </div>
+    <!-- El Equipo -->
+    <div class="flex flex-col gap-3">
+      <span class="text-white font-label text-xs tracking-widest uppercase mb-2">Equipo</span>
+      <a href="#" class="text-slate-400 hover:text-tertiary-fixed transition-colors text-xs uppercase tracking-widest">Julián Vega</a>
+      <a href="#" class="text-slate-400 hover:text-tertiary-fixed transition-colors text-xs uppercase tracking-widest">Elena Martín</a>
+      <a href="#" class="text-slate-400 hover:text-tertiary-fixed transition-colors text-xs uppercase tracking-widest">Marco Torres</a>
+    </div>
+    <!-- Servicios -->
+    <div class="flex flex-col gap-3">
+      <span class="text-white font-label text-xs tracking-widest uppercase mb-2">Servicios</span>
+      <a href="#" class="text-slate-400 hover:text-tertiary-fixed transition-colors text-xs uppercase tracking-widest">Compraventa</a>
+      <a href="#" class="text-slate-400 hover:text-tertiary-fixed transition-colors text-xs uppercase tracking-widest">Alquiler Vacacional</a>
+      <a href="#" class="text-slate-400 hover:text-tertiary-fixed transition-colors text-xs uppercase tracking-widest">Inversión</a>
+    </div>
+    <!-- Contacto -->
+    <div class="flex flex-col gap-3">
+      <span class="text-white font-label text-xs tracking-widest uppercase mb-2">Contacto</span>
+      <a href="tel:+34922123456" class="text-slate-400 hover:text-tertiary-fixed transition-colors text-xs uppercase tracking-widest">+34 922 123 456</a>
+      <a href="mailto:info@costarealty.es" class="text-slate-400 hover:text-tertiary-fixed transition-colors text-xs uppercase tracking-widest">Email</a>
+      <a href="#" class="text-slate-400 hover:text-tertiary-fixed transition-colors text-xs uppercase tracking-widest">Instagram</a>
+    </div>
+  </div>
+  <!-- Bottom -->
+  <div class="max-w-7xl mx-auto mt-12 md:mt-20 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/5 pt-6 md:pt-8">
+    <span class="text-slate-500 font-body text-[10px] tracking-widest uppercase">© 2026 Costa Realty · Tenerife, Islas Canarias</span>
+    <div class="flex gap-6">
+      <a href="#" class="text-slate-500 hover:text-white transition-colors">
+        <span class="material-symbols-outlined" style="font-size:16px">language</span>
+      </a>
+      <a href="#" class="text-slate-500 hover:text-white transition-colors">
+        <span class="material-symbols-outlined" style="font-size:16px">location_on</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════ SCROLL ANIMATIONS ═══════════════════ -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Fade-up on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+});
+</script>
+
+</body>
+</html>

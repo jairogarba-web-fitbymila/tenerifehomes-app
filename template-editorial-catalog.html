@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editorial Estate | Catálogo de Propiedades</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#000d22",
+        "primary-container": "#002349",
+        "on-primary": "#ffffff",
+        "on-primary-container": "#718bb7",
+        "tertiary-fixed": "#ffdea5",
+        "tertiary-fixed-dim": "#e9c176",
+        "on-tertiary-fixed": "#261900",
+        "on-tertiary-container": "#a78541",
+        "surface": "#f8f9fa",
+        "surface-container-low": "#f3f4f5",
+        "surface-container": "#edeeef",
+        "surface-container-high": "#e7e8e9",
+        "surface-container-highest": "#e1e3e4",
+        "surface-container-lowest": "#ffffff",
+        "surface-dim": "#d9dadb",
+        "on-surface": "#191c1d",
+        "on-surface-variant": "#43474e",
+        "secondary": "#51606b",
+        "secondary-container": "#d2e2ee",
+        "secondary-fixed": "#d5e5f1",
+        "on-secondary-container": "#55656f",
+        "outline": "#74777f",
+        "outline-variant": "#c4c6cf",
+      },
+      fontFamily: {
+        headline: ["Noto Serif", "Georgia", "serif"],
+        body: ["Manrope", "system-ui", "sans-serif"],
+        label: ["Manrope", "system-ui", "sans-serif"],
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem",
+        lg: "0.25rem",
+        xl: "0.5rem",
+        full: "0.75rem",
+      }
+    },
+  },
+}
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    line-height: 1;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Manrope', sans-serif; }
+  h1, h2, h3, .serif { font-family: 'Noto Serif', serif; }
+  .glass-nav {
+    background-color: rgba(248, 249, 250, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  /* Hide scrollbar on category chips */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  /* Property hover zoom */
+  .prop-img { transition: transform 0.7s ease; }
+  .group:hover .prop-img { transform: scale(1.05); }
+  /* Fade-in on scroll */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  /* Mobile menu */
+  .mobile-menu { transform: translateX(100%); transition: transform 0.35s ease; }
+  .mobile-menu.open { transform: translateX(0); }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-tertiary-fixed selection:text-on-tertiary-fixed">
+
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<header class="fixed top-0 w-full z-50 glass-nav border-b border-outline-variant/10">
+  <div class="flex justify-between items-center px-6 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary" style="font-size:24px">real_estate_agent</span>
+      <span class="text-xl font-bold tracking-tighter text-primary font-headline">Costa Properties</span>
+    </div>
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#propiedades" class="text-secondary font-medium hover:text-primary transition-colors text-sm">Propiedades</a>
+      <a href="#agente" class="text-secondary font-medium hover:text-primary transition-colors text-sm">El Agente</a>
+      <a href="#servicios" class="text-secondary font-medium hover:text-primary transition-colors text-sm">Servicios</a>
+    </div>
+    <a href="#contacto" class="hidden md:inline-block bg-primary text-on-primary px-5 py-2 rounded-sm font-label text-sm uppercase tracking-wider hover:opacity-80 transition-opacity">
+      Contactar
+    </a>
+    <!-- Mobile hamburger -->
+    <button onclick="document.getElementById('mobileMenu').classList.add('open')" class="md:hidden text-primary">
+      <span class="material-symbols-outlined" style="font-size:26px">menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile menu overlay -->
+<div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-primary text-white">
+  <div class="flex justify-between items-center px-6 py-4">
+    <span class="text-lg font-bold font-headline">Costa Properties</span>
+    <button onclick="document.getElementById('mobileMenu').classList.remove('open')">
+      <span class="material-symbols-outlined text-white" style="font-size:28px">close</span>
+    </button>
+  </div>
+  <div class="flex flex-col items-center justify-center h-[70vh] gap-8">
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#propiedades" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Propiedades</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#agente" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">El Agente</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#servicios" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Servicios</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#contacto" class="font-headline text-3xl hover:text-tertiary-fixed transition-colors">Contacto</a>
+  </div>
+</div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<main class="pt-16">
+<section class="px-6 py-12 md:py-24 bg-surface-container-low overflow-hidden">
+  <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-12 fade-up">
+    <div class="w-full md:w-1/2">
+      <p class="text-secondary font-label text-xs uppercase tracking-[0.2em] mb-4">Tenerife Sur · Desde 2008</p>
+      <h1 class="font-headline text-4xl md:text-5xl lg:text-6xl text-primary leading-tight mb-6">
+        Encuentra tu lugar en el mundo.
+      </h1>
+      <div class="flex gap-4">
+        <a href="#propiedades" class="bg-primary text-on-primary px-6 py-3 rounded-sm font-semibold transition-transform active:scale-95 text-sm">
+          Ver Propiedades
+        </a>
+        <a href="#contacto" class="border-b-2 border-primary text-primary px-2 py-3 font-semibold hover:bg-surface-container transition-colors text-sm">
+          Contactar
+        </a>
+      </div>
+    </div>
+    <div class="w-full md:w-1/2 relative">
+      <div class="aspect-[4/5] overflow-hidden rounded-sm shadow-sm">
+        <img class="w-full h-full object-cover"
+             src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80"
+             alt="Villa moderna con piscina en Tenerife Sur"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CATEGORY QUICK LINKS ═══════════════════ -->
+<section class="py-6 md:py-8 px-6 bg-surface">
+  <div class="flex overflow-x-auto gap-3 md:gap-4 no-scrollbar pb-2 max-w-screen-xl mx-auto">
+    <button onclick="filterCards('all')" class="cat-chip active flex-shrink-0 flex items-center gap-2 px-5 md:px-6 py-3 bg-primary text-on-primary rounded-sm border border-transparent text-sm font-medium transition-all" data-cat="all">
+      <span class="material-symbols-outlined text-[18px]">home</span>
+      <span>Todas</span>
+    </button>
+    <button onclick="filterCards('venta')" class="cat-chip flex-shrink-0 flex items-center gap-2 px-5 md:px-6 py-3 bg-surface-container-lowest rounded-sm border border-outline-variant/15 text-sm font-medium hover:border-primary transition-all" data-cat="venta">
+      <span class="material-symbols-outlined text-primary text-[18px]">sell</span>
+      <span>Venta</span>
+    </button>
+    <button onclick="filterCards('alquiler')" class="cat-chip flex-shrink-0 flex items-center gap-2 px-5 md:px-6 py-3 bg-surface-container-lowest rounded-sm border border-outline-variant/15 text-sm font-medium hover:border-primary transition-all" data-cat="alquiler">
+      <span class="material-symbols-outlined text-primary text-[18px]">key</span>
+      <span>Alquiler</span>
+    </button>
+    <button onclick="filterCards('vacacional')" class="cat-chip flex-shrink-0 flex items-center gap-2 px-5 md:px-6 py-3 bg-surface-container-lowest rounded-sm border border-outline-variant/15 text-sm font-medium hover:border-primary transition-all" data-cat="vacacional">
+      <span class="material-symbols-outlined text-primary text-[18px]">beach_access</span>
+      <span>Vacacional</span>
+    </button>
+    <button onclick="filterCards('inversion')" class="cat-chip flex-shrink-0 flex items-center gap-2 px-5 md:px-6 py-3 bg-surface-container-lowest rounded-sm border border-outline-variant/15 text-sm font-medium hover:border-primary transition-all" data-cat="inversion">
+      <span class="material-symbols-outlined text-primary text-[18px]">trending_up</span>
+      <span>Inversión</span>
+    </button>
+  </div>
+</section>
+
+<!-- ═══════════════════ PROPERTY GRID ═══════════════════ -->
+<section id="propiedades" class="px-6 py-10 md:py-12 max-w-screen-xl mx-auto">
+  <div class="flex justify-between items-end mb-8 md:mb-10 fade-up">
+    <div>
+      <h2 class="text-2xl md:text-3xl text-primary font-headline mb-2">Propiedades Destacadas</h2>
+      <p class="text-secondary max-w-md text-sm">Selección exclusiva de propiedades en el sur de Tenerife — compraventa, alquiler y vacacional.</p>
+    </div>
+    <a href="#" class="hidden md:block text-primary font-bold border-b border-primary text-sm hover:opacity-70 transition-opacity">Ver Todas</a>
+  </div>
+
+  <!-- Grid -->
+  <div id="propertyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+
+    <!-- Property Card 1: Venta -->
+    <div class="property-card flex flex-col group fade-up" data-type="venta">
+      <div class="relative aspect-[3/2] overflow-hidden bg-surface-container-highest mb-4">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"
+             alt="Villa Alisios — Costa Adeje"/>
+        <span class="absolute top-4 left-4 bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-sm">Venta</span>
+      </div>
+      <div class="px-1">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg md:text-xl font-headline text-primary">Villa Alisios</h3>
+          <span class="text-lg md:text-xl font-bold text-primary">1.850.000 €</span>
+        </div>
+        <p class="text-secondary text-sm mb-3 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">location_on</span>
+          Costa Adeje, Tenerife
+        </p>
+        <div class="flex gap-5 py-3 border-t border-outline-variant/20">
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bed</span> 4 Hab
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bathtub</span> 3 Baños
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">square_foot</span> 380 m²
+          </div>
+        </div>
+        <button class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-sm font-semibold mt-2 hover:bg-secondary-fixed transition-colors text-sm">
+          Solicitar Visita
+        </button>
+      </div>
+    </div>
+
+    <!-- Property Card 2: Alquiler -->
+    <div class="property-card flex flex-col group fade-up" data-type="alquiler">
+      <div class="relative aspect-[3/2] overflow-hidden bg-surface-container-highest mb-4">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
+             alt="Apartamento Los Cristianos"/>
+        <span class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-sm">Alquiler</span>
+      </div>
+      <div class="px-1">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg md:text-xl font-headline text-primary">Piso Playa Fañabé</h3>
+          <span class="text-lg md:text-xl font-bold text-primary">1.200 €<span class="text-xs font-normal">/mes</span></span>
+        </div>
+        <p class="text-secondary text-sm mb-3 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">location_on</span>
+          Fañabé, Adeje
+        </p>
+        <div class="flex gap-5 py-3 border-t border-outline-variant/20">
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bed</span> 2 Hab
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bathtub</span> 1 Baño
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">square_foot</span> 85 m²
+          </div>
+        </div>
+        <button class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-sm font-semibold mt-2 hover:bg-secondary-fixed transition-colors text-sm">
+          Solicitar Visita
+        </button>
+      </div>
+    </div>
+
+    <!-- Property Card 3: Vacacional -->
+    <div class="property-card flex flex-col group fade-up" data-type="vacacional">
+      <div class="relative aspect-[3/2] overflow-hidden bg-surface-container-highest mb-4">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+             alt="Apartamento vacacional Las Américas"/>
+        <span class="absolute top-4 left-4 bg-tertiary-fixed-dim text-on-tertiary-fixed px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-sm">Vacacional</span>
+      </div>
+      <div class="px-1">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg md:text-xl font-headline text-primary">Suite Las Américas</h3>
+          <span class="text-lg md:text-xl font-bold text-primary">95 €<span class="text-xs font-normal">/noche</span></span>
+        </div>
+        <p class="text-secondary text-sm mb-3 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">location_on</span>
+          Playa de las Américas
+        </p>
+        <div class="flex gap-5 py-3 border-t border-outline-variant/20">
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bed</span> 1 Hab
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bathtub</span> 1 Baño
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">square_foot</span> 55 m²
+          </div>
+        </div>
+        <button class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-sm font-semibold mt-2 hover:bg-secondary-fixed transition-colors text-sm">
+          Reservar
+        </button>
+      </div>
+    </div>
+
+    <!-- Property Card 4: Venta -->
+    <div class="property-card flex flex-col group fade-up" data-type="venta">
+      <div class="relative aspect-[3/2] overflow-hidden bg-surface-container-highest mb-4">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80"
+             alt="Chalet San Eugenio"/>
+        <span class="absolute top-4 left-4 bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-sm">Venta</span>
+      </div>
+      <div class="px-1">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg md:text-xl font-headline text-primary">Chalet San Eugenio</h3>
+          <span class="text-lg md:text-xl font-bold text-primary">920.000 €</span>
+        </div>
+        <p class="text-secondary text-sm mb-3 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">location_on</span>
+          San Eugenio Alto, Adeje
+        </p>
+        <div class="flex gap-5 py-3 border-t border-outline-variant/20">
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bed</span> 3 Hab
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bathtub</span> 2 Baños
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">square_foot</span> 220 m²
+          </div>
+        </div>
+        <button class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-sm font-semibold mt-2 hover:bg-secondary-fixed transition-colors text-sm">
+          Solicitar Visita
+        </button>
+      </div>
+    </div>
+
+    <!-- Property Card 5: Inversión -->
+    <div class="property-card flex flex-col group fade-up" data-type="inversion">
+      <div class="relative aspect-[3/2] overflow-hidden bg-surface-container-highest mb-4">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80"
+             alt="Complejo Golf del Sur"/>
+        <span class="absolute top-4 left-4 bg-primary-container text-on-primary px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-sm">Inversión</span>
+      </div>
+      <div class="px-1">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg md:text-xl font-headline text-primary">Residencial Abama</h3>
+          <span class="text-lg md:text-xl font-bold text-primary">2.400.000 €</span>
+        </div>
+        <p class="text-secondary text-sm mb-3 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">location_on</span>
+          Guía de Isora · ROI 7.2%
+        </p>
+        <div class="flex gap-5 py-3 border-t border-outline-variant/20">
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bed</span> 3 Hab
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bathtub</span> 2 Baños
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">square_foot</span> 210 m²
+          </div>
+        </div>
+        <button class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-sm font-semibold mt-2 hover:bg-secondary-fixed transition-colors text-sm">
+          Solicitar Info
+        </button>
+      </div>
+    </div>
+
+    <!-- Property Card 6: Vacacional -->
+    <div class="property-card flex flex-col group fade-up" data-type="vacacional">
+      <div class="relative aspect-[3/2] overflow-hidden bg-surface-container-highest mb-4">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=800&q=80"
+             alt="Villa vacacional El Médano"/>
+        <span class="absolute top-4 left-4 bg-tertiary-fixed-dim text-on-tertiary-fixed px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-sm">Vacacional</span>
+      </div>
+      <div class="px-1">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg md:text-xl font-headline text-primary">Casa El Médano</h3>
+          <span class="text-lg md:text-xl font-bold text-primary">150 €<span class="text-xs font-normal">/noche</span></span>
+        </div>
+        <p class="text-secondary text-sm mb-3 flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">location_on</span>
+          El Médano, Granadilla
+        </p>
+        <div class="flex gap-5 py-3 border-t border-outline-variant/20">
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bed</span> 3 Hab
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">bathtub</span> 2 Baños
+          </div>
+          <div class="flex items-center gap-1.5 text-secondary text-sm">
+            <span class="material-symbols-outlined text-[18px]">square_foot</span> 140 m²
+          </div>
+        </div>
+        <button class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-sm font-semibold mt-2 hover:bg-secondary-fixed transition-colors text-sm">
+          Reservar
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ AGENT SECTION ═══════════════════ -->
+<section id="agente" class="bg-surface-container-low py-16 md:py-20 px-6">
+  <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-12 fade-up">
+    <div class="w-full md:w-1/3">
+      <div class="aspect-[3/4] bg-surface-dim rounded-sm overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
+        <img class="w-full h-full object-cover object-top"
+             src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80"
+             alt="Julián Vega — Agente inmobiliario"/>
+      </div>
+    </div>
+    <div class="w-full md:w-2/3">
+      <span class="text-tertiary-fixed-dim font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Tu Agente en Tenerife</span>
+      <h2 class="text-3xl md:text-4xl text-primary font-headline mb-5">Julián Vega</h2>
+      <p class="text-secondary text-base md:text-lg leading-relaxed mb-8 max-w-xl">
+        Más de 15 años conectando compradores internacionales con las mejores propiedades del sur de Tenerife. Especializado en villas de lujo, apartamentos vacacionales y oportunidades de inversión en Costa Adeje, Los Cristianos y Golf del Sur.
+      </p>
+      <div class="grid grid-cols-2 gap-6 mb-8 border-l border-outline-variant/30 pl-6">
+        <div>
+          <span class="block text-2xl font-bold text-primary">320+</span>
+          <span class="text-sm text-secondary uppercase tracking-widest">Ventas Cerradas</span>
+        </div>
+        <div>
+          <span class="block text-2xl font-bold text-primary">15 años</span>
+          <span class="text-sm text-secondary uppercase tracking-widest">Experiencia</span>
+        </div>
+      </div>
+      <a href="#contacto" class="inline-block bg-primary text-on-primary px-8 py-4 rounded-sm font-bold uppercase tracking-widest text-sm hover:opacity-90 transition-opacity">
+        Contactar a Julián
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ SERVICES ═══════════════════ -->
+<section id="servicios" class="py-20 md:py-24 px-6 max-w-screen-xl mx-auto">
+  <div class="text-center mb-12 md:mb-16 fade-up">
+    <h2 class="text-2xl md:text-3xl text-primary font-headline mb-4">Más que una Transacción</h2>
+    <p class="text-secondary max-w-lg mx-auto text-sm md:text-base">Servicios integrales para que tu inversión inmobiliaria en Tenerife sea segura y sin complicaciones.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 fade-up">
+    <div class="text-center">
+      <div class="w-14 h-14 md:w-16 md:h-16 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-5">
+        <span class="material-symbols-outlined text-primary text-2xl md:text-3xl">analytics</span>
+      </div>
+      <h3 class="text-lg md:text-xl font-bold text-primary mb-3">Valoración de Mercado</h3>
+      <p class="text-secondary text-sm">Análisis de precios por zona, tendencias y proyección de rentabilidad para inversores.</p>
+    </div>
+    <div class="text-center">
+      <div class="w-14 h-14 md:w-16 md:h-16 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-5">
+        <span class="material-symbols-outlined text-primary text-2xl md:text-3xl">architecture</span>
+      </div>
+      <h3 class="text-lg md:text-xl font-bold text-primary mb-3">Home Staging</h3>
+      <p class="text-secondary text-sm">Preparación profesional de tu propiedad para maximizar su atractivo y valor de venta.</p>
+    </div>
+    <div class="text-center">
+      <div class="w-14 h-14 md:w-16 md:h-16 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-5">
+        <span class="material-symbols-outlined text-primary text-2xl md:text-3xl">gavel</span>
+      </div>
+      <h3 class="text-lg md:text-xl font-bold text-primary mb-3">Asesoría Legal</h3>
+      <p class="text-secondary text-sm">Gestión de contratos internacionales, NIE, impuestos y toda la documentación necesaria.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACT CTA ═══════════════════ -->
+<section id="contacto" class="bg-primary py-20 md:py-24 px-6">
+  <div class="max-w-2xl mx-auto text-center fade-up">
+    <h2 class="font-headline text-3xl md:text-4xl text-white mb-6">¿Buscas propiedad en Tenerife?</h2>
+    <p class="text-on-primary-container text-base md:text-lg mb-10 leading-relaxed">
+      Cuéntame qué necesitas y te enviaré una selección personalizada en 24 horas.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="tel:+34922123456" class="bg-tertiary-fixed text-on-tertiary-fixed px-8 py-4 rounded-sm font-label uppercase tracking-[0.15em] text-sm font-bold hover:bg-tertiary-fixed-dim transition-colors">
+        +34 922 123 456
+      </a>
+      <a href="https://wa.me/34622123456" target="_blank" class="border border-white/30 text-white px-8 py-4 rounded-sm font-label uppercase tracking-[0.15em] text-sm font-bold hover:bg-white/10 transition-colors">
+        WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════ MOBILE BOTTOM NAV ═══════════════════ -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 glass-nav z-50 border-t border-outline-variant/10">
+  <div class="flex justify-around items-center h-16">
+    <a href="#propiedades" class="bottom-tab flex flex-col items-center gap-1 text-primary font-semibold" data-cat="venta">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sell</span>
+      <span class="text-[10px] uppercase tracking-tight">Venta</span>
+    </a>
+    <a href="#propiedades" class="bottom-tab flex flex-col items-center gap-1 text-secondary" data-cat="alquiler">
+      <span class="material-symbols-outlined">key</span>
+      <span class="text-[10px] uppercase tracking-tight">Alquiler</span>
+    </a>
+    <a href="#propiedades" class="bottom-tab flex flex-col items-center gap-1 text-secondary" data-cat="vacacional">
+      <span class="material-symbols-outlined">beach_access</span>
+      <span class="text-[10px] uppercase tracking-tight">Vacacional</span>
+    </a>
+    <a href="#agente" class="flex flex-col items-center gap-1 text-secondary">
+      <span class="material-symbols-outlined">badge</span>
+      <span class="text-[10px] uppercase tracking-tight">Agente</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="w-full bg-slate-100 pb-20 md:pb-0">
+  <div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-12 py-8 md:py-10 border-t border-slate-200 max-w-screen-2xl mx-auto gap-4">
+    <div>
+      <span class="font-headline font-bold text-lg text-primary">Costa Properties</span>
+    </div>
+    <div class="flex flex-wrap justify-center gap-6">
+      <a class="text-secondary hover:text-primary text-sm transition-colors" href="#">Propiedades</a>
+      <a class="text-secondary hover:text-primary text-sm transition-colors" href="#">Sobre Nosotros</a>
+      <a class="text-secondary hover:text-primary text-sm transition-colors" href="#">Privacidad</a>
+      <a class="text-secondary hover:text-primary text-sm transition-colors" href="#">Aviso Legal</a>
+    </div>
+    <p class="text-secondary text-sm">© 2026 Costa Properties · Tenerife</p>
+  </div>
+</footer>
+
+<!-- Spacer for mobile bottom nav -->
+<div class="h-16 md:hidden"></div>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script>
+// Category filter
+function filterCards(type) {
+  const cards = document.querySelectorAll('.property-card');
+  const chips = document.querySelectorAll('.cat-chip');
+
+  // Update active chip
+  chips.forEach(c => {
+    if (c.dataset.cat === type) {
+      c.classList.add('active');
+      c.className = c.className.replace('bg-surface-container-lowest', 'bg-primary').replace('text-on-surface', 'text-on-primary');
+      if (!c.classList.contains('text-on-primary')) c.classList.add('text-on-primary');
+      c.querySelectorAll('.material-symbols-outlined').forEach(i => { i.classList.remove('text-primary'); i.classList.add('text-on-primary'); });
+    } else {
+      c.classList.remove('active');
+      c.className = c.className.replace('bg-primary', 'bg-surface-container-lowest').replace('text-on-primary', '');
+      c.querySelectorAll('.material-symbols-outlined').forEach(i => { i.classList.remove('text-on-primary'); i.classList.add('text-primary'); });
+    }
+  });
+
+  // Show/hide cards
+  cards.forEach(card => {
+    if (type === 'all' || card.dataset.type === type) {
+      card.style.display = 'flex';
+      card.style.opacity = '0';
+      requestAnimationFrame(() => { card.style.transition = 'opacity 0.4s'; card.style.opacity = '1'; });
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// Bottom nav filter links
+document.querySelectorAll('.bottom-tab').forEach(tab => {
+  tab.addEventListener('click', (e) => {
+    if (tab.dataset.cat) {
+      filterCards(tab.dataset.cat);
+    }
+  });
+});
+
+// Fade-up on scroll
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MONOLITH | Propiedades de Arquitectura en Tenerife</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@700;800;900&family=Public+Sans:ital,wght@0,300;0,400;0,600;1,300&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "background": "#131313",
+        "surface": "#131313",
+        "surface-low": "#1c1b1b",
+        "surface-container": "#201f1f",
+        "surface-high": "#2a2a2a",
+        "surface-highest": "#353534",
+        "surface-lowest": "#0e0e0e",
+        "on-surface": "#e5e2e1",
+        "on-surface-variant": "#c5c9ac",
+        "on-background": "#e5e2e1",
+        "primary": "#ffffff",
+        "primary-container": "#caf300",
+        "primary-fixed": "#caf300",
+        "primary-fixed-dim": "#b0d500",
+        "on-primary": "#2a3400",
+        "on-primary-container": "#596c00",
+        "secondary": "#c6c6c7",
+        "secondary-container": "#454747",
+        "on-secondary": "#2f3131",
+        "on-secondary-container": "#b4b5b5",
+        "tertiary": "#ffffff",
+        "tertiary-fixed": "#e5e2e1",
+        "tertiary-fixed-dim": "#c8c6c5",
+        "outline": "#8f9378",
+        "outline-variant": "#444932",
+      },
+      fontFamily: {
+        headline: ["Lexend", "system-ui", "sans-serif"],
+        body: ["Public Sans", "system-ui", "sans-serif"],
+        label: ["Space Grotesk", "system-ui", "sans-serif"],
+      },
+      borderRadius: {
+        DEFAULT: "0px", lg: "0px", xl: "0px", full: "9999px",
+      }
+    },
+  },
+}
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    display: inline-block; line-height: 1;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Public Sans', sans-serif; }
+  /* Lime accent utility */
+  .text-lime { color: #CAF300; }
+  .bg-lime { background-color: #CAF300; }
+  /* Card overlay */
+  .card-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+  }
+  /* Hero gradient */
+  .hero-fade {
+    background: linear-gradient(180deg, transparent 0%, rgba(19,19,19,0.2) 50%, #131313 100%);
+  }
+  /* Property hover */
+  .prop-img { transition: transform 0.7s ease; }
+  .group:hover .prop-img { transform: scale(1.05); }
+  /* Fade-in */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  /* Mobile menu */
+  .mobile-menu { transform: translateX(100%); transition: transform 0.35s ease; }
+  .mobile-menu.open { transform: translateX(0); }
+  /* Arrow appear */
+  .arrow-icon { opacity: 0; transition: opacity 0.3s ease; }
+  .group:hover .arrow-icon { opacity: 1; }
+</style>
+</head>
+<body class="bg-background text-on-background font-body antialiased selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<header class="fixed top-0 w-full z-50 bg-zinc-950/70 backdrop-blur-xl">
+  <div class="flex items-center justify-between px-6 py-4 w-full">
+    <div class="flex items-center gap-4">
+      <button onclick="document.getElementById('mobileMenu').classList.add('open')" class="md:hidden">
+        <span class="material-symbols-outlined text-white">menu</span>
+      </button>
+      <span class="font-headline tracking-tighter uppercase font-black text-xl md:text-2xl text-white">MONOLITH</span>
+    </div>
+    <nav class="hidden md:flex gap-10 font-label text-sm tracking-[0.2em]">
+      <a href="#propiedades" class="text-lime transition-colors">EXPLORAR</a>
+      <a href="#agente" class="text-white hover:text-lime transition-colors">CURADOR</a>
+      <a href="#servicios" class="text-white hover:text-lime transition-colors">SERVICIOS</a>
+      <a href="#contacto" class="text-white hover:text-lime transition-colors">CONTACTO</a>
+    </nav>
+    <a href="#contacto" class="hidden md:flex items-center">
+      <span class="material-symbols-outlined text-white hover:text-lime transition-colors">search</span>
+    </a>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-black text-white">
+  <div class="flex justify-between items-center px-6 py-4">
+    <span class="font-headline font-black text-xl uppercase tracking-tighter">MONOLITH</span>
+    <button onclick="document.getElementById('mobileMenu').classList.remove('open')">
+      <span class="material-symbols-outlined text-white" style="font-size:28px">close</span>
+    </button>
+  </div>
+  <div class="flex flex-col items-start justify-center h-[75vh] px-8 gap-6">
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#propiedades" class="font-headline text-4xl font-black tracking-tighter uppercase text-zinc-400 hover:text-lime transition-colors">EXPLORAR</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#agente" class="font-headline text-4xl font-black tracking-tighter uppercase text-zinc-400 hover:text-lime transition-colors">CURADOR</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#servicios" class="font-headline text-4xl font-black tracking-tighter uppercase text-zinc-400 hover:text-lime transition-colors">SERVICIOS</a>
+    <a onclick="document.getElementById('mobileMenu').classList.remove('open')" href="#contacto" class="font-headline text-4xl font-black tracking-tighter uppercase text-zinc-400 hover:text-lime transition-colors">CONTACTO</a>
+    <div class="mt-8 border-t border-white/10 pt-6">
+      <a href="tel:+34922123456" class="text-zinc-500 font-label text-sm tracking-widest">+34 922 123 456</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<main>
+<section class="relative h-screen w-full overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <img class="w-full h-full object-cover grayscale opacity-50 scale-110"
+         src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80"
+         alt="Arquitectura moderna en Tenerife"/>
+    <div class="absolute inset-0 hero-fade"></div>
+  </div>
+  <div class="relative z-10 h-full flex flex-col justify-end px-6 md:px-8 pb-20 md:pb-32 fade-up">
+    <div class="max-w-[95vw]">
+      <h1 class="font-headline text-[13vw] md:text-[10vw] font-black leading-[0.85] tracking-tighter text-white uppercase">
+        ESCAPA DE LO<br/>ORDINARIO.
+      </h1>
+      <div class="mt-6 md:mt-8 flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8">
+        <p class="max-w-md text-secondary font-light text-base md:text-lg leading-relaxed">
+          Propiedades de arquitectura contemporánea en Tenerife Sur. No son simples alquileres — son declaraciones de diseño.
+        </p>
+        <a href="#propiedades" class="bg-white text-on-primary px-8 md:px-10 py-4 md:py-5 font-label font-bold text-sm tracking-widest hover:bg-primary-fixed transition-all">
+          VER COLECCIÓN
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ AGENT / CURATOR ═══════════════════ -->
+<section id="agente" class="py-20 md:py-32 px-6 md:px-8 bg-background overflow-hidden">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-0">
+    <!-- Text -->
+    <div class="md:col-span-5 order-2 md:order-1 mt-8 md:mt-0 fade-up">
+      <div class="md:sticky md:top-32">
+        <span class="font-label text-lime tracking-[0.4em] text-xs font-bold mb-6 block">EL VISIONARIO</span>
+        <h2 class="font-headline text-4xl md:text-5xl lg:text-7xl font-extrabold text-white leading-none tracking-tighter mb-6 md:mb-8 uppercase">
+          El Curador Arquitectónico.
+        </h2>
+        <p class="text-tertiary-fixed-dim font-body text-lg md:text-xl leading-relaxed mb-8 md:mb-10 max-w-sm italic">
+          "El minimalismo no es ausencia — es la honestidad del material y la pureza de la forma."
+        </p>
+        <div class="border-t border-white/10 pt-8 md:pt-10">
+          <h4 class="font-label text-sm font-bold text-white tracking-widest mb-2">JULIÁN VEGA</h4>
+          <p class="text-zinc-500 font-label text-xs tracking-widest uppercase">Director · 15+ Años en Tenerife Sur</p>
+        </div>
+      </div>
+    </div>
+    <!-- Photo -->
+    <div class="md:col-span-7 order-1 md:order-2 fade-up">
+      <div class="relative aspect-[3/4] md:aspect-square overflow-hidden bg-surface-low">
+        <img class="w-full h-full object-cover grayscale contrast-125"
+             src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=900&q=80"
+             alt="Julián Vega — Curador de propiedades"/>
+        <div class="absolute bottom-0 right-0 bg-primary-fixed p-6 md:p-8 hidden md:block">
+          <span class="material-symbols-outlined text-on-primary text-4xl md:text-5xl">architecture</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PROPERTY PORTFOLIO ═══════════════════ -->
+<section id="propiedades" class="bg-surface-low py-20 md:py-32 px-6 md:px-8">
+  <!-- Header -->
+  <div class="mb-16 md:mb-24 flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/5 pb-6 md:pb-8 fade-up">
+    <h2 class="font-headline text-3xl md:text-4xl lg:text-6xl font-black text-white tracking-tighter uppercase">EL PORTFOLIO</h2>
+    <div class="font-label text-lime text-sm tracking-widest mt-2 md:mt-0">01 — 06 / SELECCIÓN</div>
+  </div>
+
+  <!-- 3-column cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-1">
+
+    <!-- Card 1 -->
+    <div class="group relative overflow-hidden fade-up">
+      <div class="aspect-[4/5] overflow-hidden">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"
+             alt="Villa Alisios — Costa Adeje"/>
+      </div>
+      <div class="absolute inset-0 card-overlay opacity-60 group-hover:opacity-80 transition-opacity"></div>
+      <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+        <div class="flex justify-between items-end">
+          <div>
+            <p class="font-label text-lime text-xs tracking-widest mb-2">COSTA ADEJE</p>
+            <h3 class="font-headline text-2xl md:text-3xl font-bold text-white tracking-tighter mb-1">VILLA ALISIOS</h3>
+            <p class="font-label text-lime text-base md:text-lg font-bold tracking-tighter">1.850.000 €</p>
+          </div>
+          <span class="material-symbols-outlined text-white text-2xl md:text-3xl arrow-icon">arrow_outward</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="group relative overflow-hidden fade-up">
+      <div class="aspect-[4/5] overflow-hidden">
+        <img class="w-full h-full object-cover prop-img grayscale"
+             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+             alt="Residencial Abama"/>
+      </div>
+      <div class="absolute inset-0 card-overlay opacity-60 group-hover:opacity-80 transition-opacity"></div>
+      <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+        <div class="flex justify-between items-end">
+          <div>
+            <p class="font-label text-lime text-xs tracking-widest mb-2">GUÍA DE ISORA</p>
+            <h3 class="font-headline text-2xl md:text-3xl font-bold text-white tracking-tighter mb-1">ABAMA ROYAL</h3>
+            <p class="font-label text-lime text-base md:text-lg font-bold tracking-tighter">2.950.000 €</p>
+          </div>
+          <span class="material-symbols-outlined text-white text-2xl md:text-3xl arrow-icon">arrow_outward</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="group relative overflow-hidden fade-up">
+      <div class="aspect-[4/5] overflow-hidden">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80"
+             alt="Chalet La Caleta"/>
+      </div>
+      <div class="absolute inset-0 card-overlay opacity-60 group-hover:opacity-80 transition-opacity"></div>
+      <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+        <div class="flex justify-between items-end">
+          <div>
+            <p class="font-label text-lime text-xs tracking-widest mb-2">LA CALETA</p>
+            <h3 class="font-headline text-2xl md:text-3xl font-bold text-white tracking-tighter mb-1">CASA BASALTO</h3>
+            <p class="font-label text-lime text-base md:text-lg font-bold tracking-tighter">280 € / NOCHE</p>
+          </div>
+          <span class="material-symbols-outlined text-white text-2xl md:text-3xl arrow-icon">arrow_outward</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Second row: wider cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-1 mt-1">
+
+    <!-- Card 4 -->
+    <div class="group relative overflow-hidden fade-up">
+      <div class="aspect-[16/9] overflow-hidden">
+        <img class="w-full h-full object-cover prop-img"
+             src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80"
+             alt="Penthouse Las Américas"/>
+      </div>
+      <div class="absolute inset-0 card-overlay opacity-60 group-hover:opacity-80 transition-opacity"></div>
+      <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+        <div class="flex justify-between items-end">
+          <div>
+            <p class="font-label text-lime text-xs tracking-widest mb-2">PLAYA DE LAS AMÉRICAS</p>
+            <h3 class="font-headline text-2xl md:text-3xl font-bold text-white tracking-tighter mb-1">PENTHOUSE HORIZON</h3>
+            <p class="font-label text-lime text-base md:text-lg font-bold tracking-tighter">150 € / NOCHE</p>
+          </div>
+          <span class="material-symbols-outlined text-white text-2xl md:text-3xl arrow-icon">arrow_outward</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="group relative overflow-hidden fade-up">
+      <div class="aspect-[16/9] overflow-hidden">
+        <img class="w-full h-full object-cover prop-img grayscale"
+             src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&q=80"
+             alt="Villa Golf del Sur"/>
+      </div>
+      <div class="absolute inset-0 card-overlay opacity-60 group-hover:opacity-80 transition-opacity"></div>
+      <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+        <div class="flex justify-between items-end">
+          <div>
+            <p class="font-label text-lime text-xs tracking-widest mb-2">GOLF DEL SUR</p>
+            <h3 class="font-headline text-2xl md:text-3xl font-bold text-white tracking-tighter mb-1">GEOMETRÍA VERDE</h3>
+            <p class="font-label text-lime text-base md:text-lg font-bold tracking-tighter">890.000 €</p>
+          </div>
+          <span class="material-symbols-outlined text-white text-2xl md:text-3xl arrow-icon">arrow_outward</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ SERVICES ═══════════════════ -->
+<section id="servicios" class="py-20 md:py-32 px-6 md:px-8 bg-background">
+  <div class="max-w-4xl fade-up">
+    <h2 class="font-headline text-3xl md:text-4xl lg:text-7xl font-black text-white tracking-tighter mb-12 md:mb-16 leading-tight uppercase">
+      Más que un<br/>alojamiento.
+    </h2>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 fade-up">
+    <div class="space-y-4 md:space-y-6">
+      <span class="material-symbols-outlined text-lime text-3xl md:text-4xl">drive_eta</span>
+      <h4 class="font-label text-base md:text-lg font-bold text-white tracking-widest uppercase">Transfer Privado</h4>
+      <p class="text-secondary text-sm leading-relaxed">Aeropuerto → propiedad en vehículo premium. Sin esperas.</p>
+    </div>
+    <div class="space-y-4 md:space-y-6">
+      <span class="material-symbols-outlined text-lime text-3xl md:text-4xl">restaurant</span>
+      <h4 class="font-label text-base md:text-lg font-bold text-white tracking-widest uppercase">Chef Privado</h4>
+      <p class="text-secondary text-sm leading-relaxed">Cocina canaria y fusión con productos km 0. En tu villa.</p>
+    </div>
+    <div class="space-y-4 md:space-y-6">
+      <span class="material-symbols-outlined text-lime text-3xl md:text-4xl">support_agent</span>
+      <h4 class="font-label text-base md:text-lg font-bold text-white tracking-widest uppercase">Curador 24/7</h4>
+      <p class="text-secondary text-sm leading-relaxed">Tu contacto personal para reservas, experiencias y logística local.</p>
+    </div>
+    <div class="space-y-4 md:space-y-6">
+      <span class="material-symbols-outlined text-lime text-3xl md:text-4xl">gavel</span>
+      <h4 class="font-label text-base md:text-lg font-bold text-white tracking-widest uppercase">Legal + NIE</h4>
+      <p class="text-secondary text-sm leading-relaxed">Gestión completa de documentación para compra por extranjeros.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer id="contacto" class="w-full min-h-[70vh] md:min-h-screen flex flex-col justify-end bg-zinc-950">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 p-6 md:p-8 w-full">
+    <!-- Left: nav links -->
+    <div class="flex flex-col justify-between">
+      <div class="space-y-2">
+        <a href="#propiedades" class="block font-headline text-3xl md:text-4xl lg:text-6xl font-bold tracking-tighter leading-none text-zinc-400 hover:text-lime transition-all duration-500">PROPIEDADES</a>
+        <a href="#servicios" class="block font-headline text-3xl md:text-4xl lg:text-6xl font-bold tracking-tighter leading-none text-zinc-400 hover:text-lime transition-all duration-500">SERVICIOS</a>
+        <a href="#agente" class="block font-headline text-3xl md:text-4xl lg:text-6xl font-bold tracking-tighter leading-none text-zinc-400 hover:text-lime transition-all duration-500">EL CURADOR</a>
+        <a href="tel:+34922123456" class="block font-headline text-3xl md:text-4xl lg:text-6xl font-bold tracking-tighter leading-none text-zinc-400 hover:text-lime transition-all duration-500">CONTACTO</a>
+      </div>
+      <div class="mt-12 md:mt-24 text-zinc-600 font-label text-xs tracking-widest">
+        © 2026 MONOLITH · TENERIFE SUR
+      </div>
+    </div>
+    <!-- Right: CTA + giant watermark -->
+    <div class="flex flex-col justify-end items-start md:items-end">
+      <div class="text-left md:text-right max-w-sm">
+        <p class="text-white font-body text-lg md:text-xl mb-6 md:mb-8 leading-relaxed">
+          Solicita acceso exclusivo a propiedades antes de que salgan al mercado.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 mb-8">
+          <a href="tel:+34922123456" class="bg-lime text-on-primary px-6 py-3 font-label font-bold text-sm tracking-widest text-center hover:opacity-80 transition-opacity">
+            +34 922 123 456
+          </a>
+          <a href="https://wa.me/34622123456" target="_blank" class="border border-white/20 text-white px-6 py-3 font-label font-bold text-sm tracking-widest text-center hover:bg-white/10 transition-colors">
+            WHATSAPP
+          </a>
+        </div>
+      </div>
+      <h2 class="text-zinc-800 text-[18vw] md:text-[12vw] font-black leading-[0.8] tracking-tighter select-none pointer-events-none mt-8 md:mt-24 font-headline">MONOLITH</h2>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════ MOBILE BOTTOM NAV ═══════════════════ -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-14 flex justify-around items-center bg-zinc-900/90 backdrop-blur-2xl z-50">
+  <a href="#propiedades" class="text-lime flex flex-col items-center">
+    <span class="material-symbols-outlined text-[20px]">home</span>
+  </a>
+  <a href="#propiedades" class="text-zinc-500 hover:text-white transition-all flex flex-col items-center">
+    <span class="material-symbols-outlined text-[20px]">search</span>
+  </a>
+  <a href="#contacto" class="text-zinc-500 hover:text-white transition-all flex flex-col items-center">
+    <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+  </a>
+  <a href="#agente" class="text-zinc-500 hover:text-white transition-all flex flex-col items-center">
+    <span class="material-symbols-outlined text-[20px]">person</span>
+  </a>
+</nav>
+
+<!-- ═══════════════════ SCROLL ANIMATIONS ═══════════════════ -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+});
+</script>
+
+</body>
+</html>

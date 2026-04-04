@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HabiBook — Editor con Live Preview (Mockup)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; padding: 0 20px;
+    background: #fff; border-bottom: 1px solid #e2e8f0;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-logo { font-weight: 700; font-size: 18px; color: #0f172a; }
+  .topbar-logo span { color: #3b82f6; }
+  .topbar-breadcrumb { font-size: 13px; color: #94a3b8; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .btn-secondary {
+    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    border: 1px solid #e2e8f0; background: #fff; color: #475569; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-secondary:hover { background: #f1f5f9; }
+  .btn-primary {
+    padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    border: none; background: #3b82f6; color: #fff; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary:hover { background: #2563eb; }
+  .save-indicator { font-size: 12px; color: #22c55e; display: flex; align-items: center; gap: 4px; }
+  .save-indicator::before { content: '●'; font-size: 8px; }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main { display: flex; height: calc(100vh - 56px); margin-top: 56px; }
+
+  /* ===== LEFT PANEL — EDITOR ===== */
+  .editor-panel {
+    width: 420px; min-width: 420px;
+    background: #fff; border-right: 1px solid #e2e8f0;
+    overflow-y: auto; padding: 0;
+  }
+
+  /* Tabs */
+  .editor-tabs {
+    display: flex; border-bottom: 1px solid #e2e8f0;
+    position: sticky; top: 0; background: #fff; z-index: 10;
+  }
+  .editor-tab {
+    flex: 1; padding: 14px 8px; text-align: center;
+    font-size: 13px; font-weight: 500; color: #94a3b8;
+    cursor: pointer; border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .editor-tab:hover { color: #475569; }
+  .editor-tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+
+  /* Sections */
+  .editor-section { padding: 20px; border-bottom: 1px solid #f1f5f9; }
+  .editor-section-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 14px;
+  }
+
+  /* Form fields */
+  .field { margin-bottom: 14px; }
+  .field-label { font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .field-label .char-count { font-weight: 400; color: #94a3b8; }
+  .field input, .field textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px;
+    font-size: 14px; color: #1e293b; background: #fff;
+    transition: border-color 0.15s;
+  }
+  .field input:focus, .field textarea:focus {
+    outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+  }
+  .field textarea { resize: vertical; min-height: 72px; font-family: inherit; }
+
+  /* Image upload */
+  .image-upload {
+    border: 2px dashed #e2e8f0; border-radius: 10px; padding: 20px;
+    text-align: center; cursor: pointer; transition: all 0.15s;
+    background: #fafbfc;
+  }
+  .image-upload:hover { border-color: #3b82f6; background: #f0f7ff; }
+  .image-upload-icon { font-size: 28px; margin-bottom: 6px; }
+  .image-upload-text { font-size: 12px; color: #94a3b8; }
+  .image-upload-preview {
+    width: 100%; height: 120px; border-radius: 8px;
+    background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800') center/cover;
+    position: relative;
+  }
+  .image-upload-preview .overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .image-upload-preview:hover .overlay { opacity: 1; }
+  .overlay-btn { padding: 6px 14px; background: #fff; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; }
+
+  /* Template selector */
+  .template-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .template-card {
+    border: 2px solid #e2e8f0; border-radius: 8px; padding: 8px;
+    text-align: center; cursor: pointer; transition: all 0.15s;
+  }
+  .template-card:hover { border-color: #93c5fd; }
+  .template-card.active { border-color: #3b82f6; background: #eff6ff; }
+  .template-swatch { height: 32px; border-radius: 4px; margin-bottom: 4px; }
+  .template-name { font-size: 10px; font-weight: 600; color: #475569; }
+
+  /* Section toggles */
+  .section-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid #f8fafc;
+  }
+  .section-toggle:last-child { border-bottom: none; }
+  .section-toggle-left { display: flex; align-items: center; gap: 10px; }
+  .section-toggle-icon { font-size: 16px; color: #94a3b8; cursor: grab; }
+  .section-toggle-name { font-size: 13px; font-weight: 500; color: #334155; }
+  .section-toggle-edit { font-size: 11px; color: #3b82f6; cursor: pointer; text-decoration: none; }
+  .toggle {
+    width: 36px; height: 20px; border-radius: 10px; background: #e2e8f0;
+    position: relative; cursor: pointer; transition: background 0.2s;
+  }
+  .toggle.on { background: #3b82f6; }
+  .toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; border-radius: 50%; background: #fff;
+    transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .toggle.on::after { transform: translateX(16px); }
+
+  /* ===== RIGHT PANEL — PREVIEW ===== */
+  .preview-panel { flex: 1; background: #f1f5f9; overflow: hidden; display: flex; flex-direction: column; }
+  .preview-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; background: #fff; border-bottom: 1px solid #e2e8f0;
+  }
+  .preview-toolbar-left { display: flex; align-items: center; gap: 8px; }
+  .preview-label { font-size: 12px; font-weight: 600; color: #64748b; }
+  .device-btns { display: flex; gap: 4px; }
+  .device-btn {
+    padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 500;
+    border: 1px solid #e2e8f0; background: #fff; color: #94a3b8; cursor: pointer;
+  }
+  .device-btn.active { background: #1e293b; color: #fff; border-color: #1e293b; }
+  .expand-btn {
+    padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 500;
+    border: 1px solid #e2e8f0; background: #fff; color: #64748b; cursor: pointer;
+  }
+
+  /* Preview frame area */
+  .preview-frame {
+    flex: 1; display: flex; justify-content: center; padding: 24px;
+    overflow: auto;
+  }
+  .preview-device {
+    width: 100%; max-width: 100%; background: #fff;
+    border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    overflow: hidden; transition: max-width 0.3s;
+  }
+  .preview-device.tablet { max-width: 768px; }
+  .preview-device.mobile { max-width: 390px; }
+
+  /* ===== SIMULATED TEMPLATE PREVIEW (Luxury) ===== */
+  .tpl-hero {
+    height: 340px; position: relative;
+    background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200') center/cover;
+  }
+  .tpl-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 40px;
+  }
+  .tpl-hero h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 32px; color: #fff; margin-bottom: 12px; font-weight: 400;
+    line-height: 1.2;
+  }
+  .tpl-hero p { font-size: 16px; color: rgba(255,255,255,0.85); margin-bottom: 24px; max-width: 500px; }
+  .tpl-hero-cta {
+    padding: 12px 32px; background: #C9A84C; color: #fff; border: none;
+    font-size: 14px; font-weight: 600; letter-spacing: 0.05em; cursor: pointer;
+  }
+
+  .tpl-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 32px; background: #1A1A1A;
+  }
+  .tpl-nav-brand { font-family: Georgia, serif; font-size: 18px; color: #C9A84C; }
+  .tpl-nav-links { display: flex; gap: 24px; }
+  .tpl-nav-links a { font-size: 12px; color: rgba(255,255,255,0.7); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  .tpl-section { padding: 48px 32px; }
+  .tpl-section-title {
+    font-family: Georgia, serif; font-size: 22px; color: #1a1a1a;
+    text-align: center; margin-bottom: 8px;
+  }
+  .tpl-section-subtitle { font-size: 13px; color: #94a3b8; text-align: center; margin-bottom: 32px; }
+  .tpl-section-gold .tpl-section-title { color: #1A1A1A; }
+  .tpl-section-gold .tpl-section-subtitle::after {
+    content: ''; display: block; width: 40px; height: 2px; background: #C9A84C;
+    margin: 12px auto 0;
+  }
+
+  .tpl-properties { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .tpl-property-card { border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .tpl-property-img { height: 140px; background: #e2e8f0; position: relative; }
+  .tpl-property-img img { width: 100%; height: 100%; object-fit: cover; }
+  .tpl-property-badge {
+    position: absolute; top: 8px; left: 8px;
+    padding: 3px 8px; background: #C9A84C; color: #fff;
+    font-size: 10px; font-weight: 600; border-radius: 4px;
+  }
+  .tpl-property-info { padding: 12px; }
+  .tpl-property-price { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+  .tpl-property-title { font-size: 12px; color: #64748b; margin-top: 2px; }
+  .tpl-property-meta { display: flex; gap: 12px; margin-top: 8px; font-size: 11px; color: #94a3b8; }
+
+  .tpl-about { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+  .tpl-about-photo { width: 100%; height: 240px; border-radius: 8px; background: #e2e8f0; overflow: hidden; }
+  .tpl-about-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .tpl-about-text h3 { font-family: Georgia, serif; font-size: 20px; margin-bottom: 12px; }
+  .tpl-about-text p { font-size: 13px; color: #64748b; line-height: 1.6; }
+
+  .tpl-footer { padding: 32px; background: #1A1A1A; text-align: center; }
+  .tpl-footer p { font-size: 11px; color: rgba(255,255,255,0.4); }
+  .tpl-footer span { color: #C9A84C; }
+
+  /* ===== LIVE UPDATE HIGHLIGHT ===== */
+  .live-highlight {
+    animation: pulse-highlight 1s ease-out;
+  }
+  @keyframes pulse-highlight {
+    0% { box-shadow: 0 0 0 3px rgba(59,130,246,0.4); }
+    100% { box-shadow: 0 0 0 0px rgba(59,130,246,0); }
+  }
+
+  /* ===== RESPONSIVE HINTS ===== */
+  .mobile-hint {
+    display: none; padding: 40px 20px; text-align: center;
+    font-size: 14px; color: #64748b;
+  }
+  @media (max-width: 900px) {
+    .editor-panel { display: none; }
+    .mobile-hint { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">Habi<span>Book</span></div>
+    <div class="topbar-breadcrumb">/ Dashboard / Editor de Sitio Web</div>
+  </div>
+  <div class="topbar-right">
+    <div class="save-indicator">Guardado</div>
+    <button class="btn-secondary" onclick="window.open('#','_blank')">↗ Ver web pública</button>
+    <button class="btn-primary" id="saveBtn">Guardar cambios</button>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main">
+
+  <!-- LEFT: EDITOR PANEL -->
+  <div class="editor-panel">
+
+    <!-- Tabs -->
+    <div class="editor-tabs">
+      <div class="editor-tab active" data-tab="design">Diseño</div>
+      <div class="editor-tab" data-tab="content">Contenido</div>
+      <div class="editor-tab" data-tab="sections">Secciones</div>
+    </div>
+
+    <!-- TAB: DISEÑO -->
+    <div id="tab-design">
+
+      <!-- Template selector -->
+      <div class="editor-section">
+        <div class="editor-section-title">Plantilla</div>
+        <div class="template-grid">
+          <div class="template-card active">
+            <div class="template-swatch" style="background: linear-gradient(135deg, #1A1A1A, #C9A84C);"></div>
+            <div class="template-name">Luxury</div>
+          </div>
+          <div class="template-card">
+            <div class="template-swatch" style="background: linear-gradient(135deg, #FBF7F2, #C4652E);"></div>
+            <div class="template-name">Mediterranean</div>
+          </div>
+          <div class="template-card">
+            <div class="template-swatch" style="background: linear-gradient(135deg, #0B2545, #fff);"></div>
+            <div class="template-name">Corporate</div>
+          </div>
+          <div class="template-card">
+            <div class="template-swatch" style="background: linear-gradient(135deg, #fff, #C08B7F);"></div>
+            <div class="template-name">Boutique</div>
+          </div>
+          <div class="template-card">
+            <div class="template-swatch" style="background: linear-gradient(135deg, #FAF8F5, #8B6F47);"></div>
+            <div class="template-name">Classic</div>
+          </div>
+          <div class="template-card">
+            <div class="template-swatch" style="background: linear-gradient(135deg, #0F172A, #06B6D4);"></div>
+            <div class="template-name">Data</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Palette selector -->
+      <div class="editor-section">
+        <div class="editor-section-title">Paleta de colores</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #C9A84C; border: 3px solid #3b82f6; cursor: pointer;"></div>
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #C75C3A; border: 3px solid transparent; cursor: pointer;"></div>
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #C87941; border: 3px solid transparent; cursor: pointer;"></div>
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #2D5A27; border: 3px solid transparent; cursor: pointer;"></div>
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #3B82F6; border: 3px solid transparent; cursor: pointer;"></div>
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #8B6F47; border: 3px solid transparent; cursor: pointer;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: CONTENIDO (shown by default simulation) -->
+    <div id="tab-content" style="display:none;">
+
+      <!-- Hero -->
+      <div class="editor-section">
+        <div class="editor-section-title">Cabecera (Hero)</div>
+
+        <div class="field">
+          <div class="field-label">Imagen de fondo <span class="char-count">1920×800px</span></div>
+          <div class="image-upload-preview">
+            <div class="overlay"><button class="overlay-btn">Cambiar imagen</button></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Titular <span class="char-count" id="headline-count">38/100</span></div>
+          <input type="text" id="headline-input" value="Propiedades exclusivas en Tenerife Sur" maxlength="100">
+        </div>
+
+        <div class="field">
+          <div class="field-label">Subtítulo <span class="char-count" id="subtitle-count">52/200</span></div>
+          <textarea id="subtitle-input" maxlength="200">Su socio de confianza para inversiones inmobiliarias</textarea>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Texto del botón <span class="char-count">18/50</span></div>
+          <input type="text" id="cta-input" value="Ver propiedades" maxlength="50">
+        </div>
+      </div>
+
+      <!-- About -->
+      <div class="editor-section">
+        <div class="editor-section-title">Sobre mí</div>
+        <div class="field">
+          <div class="field-label">Foto de perfil</div>
+          <div class="image-upload">
+            <div class="image-upload-icon">📷</div>
+            <div class="image-upload-text">Arrastra o haz clic · 400×400px min</div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Nombre / Empresa</div>
+          <input type="text" value="Victoria Laurent Real Estate">
+        </div>
+        <div class="field">
+          <div class="field-label">Biografía</div>
+          <textarea>Especializada en propiedades premium en la costa sur de Tenerife. 12 años de experiencia ayudando a clientes internacionales a encontrar su hogar ideal.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: SECCIONES -->
+    <div id="tab-sections" style="display:none;">
+      <div class="editor-section">
+        <div class="editor-section-title">Secciones visibles</div>
+        <p style="font-size: 12px; color: #94a3b8; margin-bottom: 16px;">Arrastra para reordenar · Activa/desactiva cada sección</p>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Navegación</span>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Cabecera (Hero)</span>
+            <a class="section-toggle-edit" href="#">Editar →</a>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Propiedades en venta</span>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Propiedades en alquiler</span>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Sobre mí</span>
+            <a class="section-toggle-edit" href="#">Editar →</a>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Servicios</span>
+            <a class="section-toggle-edit" href="#">Editar →</a>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Testimonios</span>
+            <a class="section-toggle-edit" href="#">Editar →</a>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Zonas</span>
+            <a class="section-toggle-edit" href="#">Editar →</a>
+          </div>
+          <div class="toggle"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Equipo</span>
+            <a class="section-toggle-edit" href="#">Editar →</a>
+          </div>
+          <div class="toggle"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Contacto</span>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+
+        <div class="section-toggle">
+          <div class="section-toggle-left">
+            <span class="section-toggle-icon">⠿</span>
+            <span class="section-toggle-name">Footer</span>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: LIVE PREVIEW -->
+  <div class="preview-panel">
+
+    <div class="preview-toolbar">
+      <div class="preview-toolbar-left">
+        <span class="preview-label">Vista previa en vivo</span>
+        <div class="device-btns">
+          <button class="device-btn active" data-device="desktop">Desktop</button>
+          <button class="device-btn" data-device="tablet">Tablet</button>
+          <button class="device-btn" data-device="mobile">Móvil</button>
+        </div>
+      </div>
+      <button class="expand-btn">⤢ Pantalla completa</button>
+    </div>
+
+    <div class="preview-frame">
+      <div class="preview-device" id="previewDevice">
+
+        <!-- SIMULATED LUXURY TEMPLATE -->
+        <nav class="tpl-nav">
+          <div class="tpl-nav-brand" id="preview-brand">Victoria Laurent</div>
+          <div class="tpl-nav-links">
+            <a href="#">Inicio</a>
+            <a href="#">Propiedades</a>
+            <a href="#">Servicios</a>
+            <a href="#">Contacto</a>
+          </div>
+        </nav>
+
+        <div class="tpl-hero">
+          <div class="tpl-hero-overlay">
+            <h1 id="preview-headline">Propiedades exclusivas en Tenerife Sur</h1>
+            <p id="preview-subtitle">Su socio de confianza para inversiones inmobiliarias</p>
+            <button class="tpl-hero-cta" id="preview-cta">VER PROPIEDADES</button>
+          </div>
+        </div>
+
+        <div class="tpl-section tpl-section-gold">
+          <div class="tpl-section-title">Propiedades destacadas</div>
+          <div class="tpl-section-subtitle">Nuestra selección exclusiva</div>
+          <div class="tpl-properties">
+            <div class="tpl-property-card">
+              <div class="tpl-property-img">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400" alt="">
+                <div class="tpl-property-badge">Exclusiva</div>
+              </div>
+              <div class="tpl-property-info">
+                <div class="tpl-property-price">€ 1.250.000</div>
+                <div class="tpl-property-title">Villa en Costa Adeje</div>
+                <div class="tpl-property-meta"><span>4 hab</span><span>3 baños</span><span>280 m²</span></div>
+              </div>
+            </div>
+            <div class="tpl-property-card">
+              <div class="tpl-property-img">
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400" alt="">
+                <div class="tpl-property-badge">Nueva</div>
+              </div>
+              <div class="tpl-property-info">
+                <div class="tpl-property-price">€ 890.000</div>
+                <div class="tpl-property-title">Ático en Los Cristianos</div>
+                <div class="tpl-property-meta"><span>3 hab</span><span>2 baños</span><span>185 m²</span></div>
+              </div>
+            </div>
+            <div class="tpl-property-card">
+              <div class="tpl-property-img">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400" alt="">
+              </div>
+              <div class="tpl-property-info">
+                <div class="tpl-property-price">€ 650.000</div>
+                <div class="tpl-property-title">Casa en El Médano</div>
+                <div class="tpl-property-meta"><span>3 hab</span><span>2 baños</span><span>150 m²</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tpl-section" style="background: #fafafa;">
+          <div class="tpl-about">
+            <div class="tpl-about-photo">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400" alt="">
+            </div>
+            <div class="tpl-about-text">
+              <h3 id="preview-name">Victoria Laurent</h3>
+              <p id="preview-bio">Especializada en propiedades premium en la costa sur de Tenerife. 12 años de experiencia ayudando a clientes internacionales a encontrar su hogar ideal.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tpl-footer">
+          <p>© 2026 Victoria Laurent Real Estate · Powered by <span>HabiBook</span></p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // === Tab switching ===
+  document.querySelectorAll('.editor-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-design').style.display = tab.dataset.tab === 'design' ? 'block' : 'none';
+      document.getElementById('tab-content').style.display = tab.dataset.tab === 'content' ? 'block' : 'none';
+      document.getElementById('tab-sections').style.display = tab.dataset.tab === 'sections' ? 'block' : 'none';
+    });
+  });
+
+  // === Live preview updates ===
+  const headlineInput = document.getElementById('headline-input');
+  const subtitleInput = document.getElementById('subtitle-input');
+  const ctaInput = document.getElementById('cta-input');
+
+  const previewHeadline = document.getElementById('preview-headline');
+  const previewSubtitle = document.getElementById('preview-subtitle');
+  const previewCta = document.getElementById('preview-cta');
+
+  function liveUpdate(input, preview, countEl, max) {
+    input.addEventListener('input', () => {
+      preview.textContent = input.value || '...';
+      preview.classList.remove('live-highlight');
+      void preview.offsetWidth;
+      preview.classList.add('live-highlight');
+      if (countEl) countEl.textContent = input.value.length + '/' + max;
+    });
+  }
+
+  liveUpdate(headlineInput, previewHeadline, document.getElementById('headline-count'), 100);
+  liveUpdate(subtitleInput, previewSubtitle, document.getElementById('subtitle-count'), 200);
+  liveUpdate(ctaInput, previewCta, null, null);
+
+  // === Toggle switches ===
+  document.querySelectorAll('.toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => toggle.classList.toggle('on'));
+  });
+
+  // === Device preview ===
+  document.querySelectorAll('.device-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const device = document.getElementById('previewDevice');
+      device.classList.remove('tablet', 'mobile');
+      if (btn.dataset.device !== 'desktop') device.classList.add(btn.dataset.device);
+    });
+  });
+
+  // === Template selection ===
+  document.querySelectorAll('.template-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    });
+  });
+
+  // === Save button ===
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = 'Guardando...';
+    btn.style.opacity = '0.7';
+    setTimeout(() => {
+      btn.textContent = 'Guardado ✓';
+      btn.style.background = '#22c55e';
+      setTimeout(() => {
+        btn.textContent = 'Guardar cambios';
+        btn.style.background = '#3b82f6';
+        btn.style.opacity = '1';
+      }, 1500);
+    }, 800);
+  });
+</script>
+
+</body>
+</html>

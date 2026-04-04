@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Editorial Estate | Tu Hogar, Mi Compromiso</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#000d22",
+        "primary-container": "#002349",
+        "tertiary-fixed": "#ffdea5",
+        "tertiary-fixed-dim": "#e9c176",
+        "on-tertiary-fixed": "#261900",
+        "tertiary-container": "#302000",
+        "on-primary-container": "#718bb7",
+        "surface": "#f8f9fa",
+        "surface-low": "#f3f4f5",
+        "surface-high": "#e7e8e9",
+        "surface-highest": "#e1e3e4",
+        "on-surface": "#191c1d",
+        "on-surface-variant": "#43474e",
+        "secondary": "#51606b",
+        "secondary-container": "#d2e2ee",
+        "on-secondary-container": "#55656f",
+        "outline": "#74777f",
+        "outline-variant": "#c4c6cf",
+      },
+      fontFamily: {
+        headline: ["Noto Serif", "Georgia", "serif"],
+        body: ["Manrope", "system-ui", "sans-serif"],
+        label: ["Manrope", "system-ui", "sans-serif"],
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem",
+        lg: "0.25rem",
+        xl: "0.5rem",
+      }
+    },
+  },
+}
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  /* Scroll progress */
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 3px; z-index: 100;
+    background: linear-gradient(90deg, #e9c176, #000d22);
+    transition: width 0.1s;
+  }
+
+  /* Nav glass */
+  .glass-nav {
+    background: rgba(248, 249, 250, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+  }
+  .glass-nav.scrolled {
+    background: rgba(248, 249, 250, 0.95);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  /* Animations */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .stagger > *:nth-child(1) { transition-delay: 0s; }
+  .stagger > *:nth-child(2) { transition-delay: 0.1s; }
+  .stagger > *:nth-child(3) { transition-delay: 0.2s; }
+  .stagger > *:nth-child(4) { transition-delay: 0.3s; }
+  .stagger > *:nth-child(5) { transition-delay: 0.4s; }
+
+  /* Hero entrance */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-anim { animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+  .hero-anim-2 { animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
+  .hero-anim-3 { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both; }
+
+  /* Image hover */
+  .img-zoom { overflow: hidden; }
+  .img-zoom img { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+  .img-zoom:hover img { transform: scale(1.05); }
+
+  /* Card shadow */
+  .editorial-shadow { box-shadow: 0 24px 48px rgba(0,13,34,0.06); }
+  .editorial-shadow-hover { transition: box-shadow 0.4s, transform 0.4s; }
+  .editorial-shadow-hover:hover { box-shadow: 0 32px 64px rgba(0,13,34,0.1); transform: translateY(-4px); }
+
+  /* Stats badge float */
+  .stats-badge {
+    animation: floatBadge 3s ease-in-out infinite;
+  }
+  @keyframes floatBadge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* Form inputs */
+  .form-input {
+    width: 100%; border: 0; border-bottom: 1px solid #c4c6cf;
+    background: transparent; padding: 16px 0; color: #000d22;
+    font-family: 'Manrope', sans-serif; outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-input:focus { border-bottom-color: #000d22; }
+  .form-input::placeholder { color: #74777f; }
+
+  /* Mobile menu */
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 60;
+    background: rgba(248, 249, 250, 0.98);
+    backdrop-filter: blur(24px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mobile-menu.open { transform: translateX(0); }
+  .mobile-menu a {
+    font-size: 1.75rem; font-weight: 300; letter-spacing: 0.08em;
+    color: #43474e; transition: color 0.3s;
+  }
+  .mobile-menu a:hover { color: #000d22; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .bento-grid > div { min-height: 240px !important; }
+  }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-tertiary-fixed selection:text-on-tertiary-fixed">
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scrollProgress" style="width: 0%"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button onclick="toggleMenu()" class="absolute top-7 right-6">
+    <span class="material-symbols-outlined text-2xl text-on-surface">close</span>
+  </button>
+  <a href="#hero" onclick="toggleMenu()">Inicio</a>
+  <a href="#about" onclick="toggleMenu()">Sobre Mi</a>
+  <a href="#properties" onclick="toggleMenu()">Propiedades</a>
+  <a href="#services" onclick="toggleMenu()">Servicios</a>
+  <a href="#contact" onclick="toggleMenu()">Contacto</a>
+</div>
+
+<!-- Navigation -->
+<header class="fixed top-0 w-full z-50 glass-nav h-20 md:h-24" id="mainNav">
+  <div class="flex justify-between items-center w-full px-6 md:px-12 lg:px-16 max-w-[1920px] mx-auto h-full">
+    <div class="flex items-center gap-4">
+      <button class="md:hidden" onclick="toggleMenu()">
+        <span class="material-symbols-outlined text-primary">menu</span>
+      </button>
+      <a href="#hero" class="font-headline text-xl md:text-2xl font-bold text-primary tracking-tighter hover:text-tertiary-fixed-dim transition-colors">
+        The Editorial Estate
+      </a>
+    </div>
+    <nav class="hidden md:flex items-center gap-8 lg:gap-12">
+      <a class="text-primary font-semibold border-b-2 border-tertiary-fixed-dim pb-1 text-sm" href="#properties">Propiedades</a>
+      <a class="text-secondary font-medium hover:text-primary transition-colors text-sm" href="#about">Sobre Mi</a>
+      <a class="text-secondary font-medium hover:text-primary transition-colors text-sm" href="#services">Servicios</a>
+      <a class="text-secondary font-medium hover:text-primary transition-colors text-sm" href="#contact">Contacto</a>
+    </nav>
+    <a href="#contact" class="bg-primary text-white px-6 md:px-8 py-3 font-label text-xs uppercase tracking-widest hover:bg-primary-container transition-colors">
+      Agendar Visita
+    </a>
+  </div>
+</header>
+
+<main class="pt-20 md:pt-24">
+
+  <!-- ============================================ -->
+  <!-- HERO: Agent-Centered                         -->
+  <!-- ============================================ -->
+  <section id="hero" class="relative min-h-[80vh] md:min-h-[90vh] flex items-center overflow-hidden bg-primary">
+    <div class="absolute inset-0 z-0">
+      <img class="w-full h-full object-cover opacity-50 mix-blend-luminosity object-right-top"
+        alt="Agente inmobiliario profesional"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBasj_BTdOUEVEAn0qHT7_rat_3F_BT5qaJBynv2Kv0mD6sDBih8cJ3QUtos4UW7Gym1FG0gXpmSGfOXWDShH44cTjj1znq3B2C6YGgXYS2dT1GRUR5bop481COloBVcP79EWLAMdWaSNKcoS41qdh2VP25Gwf66JFobEcyFNBRFi37ZB1oBTjHUcnZK5RObzMF1GFyhbDxyfJXdNIvOfrQ2xbTcHhM02Z8xcmhEsjJSVNy2-3Ly-kgCH8wUJkPriZg2t4gwPTeNdgd"/>
+      <div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-transparent"></div>
+    </div>
+    <div class="relative z-10 w-full px-6 md:px-12 lg:px-16 max-w-[1920px] mx-auto">
+      <div class="max-w-2xl space-y-6 md:space-y-8">
+        <span class="hero-anim font-label text-tertiary-fixed-dim uppercase tracking-[0.3em] text-xs md:text-sm block">
+          Servicios Inmobiliarios a Medida
+        </span>
+        <h1 class="hero-anim font-headline text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] tracking-tighter">
+          Tu Hogar, <br/>Mi Compromiso
+        </h1>
+        <p class="hero-anim-2 font-body text-lg md:text-xl text-white/60 max-w-lg leading-relaxed">
+          Experiencia, integridad y una vision curada para encontrar la propiedad que define tu estilo de vida. Tu inversion en manos de un experto.
+        </p>
+        <div class="hero-anim-3 flex flex-col sm:flex-row gap-4 pt-2">
+          <a href="#properties" class="bg-tertiary-fixed text-on-tertiary-fixed px-8 md:px-10 py-4 md:py-5 font-label font-bold uppercase tracking-widest text-xs hover:bg-white transition-all text-center">
+            Explorar Propiedades
+          </a>
+          <a href="#about" class="border border-white/20 text-white px-8 md:px-10 py-4 md:py-5 font-label font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-primary transition-all text-center">
+            Mi Trayectoria
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- ABOUT: Asymmetric Agent Section              -->
+  <!-- ============================================ -->
+  <section id="about" class="py-20 md:py-32 bg-surface">
+    <div class="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-16">
+      <div class="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
+
+        <!-- Photo with badge -->
+        <div class="lg:w-5/12 relative animate-on-scroll">
+          <div class="aspect-[4/5] bg-surface-high overflow-hidden">
+            <img class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-700"
+              alt="Retrato profesional"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgXnxK4FkGDv8bVcueqmnjKWsdiNFm8M2aHyWkz_geo19WVLOznQYhaowzN4vl4jrzroR-kVd_iKeUvoOTZ2IqG-ddVrgdp-36kUOULc7Baa__hvdB8nCJwuMHzg6rCaaIMYtrH9dy99eWuuZ310ykhKEYMw1s18r6tPAKSjjE0blVNLKYajqzqeLEQgiuFrbJ3rDacmti-GirhRkCEbXKo0yBZx0mlaGAXz8lk78Zt5JKFEtZ6A54V8Sl_yCcGu71UqDc6IFFEmAG"/>
+          </div>
+          <!-- Floating stats badge -->
+          <div class="absolute -bottom-6 -right-4 md:-bottom-8 md:-right-8 bg-tertiary-fixed p-6 md:p-10 stats-badge editorial-shadow">
+            <span class="block font-headline text-3xl md:text-4xl text-on-tertiary-fixed font-bold">15+</span>
+            <span class="block font-label text-[10px] md:text-xs uppercase tracking-widest text-on-tertiary-fixed opacity-80">Anos de Expertise</span>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="lg:w-7/12 space-y-6 md:space-y-8 stagger">
+          <span class="font-label text-secondary uppercase tracking-[0.2em] text-xs md:text-sm animate-on-scroll">Curador de Estilos de Vida</span>
+          <h2 class="font-headline text-3xl sm:text-4xl md:text-5xl text-primary leading-tight animate-on-scroll">
+            Mas que un agente, un aliado en tu vision de futuro.
+          </h2>
+          <div class="space-y-5 text-on-surface-variant text-base md:text-lg leading-relaxed max-w-2xl">
+            <p class="animate-on-scroll">
+              Entiendo que un hogar no es solo una estructura, sino el escenario donde se desarrolla tu historia. Mi enfoque se basa en la curaduria estrategica, seleccionando solo aquellas propiedades que cumplen con los estandares mas altos de arquitectura y confort.
+            </p>
+            <p class="animate-on-scroll">
+              Mi compromiso es brindarte seguridad juridica, transparencia absoluta y una estrategia de marketing disenada para resaltar la esencia unica de cada propiedad.
+            </p>
+          </div>
+          <!-- Signature area -->
+          <div class="pt-6 border-t border-outline-variant/30 max-w-md animate-on-scroll">
+            <p class="font-headline text-2xl italic text-primary/60 mb-2">Julian Vance</p>
+            <p class="font-label text-[10px] uppercase tracking-widest text-secondary font-bold">Fundador, The Editorial Estate</p>
+          </div>
+
+          <!-- Agent stats row -->
+          <div class="grid grid-cols-3 gap-6 pt-4 animate-on-scroll">
+            <div>
+              <span class="text-2xl md:text-3xl font-bold text-primary block">€240M</span>
+              <span class="text-[10px] uppercase tracking-widest text-secondary">Transacciones</span>
+            </div>
+            <div>
+              <span class="text-2xl md:text-3xl font-bold text-primary block">98%</span>
+              <span class="text-[10px] uppercase tracking-widest text-secondary">Satisfaccion</span>
+            </div>
+            <div>
+              <span class="text-2xl md:text-3xl font-bold text-primary block">42</span>
+              <span class="text-[10px] uppercase tracking-widest text-secondary">Exclusivas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- PROPERTY SHOWCASE: Bento Grid                -->
+  <!-- ============================================ -->
+  <section id="properties" class="py-20 md:py-32 bg-surface-low">
+    <div class="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-16">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-4">
+        <div class="animate-on-scroll">
+          <span class="font-label text-secondary uppercase tracking-[0.2em] text-xs md:text-sm">Coleccion Exclusiva</span>
+          <h2 class="font-headline text-3xl md:text-4xl lg:text-5xl text-primary mt-3">Propiedades Destacadas</h2>
+        </div>
+        <a href="#" class="font-label text-xs uppercase tracking-widest border-b-2 border-tertiary-fixed-dim pb-1 hover:border-primary transition-all animate-on-scroll">
+          Ver Todo →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 lg:gap-8 bento-grid">
+
+        <!-- Featured: Large card 8col -->
+        <div class="md:col-span-8 group bg-white editorial-shadow-hover overflow-hidden animate-on-scroll">
+          <div class="aspect-[16/9] img-zoom">
+            <img class="w-full h-full object-cover"
+              alt="Residencia Los Olivos"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuARE-Cb6YSzsWsNh1ODF2mbCl3RaC05GoQhgcaYqcyvvx3VWsFUed43J_WlgMVrrT_NOJ5iBQx58-G2r-RrziYI8Ehnet2gFYnUEELOSwNO-DpzQCECPgaYiQSiDQzLLRxVUo3NOXinU2j_ebueVXj6BicgDc736jf_CEbzg8LClE6Aq28Uc3b0cX5Znl1ngtiMYzf2LomWci6SJwMlvkDNbLOUqOdpNsdgjkZSJUKfMy8MlaAO0W6sQEsvo0UirWGpIxDbNZU2celC"/>
+          </div>
+          <div class="p-6 md:p-10 flex flex-col md:flex-row justify-between items-start gap-4">
+            <div>
+              <span class="bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-bold uppercase tracking-widest px-3 py-1 mb-3 inline-block">Venta · Exclusivo</span>
+              <h3 class="font-headline text-2xl md:text-3xl text-primary mb-1">Residencia Los Olivos</h3>
+              <p class="font-body text-secondary text-sm flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">location_on</span>
+                Costa Adeje, Tenerife · 850 m²
+              </p>
+            </div>
+            <div class="md:text-right">
+              <p class="font-headline text-2xl md:text-3xl text-primary">2.850.000 €</p>
+              <p class="font-label text-[10px] uppercase tracking-widest text-secondary mt-1">5 Hab · 6 Banos</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vacation rental: 4col -->
+        <div class="md:col-span-4 group bg-white editorial-shadow-hover overflow-hidden flex flex-col animate-on-scroll">
+          <div class="aspect-square img-zoom">
+            <img class="w-full h-full object-cover"
+              alt="Penthouse Skyview"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjqF5K0tLtAf4Pt56JdMdFXNDPwTI58zU-aw0FRZK5hUG1Fif-_Xuim9-amprG5yquEf0tDJP_9M9XPstGb0re78tzF58X_3hwZKEPRdA1HGJNQ40PvoHwCXYZWhoXVMGlcFkg98ewlSyjvfwS1TwqI1oF3p5Zc6-XecukN8U1oYJn7EGMXRn5HWF_zamjTHzM1pMxlB0ZQcWcGXqt9K6hl1eHbT0d-7vqBBIJgDPMU0TkUsynHq36AWzURiFEv89vRL9v6ZiY99bH"/>
+          </div>
+          <div class="p-6 md:p-8 flex-grow">
+            <span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-widest px-3 py-1 mb-3 inline-block">Vacacional</span>
+            <h3 class="font-headline text-lg md:text-xl text-primary mb-2">Penthouse Skyview</h3>
+            <p class="text-secondary text-xs mb-3 flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">location_on</span>
+              Santa Cruz, Tenerife · 120 m²
+            </p>
+            <p class="font-headline text-xl md:text-2xl text-tertiary-fixed-dim">250 € <span class="text-xs font-label uppercase tracking-widest text-secondary">/ noche</span></p>
+          </div>
+        </div>
+
+        <!-- Small card: 4col -->
+        <div class="md:col-span-4 group bg-white editorial-shadow-hover overflow-hidden flex flex-col animate-on-scroll">
+          <div class="aspect-square img-zoom">
+            <img class="w-full h-full object-cover"
+              alt="Villa Maritima"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw9KTHUzSQvkt73mMVfUzmakiad-ADvNQvFUTmGKpo8Bl3X9eDD4ViTnoHGjwvSYWt6f_M1ik_tXkjIu5D05lSooJKDTUPMcnm5OtQzLHKlc_9O_9tyMD6Sevn6_AgU09AKFcrSilvlk20pmLqMRb_MLX2aupWNrgUaPPA3J7TFQFFVaNHLrTFtVguRIMixlhtArVPPbktU8bXjpXVAGUCTurthbbtkyjXmq4WSojRqvu_Sq9o2LSgNfvzwCwig4ZKd9bTWPqdTtC0"/>
+          </div>
+          <div class="p-6 md:p-8">
+            <span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-widest px-3 py-1 mb-3 inline-block">Venta</span>
+            <h3 class="font-headline text-lg md:text-xl text-primary mb-2">Villa Maritima</h3>
+            <p class="text-secondary text-xs mb-3 flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">location_on</span>
+              La Orotava, Tenerife · 310 m²
+            </p>
+            <p class="font-headline text-xl md:text-2xl text-primary">1.200.000 €</p>
+          </div>
+        </div>
+
+        <!-- CTA card: 8col -->
+        <div class="md:col-span-8 group relative bg-primary-container p-8 md:p-12 flex flex-col justify-center overflow-hidden animate-on-scroll" style="min-height: 240px;">
+          <div class="max-w-md relative z-10">
+            <span class="font-label text-tertiary-fixed-dim uppercase tracking-[0.3em] text-[10px] mb-4 md:mb-6 block">Asesoria Personalizada</span>
+            <h3 class="font-headline text-2xl md:text-4xl text-white mb-4 md:mb-6">Buscas algo especifico?</h3>
+            <p class="text-white/60 text-sm md:text-lg mb-6 md:mb-8 leading-relaxed">
+              Tengo acceso a propiedades off-market que no estan listadas publicamente. Permiteme encontrar tu proximo hogar.
+            </p>
+            <a href="#contact" class="inline-block bg-white text-primary px-6 md:px-8 py-3 md:py-4 font-label font-bold uppercase tracking-widest text-xs hover:bg-tertiary-fixed transition-colors">
+              Iniciar Busqueda
+            </a>
+          </div>
+          <div class="absolute right-0 bottom-0 opacity-[0.07] pointer-events-none">
+            <span class="material-symbols-outlined" style="font-size: 200px;">real_estate_agent</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SERVICES & TRUST                             -->
+  <!-- ============================================ -->
+  <section id="services" class="py-20 md:py-32 bg-surface">
+    <div class="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-16">
+
+      <!-- Services grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 mb-20 md:mb-32">
+        <div class="space-y-5 animate-on-scroll">
+          <div class="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-surface-high text-primary">
+            <span class="material-symbols-outlined text-3xl md:text-4xl">analytics</span>
+          </div>
+          <h3 class="font-headline text-xl md:text-2xl text-primary">Valuacion Precisa</h3>
+          <p class="text-on-surface-variant leading-relaxed text-sm md:text-base">
+            Analisis de mercado avanzados y datos en tiempo real para determinar el valor optimo, maximizando tu retorno de inversion.
+          </p>
+        </div>
+        <div class="space-y-5 animate-on-scroll">
+          <div class="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-surface-high text-primary">
+            <span class="material-symbols-outlined text-3xl md:text-4xl">camera_enhance</span>
+          </div>
+          <h3 class="font-headline text-xl md:text-2xl text-primary">Marketing Editorial</h3>
+          <p class="text-on-surface-variant leading-relaxed text-sm md:text-base">
+            Cada listing como una portada de revista. Fotografia profesional, video cinematografico y storytelling emocional.
+          </p>
+        </div>
+        <div class="space-y-5 animate-on-scroll">
+          <div class="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-surface-high text-primary">
+            <span class="material-symbols-outlined text-3xl md:text-4xl">gavel</span>
+          </div>
+          <h3 class="font-headline text-xl md:text-2xl text-primary">Soporte Legal</h3>
+          <p class="text-on-surface-variant leading-relaxed text-sm md:text-base">
+            Gestion integral de contratos, due diligence y tramites notariales. Tu unica preocupacion: disfrutar tu nuevo hogar.
+          </p>
+        </div>
+      </div>
+
+      <!-- Testimonial -->
+      <div class="bg-primary p-8 md:p-12 lg:p-20 relative overflow-hidden animate-on-scroll">
+        <div class="absolute top-0 left-0 text-white/5 pointer-events-none -translate-x-1/4 -translate-y-1/4">
+          <span class="material-symbols-outlined" style="font-size: 300px;">format_quote</span>
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto text-center space-y-8 md:space-y-10">
+          <p class="font-headline text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white italic leading-relaxed">
+            "La atencion al detalle y el conocimiento del mercado transformaron por completo nuestra experiencia. Encontraron nuestra casa antes de que saliera al mercado."
+          </p>
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-tertiary-fixed-dim">
+              <img class="w-full h-full object-cover"
+                alt="Familia Sterling-Vidal"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjH1gyj2DrFVYN95jLiEhea526G6KG86gzVnvGK7_1h6AJWRM5YIUaCaqEt5cs3bkHsxp83mkzo7LLOGJpeA5aT-VQf89vUbfZMV64QnK0cVZzxUOZUyWLCUBrF-biv-8Dcq-phRFBzAFEgMbcC9FXNv13xyN1YrD8TrF0FxvSmO_3g40taQEuatK8PDsQhK95UMdsTGfnSCBbrUrqHD0XeSDqb0vk0mApEpzbybI9bkBWrhYv1UeDdWJk1jbsswfzIjabhCt20FXC"/>
+            </div>
+            <div class="space-y-1">
+              <p class="font-label font-bold text-white uppercase tracking-[0.2em] text-xs md:text-sm">Familia Sterling-Vidal</p>
+              <div class="flex gap-1 justify-center">
+                <span class="material-symbols-outlined text-tertiary-fixed-dim text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="material-symbols-outlined text-tertiary-fixed-dim text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="material-symbols-outlined text-tertiary-fixed-dim text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="material-symbols-outlined text-tertiary-fixed-dim text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="material-symbols-outlined text-tertiary-fixed-dim text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- CONTACT FORM                                 -->
+  <!-- ============================================ -->
+  <section id="contact" class="py-20 md:py-32 bg-surface-low overflow-hidden">
+    <div class="max-w-[1920px] mx-auto px-6 md:px-12 lg:px-16">
+      <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-12 lg:gap-24">
+
+        <!-- Left: Info -->
+        <div class="space-y-8 md:space-y-12 animate-on-scroll stagger">
+          <div class="space-y-4 md:space-y-6">
+            <span class="font-label text-secondary uppercase tracking-[0.2em] text-xs md:text-sm animate-on-scroll">Hablemos de tu Futuro</span>
+            <h2 class="font-headline text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-primary animate-on-scroll">
+              Agendar una<br/>Consulta Privada
+            </h2>
+            <p class="text-on-surface-variant text-base md:text-lg leading-relaxed max-w-md animate-on-scroll">
+              Completa el formulario y me pondre en contacto contigo en menos de 24 horas para discutir tus objetivos inmobiliarios.
+            </p>
+          </div>
+          <div class="space-y-5 animate-on-scroll">
+            <a href="mailto:julian@editorialestate.com" class="flex items-center gap-5 group">
+              <div class="w-10 h-10 border border-outline/40 flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
+                <span class="material-symbols-outlined text-lg">mail</span>
+              </div>
+              <span class="font-label text-primary font-medium tracking-wide text-sm">julian@editorialestate.com</span>
+            </a>
+            <a href="tel:+34611789012" class="flex items-center gap-5 group">
+              <div class="w-10 h-10 border border-outline/40 flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
+                <span class="material-symbols-outlined text-lg">call</span>
+              </div>
+              <span class="font-label text-primary font-medium tracking-wide text-sm">+34 611 789 012</span>
+            </a>
+            <a href="https://wa.me/34611789012" class="flex items-center gap-5 group">
+              <div class="w-10 h-10 border border-outline/40 flex items-center justify-center group-hover:bg-tertiary-fixed-dim group-hover:text-on-tertiary-fixed group-hover:border-tertiary-fixed-dim transition-all">
+                <span class="material-symbols-outlined text-lg">chat</span>
+              </div>
+              <span class="font-label text-primary font-medium tracking-wide text-sm">WhatsApp Directo</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="bg-white p-8 md:p-12 lg:p-16 editorial-shadow border border-outline-variant/10 animate-on-scroll">
+          <form class="space-y-6 md:space-y-8" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Enviado!'; setTimeout(()=>this.querySelector('button').textContent='Solicitar Informacion', 2000)">
+            <div class="space-y-1">
+              <label class="font-label text-[10px] uppercase tracking-widest text-secondary font-bold">Nombre Completo</label>
+              <input class="form-input" placeholder="Ej. Maria Rodriguez" type="text" required/>
+            </div>
+            <div class="space-y-1">
+              <label class="font-label text-[10px] uppercase tracking-widest text-secondary font-bold">Correo Electronico</label>
+              <input class="form-input" placeholder="maria@ejemplo.com" type="email" required/>
+            </div>
+            <div class="space-y-1">
+              <label class="font-label text-[10px] uppercase tracking-widest text-secondary font-bold">Tipo de Consulta</label>
+              <select class="form-input cursor-pointer">
+                <option>Comprar Propiedad</option>
+                <option>Vender Propiedad</option>
+                <option>Alquiler Vacacional</option>
+                <option>Alquiler Larga Temporada</option>
+                <option>Inversion Inmobiliaria</option>
+                <option>Valoracion Gratuita</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label class="font-label text-[10px] uppercase tracking-widest text-secondary font-bold">Mensaje</label>
+              <textarea class="form-input resize-none" placeholder="Cuentame un poco mas sobre lo que buscas..." rows="4"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-primary text-white py-4 md:py-5 font-label font-bold uppercase tracking-widest text-xs hover:bg-tertiary-container transition-colors">
+              Solicitar Informacion
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="w-full py-12 md:py-20 bg-primary">
+  <div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-12 lg:px-16 max-w-[1920px] mx-auto gap-8">
+    <div class="text-center md:text-left">
+      <span class="font-headline text-xl text-white">The Editorial Estate</span>
+      <p class="font-body text-[10px] tracking-widest uppercase text-white/30 mt-2">Tenerife · Canary Islands</p>
+    </div>
+    <nav class="flex flex-wrap justify-center gap-6 md:gap-8">
+      <a class="text-[10px] tracking-widest uppercase text-white/40 hover:text-white transition-colors" href="#properties">Propiedades</a>
+      <a class="text-[10px] tracking-widest uppercase text-white/40 hover:text-white transition-colors" href="#about">Sobre Mi</a>
+      <a class="text-[10px] tracking-widest uppercase text-white/40 hover:text-white transition-colors" href="#services">Servicios</a>
+      <a class="text-[10px] tracking-widest uppercase text-white/40 hover:text-white transition-colors" href="#">Privacidad</a>
+    </nav>
+    <div class="flex gap-4">
+      <span class="text-tertiary-fixed-dim/60 hover:text-white cursor-pointer transition-colors">
+        <span class="material-symbols-outlined">share</span>
+      </span>
+      <span class="text-tertiary-fixed-dim/60 hover:text-white cursor-pointer transition-colors">
+        <span class="material-symbols-outlined">language</span>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mobile menu
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// Scroll progress
+window.addEventListener('scroll', () => {
+  const st = document.documentElement.scrollTop || document.body.scrollTop;
+  const sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  document.getElementById('scrollProgress').style.width = (st / sh * 100) + '%';
+});
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Intersection Observer
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

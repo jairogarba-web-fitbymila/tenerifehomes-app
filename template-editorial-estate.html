@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Editorial Estate | Bespoke Curation</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#000d22",
+        "primary-container": "#002349",
+        "tertiary-fixed-dim": "#e9c176",
+        "on-tertiary-fixed": "#261900",
+        "surface": "#000d22",
+        "on-surface": "#ffffff",
+        "outline-variant": "#c4c6cf",
+      },
+      borderRadius: {
+        DEFAULT: "0px",
+        lg: "0px",
+        xl: "0px",
+        full: "9999px"
+      },
+      fontFamily: {
+        headline: ["Noto Serif", "Georgia", "serif"],
+        body: ["Manrope", "system-ui", "sans-serif"],
+        label: ["Manrope", "system-ui", "sans-serif"]
+      }
+    },
+  },
+}
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+  }
+
+  /* ===== SCROLL SNAP ===== */
+  body {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
+    background-color: #000d22;
+  }
+  section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #000d22; }
+  ::-webkit-scrollbar-thumb { background: #e9c176; border-radius: 2px; }
+
+  /* ===== NAV ===== */
+  .glass-nav {
+    background: rgba(0, 13, 34, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transition: background 0.4s ease;
+  }
+  .glass-nav.scrolled {
+    background: rgba(0, 13, 34, 0.92);
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes slideNumber {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes textReveal {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0% 0 0); }
+  }
+
+  .animate-on-scroll {
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .animate-on-scroll.visible {
+    opacity: 1;
+  }
+  .fade-up { transform: translateY(40px); }
+  .fade-up.visible { transform: translateY(0); }
+  .fade-left { transform: translateX(-40px); }
+  .fade-left.visible { transform: translateX(0); }
+  .scale-in { transform: scale(0.95); }
+  .scale-in.visible { transform: scale(1); }
+
+  /* Stagger children */
+  .stagger > *:nth-child(1) { transition-delay: 0s; }
+  .stagger > *:nth-child(2) { transition-delay: 0.15s; }
+  .stagger > *:nth-child(3) { transition-delay: 0.3s; }
+  .stagger > *:nth-child(4) { transition-delay: 0.45s; }
+
+  /* ===== HERO TEXT ===== */
+  .hero-title {
+    animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  }
+  .hero-sub {
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+  }
+  .hero-btn {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1s both;
+  }
+
+  /* ===== HOVER EFFECTS ===== */
+  .card-hover {
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+  }
+  .card-hover:hover img {
+    transform: scale(1.08);
+  }
+
+  .img-zoom {
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+  }
+
+  /* ===== SECTION COUNTER ===== */
+  .section-counter {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    mix-blend-mode: difference;
+  }
+  .section-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    transition: all 0.4s ease;
+    cursor: pointer;
+  }
+  .section-dot.active {
+    background: #e9c176;
+    transform: scale(1.5);
+  }
+
+  /* ===== MOBILE MENU ===== */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: rgba(0, 13, 34, 0.97);
+    backdrop-filter: blur(30px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mobile-menu.open {
+    transform: translateX(0);
+  }
+  .mobile-menu a {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.7);
+    transition: color 0.3s, transform 0.3s;
+  }
+  .mobile-menu a:hover {
+    color: #e9c176;
+    transform: translateX(8px);
+  }
+
+  /* ===== PROPERTY CARDS ===== */
+  .property-overlay {
+    background: linear-gradient(to top, rgba(0,13,34,0.9) 0%, rgba(0,13,34,0.4) 40%, transparent 70%);
+  }
+  .property-tag {
+    background: rgba(233,193,118,0.15);
+    border: 1px solid rgba(233,193,118,0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .section-counter { display: none; }
+    section { scroll-snap-stop: normal; }
+  }
+</style>
+</head>
+<body class="font-body text-on-surface antialiased">
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu" id="mobileMenu">
+  <button onclick="toggleMenu()" class="absolute top-6 right-6">
+    <span class="material-symbols-outlined text-white text-3xl">close</span>
+  </button>
+  <a href="#hero" onclick="toggleMenu()">Inicio</a>
+  <a href="#venta" onclick="toggleMenu()">Venta</a>
+  <a href="#alquiler" onclick="toggleMenu()">Alquiler</a>
+  <a href="#asesoria" onclick="toggleMenu()">Asesoramiento</a>
+  <a href="#portfolio" onclick="toggleMenu()">Portfolio</a>
+  <a href="#contacto" onclick="toggleMenu()">Contacto</a>
+</div>
+
+<!-- Section Navigation Dots -->
+<div class="section-counter" id="sectionDots">
+  <div class="section-dot active" data-section="0" title="Inicio"></div>
+  <div class="section-dot" data-section="1" title="Venta"></div>
+  <div class="section-dot" data-section="2" title="Alquiler"></div>
+  <div class="section-dot" data-section="3" title="Asesoramiento"></div>
+  <div class="section-dot" data-section="4" title="Portfolio"></div>
+  <div class="section-dot" data-section="5" title="Contacto"></div>
+</div>
+
+<!-- Navigation -->
+<header class="fixed top-0 w-full z-50 glass-nav border-b border-white/10" id="mainNav">
+  <nav class="flex justify-between items-center px-6 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-6">
+      <span class="material-symbols-outlined text-white cursor-pointer hover:text-tertiary-fixed-dim transition-colors" onclick="toggleMenu()">menu</span>
+      <a href="#hero" class="text-xl font-headline italic text-white tracking-tight hover:text-tertiary-fixed-dim transition-colors">The Editorial Estate</a>
+    </div>
+    <div class="hidden md:flex gap-10 items-center">
+      <a class="text-xs font-label uppercase tracking-[0.3em] text-white/60 hover:text-tertiary-fixed-dim transition-colors duration-300" href="#venta">Venta</a>
+      <a class="text-xs font-label uppercase tracking-[0.3em] text-white/60 hover:text-tertiary-fixed-dim transition-colors duration-300" href="#alquiler">Alquiler</a>
+      <a class="text-xs font-label uppercase tracking-[0.3em] text-white/60 hover:text-tertiary-fixed-dim transition-colors duration-300" href="#asesoria">Asesoramiento</a>
+      <a class="text-xs font-label uppercase tracking-[0.3em] text-white/60 hover:text-tertiary-fixed-dim transition-colors duration-300" href="#portfolio">Portfolio</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="#contacto" class="hidden md:block text-xs font-label uppercase tracking-[0.2em] text-tertiary-fixed-dim hover:text-white transition-colors border border-tertiary-fixed-dim/30 px-4 py-2 hover:border-white/40">Contacto</a>
+      <img alt="Agent" class="w-9 h-9 rounded-full grayscale hover:grayscale-0 transition-all duration-500 border border-white/20 hover:border-tertiary-fixed-dim cursor-pointer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDb1395vdxY0DzhWw6oe0rVHUrZNblvAcP8PCWL2QYOvATgr5_x0wuTKVCyP_zyqNURhBqI1AFGPS8BQ-ULPndjqFikYKu9G2vC3aSIHFBqWrpBnoCLqRykl3MPm1Nhe3MbNNUe9v3OrtvRDFBlS4OCORIO4XTZvq_bZkFFeCC7-Bv0AKd4O7KAsrsw4xIbcVHhEdJqMArVCGXTnyYSv8eO2oPVE7Rvhqg3Pjw2s5eaNPu6PoX-Hr8pqWpbl2fVrqaL16hspg8HO68Q"/>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============================================ -->
+  <!-- SECTION 1: HERO                              -->
+  <!-- ============================================ -->
+  <section id="hero" class="flex items-center justify-center text-center">
+    <div class="absolute inset-0">
+      <img alt="Luxury Estate" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCa9MZShpJpkAhSZUksrLt0nVqWKnKDiL2McoTFwKWS5y1pfBCABSVC-WTUsCMezNwfbT6O00brLNKNfIKimvfaMWiTJdzd8cL6DR31HlHiC5RBmR7bjZvBej-zDwe02wnZasgb_euEyEr8mBTuH2fvc5ox5q-7MsMi_EbPhd1aX9RF2EbPxhv2OMeKbQ_othpjeTs6uV9hfzLcfUIO-Q5D45uv3n6T33Wb5D3CE_4Q13X8eBh6cgmr5_qLeOSnfSXEIUfJf3KX-fbN"/>
+      <div class="absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/40 to-primary/70"></div>
+    </div>
+    <div class="relative z-10 px-6">
+      <h1 class="hero-title font-headline text-6xl sm:text-7xl md:text-[10rem] text-white font-bold leading-none tracking-tighter mb-6">
+        ARCHITEC<span class="italic font-light">TURE.</span>
+      </h1>
+      <p class="hero-sub font-label text-tertiary-fixed-dim uppercase tracking-[0.5em] text-sm mb-12">Bespoke Living Curator</p>
+      <a href="#venta" class="hero-btn inline-block border border-white/30 text-white px-12 py-5 text-xs font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-primary transition-all duration-500 backdrop-blur-sm">
+        Explore The Collection
+      </a>
+    </div>
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+      <span class="material-symbols-outlined text-white text-3xl">keyboard_double_arrow_down</span>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 2: VENTA                             -->
+  <!-- ============================================ -->
+  <section id="venta">
+    <div class="absolute inset-0 flex flex-col md:flex-row">
+      <!-- Main image -->
+      <div class="w-full md:w-3/4 h-full relative overflow-hidden group">
+        <img alt="Venta" class="w-full h-full object-cover img-zoom group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnXleSfgngulJlfurvtEP4J2t3qwx-aMhHnvJq5c9OfKEHxL50xNu0ZdU7mI-aDzXA9JOjhE-Y4T73KwfqVJDsvXRjeOyW4w19n_0aSDUOf9RwgzFPM8u-bg7o4sYS6Wp4gL3GmKZI62fd0LnIK753wRdjtABMP8HOHbdOuiwALUUc78sa7PrStKfBkN_Fyy-f4xoCSbBoaduOIhkOpuhYvHZHI7ahdfFDxWqNO0XBWbv4XH8kG8YjOo-RYevZ3mN62r3MVuBn1qUT"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent"></div>
+        <div class="absolute bottom-12 left-8 md:bottom-16 md:left-16 animate-on-scroll fade-up stagger">
+          <span class="text-tertiary-fixed-dim tracking-[0.3em] uppercase text-xs block mb-3 animate-on-scroll fade-up">Legacy Acquisitions</span>
+          <h2 class="font-headline text-5xl sm:text-6xl md:text-8xl text-white font-bold animate-on-scroll fade-up">Venta</h2>
+        </div>
+      </div>
+      <!-- Side panel -->
+      <div class="hidden md:flex md:w-1/4 bg-primary-container items-center justify-center p-12 border-l border-white/5">
+        <div class="text-right stagger">
+          <span class="text-tertiary-fixed-dim text-5xl font-headline mb-8 block animate-on-scroll fade-up">01</span>
+          <p class="text-white/60 font-light leading-relaxed mb-10 text-lg animate-on-scroll fade-up">Acceso exclusivo a propiedades fuera de mercado y residencias arquitectonicas unicas.</p>
+          <a class="inline-block text-white text-xs uppercase tracking-widest border-b border-tertiary-fixed-dim pb-2 hover:text-tertiary-fixed-dim hover:border-white transition-all duration-300 animate-on-scroll fade-up" href="#contacto">
+            Consultar →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 3: ALQUILER VACACIONAL               -->
+  <!-- ============================================ -->
+  <section id="alquiler">
+    <div class="absolute inset-0">
+      <img alt="Vacation" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASC5Wt6-Z_eZbAqCdagP-JScQk-zVsPvuLw2-GCuXdT_jI609XR0qeN7qxKDY3w-VgYQzIqz41ZDdWt1V1Oc7mW1jnCONjdMPOVSUGgnVi285rdZJUe8wQoUBz0R2pJyDWd4LS3WJMTx-9NP8koRWG0uDvWASOItHygFD2_k_3l_L4B2BmDAZpdcQxog6G4Rk0wPN7MLQuhARSHi8yVtWdlwM0dgijHSt2MdfG2cgqVw0fiulabVsHl6zsFapgXvSinRxCEmdTpMlr"/>
+      <div class="absolute inset-0 bg-primary/60 mix-blend-multiply"></div>
+    </div>
+    <div class="relative z-10 h-full flex items-center px-8 md:px-16">
+      <div class="max-w-2xl stagger">
+        <span class="text-tertiary-fixed-dim uppercase tracking-[0.4em] text-xs mb-6 block animate-on-scroll fade-left">Temporary Escapes</span>
+        <h2 class="font-headline text-5xl sm:text-6xl md:text-8xl lg:text-[9rem] text-white font-bold leading-none mb-10 animate-on-scroll fade-left">
+          Alquiler<br/>
+          <span class="italic font-light opacity-50">Vacacional</span>
+        </h2>
+        <div class="flex flex-col sm:flex-row gap-4 animate-on-scroll fade-left">
+          <a href="#contacto" class="bg-tertiary-fixed-dim text-primary px-12 sm:px-16 py-5 sm:py-6 font-bold uppercase tracking-widest text-xs hover:bg-white transition-colors text-center">
+            Reservar Ahora
+          </a>
+          <a href="#portfolio" class="border border-white/30 text-white px-12 py-5 font-bold uppercase tracking-widest text-xs hover:bg-white/10 transition-colors text-center">
+            Ver Opciones
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Decorative number -->
+    <div class="absolute bottom-8 right-8 md:bottom-16 md:right-16 opacity-20">
+      <span class="font-headline text-[8rem] md:text-[12rem] text-white font-bold leading-none">02</span>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 4: ASESORAMIENTO                     -->
+  <!-- ============================================ -->
+  <section id="asesoria" class="bg-primary flex items-center">
+    <!-- Agent photo -->
+    <div class="absolute right-0 bottom-0 w-full md:w-1/2 h-full opacity-30 md:opacity-100">
+      <div class="relative h-full w-full overflow-hidden">
+        <img alt="Agente inmobiliario" class="absolute bottom-0 right-0 h-[110%] w-auto object-cover object-bottom grayscale transition-all duration-700 hover:grayscale-0 hover:scale-[1.02]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLuvohaTcNEL3TjoJxQB8gkGZf9NvuwTgz8AGhHrNUhKdF-NsJxfwQw2hkomVtSpSMvRsGLpRfF0rNZiJ-wBFjsA9u3Ay6sAUWDzMp9lBedwjQ1KBohs6irb5c4d9Y_ZksaNaSw2WhjYBzFJIqqyWD3_UGOgqMJSDDgFXUBk6uaB6V8Q30Z0hWyLuPuKg1toBiZKkwGCcTcECpFLizdbPmrt6-NpY6SHPoWwvxwtUT4qoz0evQ7obha8Wr_2v3U4SRRLxwzOzXlVZ2"/>
+        <div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/50 to-transparent"></div>
+      </div>
+    </div>
+    <!-- Content -->
+    <div class="relative z-20 px-8 md:px-16 w-full md:w-1/2 stagger">
+      <span class="text-tertiary-fixed-dim uppercase tracking-[0.4em] text-xs mb-8 block animate-on-scroll fade-left">Strategic Consulting</span>
+      <h2 class="font-headline text-4xl sm:text-5xl md:text-7xl text-white font-bold mb-8 leading-tight animate-on-scroll fade-left">
+        Asesora<span class="italic font-light">miento.</span>
+      </h2>
+      <p class="text-white/50 font-body text-lg md:text-xl italic max-w-lg mb-12 animate-on-scroll fade-left">
+        "La curacion es el acto de seleccionar lo que importa. Aplico esta filosofia a tu portfolio inmobiliario."
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 animate-on-scroll fade-left">
+        <a href="#portfolio" class="border border-tertiary-fixed-dim text-tertiary-fixed-dim px-8 sm:px-10 py-4 uppercase tracking-widest text-[10px] font-bold hover:bg-tertiary-fixed-dim hover:text-primary transition-all duration-300 text-center">
+          La Metodologia
+        </a>
+        <a href="#contacto" class="bg-white text-primary px-8 sm:px-10 py-4 uppercase tracking-widest text-[10px] font-bold hover:bg-tertiary-fixed-dim transition-colors text-center">
+          Contactar
+        </a>
+      </div>
+      <!-- Credentials -->
+      <div class="mt-16 flex gap-12 opacity-60 animate-on-scroll fade-up">
+        <div>
+          <span class="text-3xl font-bold text-white block">15+</span>
+          <span class="text-[10px] uppercase tracking-widest text-white/50">Anos experiencia</span>
+        </div>
+        <div>
+          <span class="text-3xl font-bold text-white block">€240M</span>
+          <span class="text-[10px] uppercase tracking-widest text-white/50">En transacciones</span>
+        </div>
+        <div>
+          <span class="text-3xl font-bold text-white block">98%</span>
+          <span class="text-[10px] uppercase tracking-widest text-white/50">Satisfaccion</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 5: PORTFOLIO                         -->
+  <!-- ============================================ -->
+  <section id="portfolio" class="bg-primary-container p-8 md:p-16 flex flex-col">
+    <div class="flex justify-between items-end mb-12 md:mb-16">
+      <div>
+        <h2 class="font-headline text-4xl md:text-5xl text-white font-bold tracking-tighter animate-on-scroll fade-up">
+          Featured<br/><span class="italic font-light opacity-60">Portfolio.</span>
+        </h2>
+      </div>
+      <p class="text-tertiary-fixed-dim text-xs uppercase tracking-[0.3em] animate-on-scroll fade-up">Curated 2024</p>
+    </div>
+
+    <div class="grid grid-cols-12 gap-4 md:gap-6 flex-1 min-h-0">
+      <!-- Card 1: Tall left -->
+      <div class="col-span-12 md:col-span-5 row-span-2 relative group overflow-hidden card-hover cursor-pointer" style="min-height: 300px;">
+        <img class="w-full h-full object-cover img-zoom grayscale group-hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBulX_3EOog9lO43nEMqZPtV_BM6W22eFEsmcBgxSFQsrk0cXwZUJHV3lJ-xX4-HvkCakLshVcFZ07xZ8a9RiaaY7bw9fR0txlyLlHTGz2iEtAUjG3Ee9SBg0nqcmvMGlNGwNMyRg-oa9CDmOUIEc8EHR4wiJHb8uXJIpM-JsJ3IzPyrtEUSwlRmqjSFCwcRXq-XrbRt6WphjOXP7bHu9pXP-g-l39ND5y8mrnvbWw1FfSbEYoKzGAsLuShr406lYqTyhQvEw2V6HJY" alt="The Obsidian"/>
+        <div class="absolute inset-0 property-overlay"></div>
+        <div class="absolute top-6 left-6">
+          <span class="property-tag text-tertiary-fixed-dim text-[10px] uppercase tracking-widest px-3 py-1.5 font-bold">Exclusiva</span>
+        </div>
+        <div class="absolute bottom-8 left-8 right-8">
+          <h3 class="text-white text-2xl font-bold mb-1">The Obsidian</h3>
+          <p class="text-white/50 text-xs mb-3">Costa Adeje, Tenerife · 520 m²</p>
+          <p class="text-tertiary-fixed-dim text-lg font-bold">€2.850.000</p>
+        </div>
+      </div>
+
+      <!-- Card 2: Wide top right -->
+      <div class="col-span-12 md:col-span-7 relative group overflow-hidden card-hover cursor-pointer" style="min-height: 200px;">
+        <img class="w-full h-full object-cover img-zoom brightness-50 group-hover:brightness-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA00p2Ivd1wIgEn9Lq2QbZJM4ktljrS25dUPPxRAQley3zj-GE5K-mq4tdOdEfSgzoG4Kdnhy6yOVwBxBWFprg7gBO2jrQpH_rI5mnmR_T-h2wSrt_Ol5XDqw5PDxAcOCIZU_vqTXkTi0EKb3dOzSkqnlqRNrwHpTpmCex-ufu1K6o9NVG8TjAmvDWjvNrTp2JW-VntFtHyTS4PkWUfO-wmW-uMov4vn0syIsKOtL4TZJiF2RMw3MxCH77zPVejkExL37CSkRNcLIwx" alt="Sky Loft 44"/>
+        <div class="absolute inset-0 property-overlay"></div>
+        <div class="absolute top-6 right-6">
+          <span class="property-tag text-tertiary-fixed-dim text-[10px] uppercase tracking-widest px-3 py-1.5 font-bold">Penthouse</span>
+        </div>
+        <div class="absolute bottom-6 left-6">
+          <h3 class="text-white text-xl font-bold mb-1">Sky Loft 44</h3>
+          <p class="text-white/50 text-xs mb-2">Santa Cruz, Tenerife · 180 m²</p>
+          <p class="text-tertiary-fixed-dim font-bold">€890.000</p>
+        </div>
+      </div>
+
+      <!-- Card 3: Small bottom -->
+      <div class="col-span-6 md:col-span-3 relative group overflow-hidden card-hover cursor-pointer" style="min-height: 180px;">
+        <img class="w-full h-full object-cover img-zoom grayscale group-hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnJdnr43qhXUfBZUsK_1H4Dxcp6Fr3VgVdEUx2T02ofyn_OezS-LeegqSQuqtN6qUaqyXoMjYJZVVaz4bpE1y6RQTVfPJh-BHVN3lt7Hu-S0qjRZVODsCAzD7ysoAuq9Iga9nJP51mlozgjbVLgXzCRO6wCgBON5j4RPzpxu06blY-IyLItOhf5VL-FyipspXTI6Gr3j-_8gbs8jXto4ObpC0KnUnTh0DHjShK4Ca8Mvx-7rxWfffHuCTjRtsWNfLQ0V36W5p0hMfP" alt="Villa Serena"/>
+        <div class="absolute inset-0 property-overlay"></div>
+        <div class="absolute bottom-4 left-4">
+          <h3 class="text-white text-sm font-bold">Villa Serena</h3>
+          <p class="text-tertiary-fixed-dim text-xs font-bold mt-1">€1.200.000</p>
+        </div>
+      </div>
+
+      <!-- CTA Card -->
+      <div class="col-span-6 md:col-span-4 bg-primary flex items-center justify-center border border-white/10 group cursor-pointer hover:bg-tertiary-fixed-dim transition-all duration-500 card-hover" style="min-height: 180px;">
+        <div class="text-center">
+          <span class="material-symbols-outlined text-white/40 group-hover:text-primary text-4xl mb-3 block transition-colors">arrow_forward</span>
+          <span class="text-white group-hover:text-primary uppercase tracking-[0.3em] text-[10px] font-bold transition-colors">Ver Todas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 6: CONTACTO / FOOTER                 -->
+  <!-- ============================================ -->
+  <section id="contacto" class="bg-primary flex flex-col justify-between p-8 md:p-16">
+    <div class="flex-1 flex items-center">
+      <div class="text-center max-w-4xl mx-auto w-full stagger">
+        <span class="text-tertiary-fixed-dim uppercase tracking-[0.4em] text-xs mb-8 block animate-on-scroll fade-up">Get in Touch</span>
+        <h2 class="font-headline text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-white font-bold mb-12 leading-none animate-on-scroll fade-up">
+          Your <span class="italic font-light opacity-50">next era</span><br class="md:hidden"/> begins here.
+        </h2>
+        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center animate-on-scroll fade-up">
+          <input
+            class="bg-transparent border-b-2 border-white/20 text-white text-xl md:text-2xl font-light py-4 w-full sm:w-96 focus:outline-none focus:border-tertiary-fixed-dim transition-colors placeholder-white/25"
+            placeholder="Tu email profesional"
+            type="email"
+          />
+          <button class="w-full sm:w-auto bg-white text-primary px-12 md:px-16 py-5 md:py-6 font-bold uppercase tracking-widest text-xs hover:bg-tertiary-fixed-dim transition-colors">
+            Contactar
+          </button>
+        </div>
+        <!-- Phone & WhatsApp -->
+        <div class="mt-10 flex flex-col sm:flex-row gap-6 justify-center animate-on-scroll fade-up">
+          <a href="tel:+34922000000" class="flex items-center gap-3 text-white/40 hover:text-tertiary-fixed-dim transition-colors">
+            <span class="material-symbols-outlined text-lg">call</span>
+            <span class="text-xs uppercase tracking-widest">+34 922 000 000</span>
+          </a>
+          <a href="https://wa.me/34600000000" class="flex items-center gap-3 text-white/40 hover:text-tertiary-fixed-dim transition-colors">
+            <span class="material-symbols-outlined text-lg">chat</span>
+            <span class="text-xs uppercase tracking-widest">WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="pt-12 flex flex-col md:flex-row justify-between items-center md:items-end border-t border-white/5 mt-auto">
+      <div class="text-center md:text-left mb-6 md:mb-0">
+        <span class="font-headline italic text-white text-2xl">The Editorial Estate</span>
+        <p class="text-[10px] tracking-[0.4em] uppercase text-white/30 mt-3">Tenerife · Canary Islands</p>
+      </div>
+      <div class="flex gap-8">
+        <a class="text-[10px] uppercase tracking-widest text-white/30 hover:text-white transition-colors" href="#">Privacy</a>
+        <a class="text-[10px] uppercase tracking-widest text-white/30 hover:text-white transition-colors" href="#">Terms</a>
+        <a class="text-[10px] uppercase tracking-widest text-white/30 hover:text-white transition-colors" href="#">Instagram</a>
+      </div>
+    </footer>
+  </section>
+
+</main>
+
+<!-- Mobile FAB -->
+<div class="md:hidden fixed bottom-6 right-6 z-50">
+  <button onclick="toggleMenu()" class="w-14 h-14 bg-tertiary-fixed-dim text-primary rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform">
+    <span class="material-symbols-outlined">more_vert</span>
+  </button>
+</div>
+
+<script>
+// ===== MOBILE MENU =====
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// ===== INTERSECTION OBSERVER (Scroll Animations) =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+// ===== SECTION DOTS NAVIGATION =====
+const sections = document.querySelectorAll('section');
+const dots = document.querySelectorAll('.section-dot');
+
+// Click on dot to scroll to section
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const idx = parseInt(dot.dataset.section);
+    sections[idx].scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Update active dot on scroll
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = Array.from(sections).indexOf(entry.target);
+      dots.forEach(d => d.classList.remove('active'));
+      if (dots[idx]) dots[idx].classList.add('active');
+    }
+  });
+}, { threshold: 0.5 });
+
+sections.forEach(s => sectionObserver.observe(s));
+
+// ===== NAV SCROLL EFFECT =====
+let lastScroll = 0;
+document.body.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  const st = document.body.scrollTop;
+  if (st > 100) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+  lastScroll = st;
+});
+</script>
+</body>
+</html>
