@@ -19,10 +19,11 @@ interface ModuleResponse {
 }
 
 function hasAccess(modules: Array<{ id: string; min_plan: string }>, overrides: Array<{ module_id: string; is_enabled: boolean }>, plan: string, moduleId: string) {
+  if (!modules || !overrides) return true
   const override = overrides.find(o => o.module_id === moduleId)
   if (override) return override.is_enabled
   const mod = modules.find(m => m.id === moduleId)
-  if (!mod) return false
+  if (!mod) return true
   const hierarchy = { starter: 1, pro: 2, premium: 3, agency: 4 }
   return hierarchy[plan as keyof typeof hierarchy] >= hierarchy[mod.min_plan as keyof typeof hierarchy]
 }
@@ -39,10 +40,14 @@ export default function RentalsPage() {
       try {
         const response = await fetch('/api/dashboard/modules')
         if (response.ok) {
-          const data = (await response.json()) as ModuleResponse
-          setModules(data.modules)
-          setOverrides(data.overrides)
-          setPlan(data.plan)
+          const data = (await response.json()) as any
+          setModules(data.modules || [])
+          const agentMods = data.agentModules || []
+          setOverrides(agentMods.map((am: any) => ({
+            module_id: am.module_slug || am.module_id,
+            is_enabled: am.is_active ?? true,
+          })))
+          setPlan(data.plan || 'starter')
         }
       } catch (error) {
         console.error('Failed to fetch modules:', error)
@@ -58,7 +63,7 @@ export default function RentalsPage() {
   const hasChannelManager = !modulesLoading && hasAccess(modules, overrides, plan, 'channel_manager')
 
   if (!modulesLoading && !hasRentalAccess) {
-    const moduleData = modules.find(m => m.id === 'properties_rent_vacation')
+    const moduleData = modules?.find(m => m.id === 'properties_rent_vacation')
     return (
       <div className="space-y-6">
         <div>
