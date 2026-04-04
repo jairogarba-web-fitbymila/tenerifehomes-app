@@ -70,7 +70,7 @@ export async function POST(req: Request) {
     switch (event.type) {
       // ─── Checkout completed: first payment ────────────────
       case 'checkout.session.completed': {
-        const session = event.data.object as Stripe.Checkout.Session
+        const session: any = event.data.object
         const agentId = session.metadata?.agent_id
         const planKey = session.metadata?.plan_key
 
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
 
         // Get subscription details
         if (session.subscription) {
-          const subscription = await stripe.subscriptions.retrieve(session.subscription as string)
+          const subscription: any = await stripe.subscriptions.retrieve(session.subscription as string)
           await updateAgentPlan(
             agentId,
             planKey,
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
 
       // ─── Subscription updated (plan change, renewal) ─────
       case 'customer.subscription.updated': {
-        const subscription = event.data.object as Stripe.Subscription
+        const subscription: any = event.data.object
         const agentId = subscription.metadata?.agent_id
         const planKey = subscription.metadata?.plan_key
 
@@ -144,7 +144,7 @@ export async function POST(req: Request) {
 
       // ─── Subscription deleted (canceled) ──────────────────
       case 'customer.subscription.deleted': {
-        const subscription = event.data.object as Stripe.Subscription
+        const subscription: any = event.data.object
         const agentId = subscription.metadata?.agent_id
 
         let targetAgentId = agentId
@@ -172,7 +172,7 @@ export async function POST(req: Request) {
 
       // ─── Invoice payment failed ───────────────────────────
       case 'invoice.payment_failed': {
-        const invoice = event.data.object as Stripe.Invoice
+        const invoice: any = event.data.object
         const customerId = invoice.customer as string
 
         const { data: sc } = await supabaseAdmin
