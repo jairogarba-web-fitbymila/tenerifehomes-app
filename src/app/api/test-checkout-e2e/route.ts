@@ -103,11 +103,17 @@ export async function GET() {
       expand: ['latest_invoice.payment_intent'],
     })
 
+    const periodEnd = subscription.current_period_end
+      ? (typeof subscription.current_period_end === 'number'
+          ? new Date(subscription.current_period_end * 1000).toISOString()
+          : String(subscription.current_period_end))
+      : null
+
     results.push({
       step: '3. Subscription created',
       subscription_id: subscription.id,
       status: subscription.status,
-      current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+      current_period_end: periodEnd,
       plan: 'starter',
       billing: 'monthly',
       amount: '39 EUR',
