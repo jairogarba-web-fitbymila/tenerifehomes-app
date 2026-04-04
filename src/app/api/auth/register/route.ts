@@ -762,21 +762,22 @@ export async function POST(request: Request) {
       background_image_url: HERO_IMAGES[templateKey],
       overlay_opacity: 0.55,
     }
-    // Try update first (trigger may have created it), then insert
-    const { data: heroUpdate } = await supabaseAdmin
-      .from('hero_config').update(heroData).eq('agent_id', userId).select()
-    if (!heroUpdate || heroUpdate.length === 0) {
-      await supabaseAdmin.from('hero_config').insert(heroData)
-    }
+    // Insert hero config directly (no trigger dependency)
+    await supabaseAdmin.from('hero_config').insert(heroData)
 
-    // 5. Activate sections per template
-    for (const sectionKey of content.activeSections) {
-      await supabaseAdmin
-        .from('agent_sections')
-        .update({ is_active: true })
-        .eq('agent_id', userId)
-        .eq('section_key', sectionKey)
-    }
+    // 5. Create all sections and activate per template (no trigger dependency)
+    const ALL_SECTIONS = ['nav', 'hero', 'footer', 'properties_sale', 'properties_rent_long',
+      'properties_rent_vacation', 'search', 'featured', 'about', 'team', 'stats', 'testimonials',
+      'services', 'process', 'valuation', 'zones', 'offices', 'map', 'blog', 'gallery', 'press',
+      'contact_form', 'whatsapp', 'booking', 'expense_mgmt', 'analytics', 'crm']
+    const sectionInserts = ALL_SECTIONS.map((key, idx) => ({
+      agent_id: userId,
+      section_key: key,
+      is_active: content.activeSections.includes(key),
+      display_order: idx,
+    }))
+    const { error: sectionsError } = await supabaseAdmin.from('agent_sections').insert(sectionInserts)
+    if (sectionsError) console.error('Sections insert error:', sectionsError?.message)
 
     // 6. Insert demo properties
     const propertyInserts = content.properties.map((p, i) => ({
