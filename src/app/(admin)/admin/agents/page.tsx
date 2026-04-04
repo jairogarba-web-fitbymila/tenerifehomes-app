@@ -192,7 +192,7 @@ export default function AdminAgentsPage() {
                       >
                         {planOptions.map((plan) => (
                           <option key={plan} value={plan}>
-                            {PLAN_LABELS[plan]} (€{PLAN_PRICES[plan]})
+                            {PLAN_LABELS[plan]} (€{PLAN_PRICES[plan]?.monthly})
                           </option>
                         ))}
                       </select>

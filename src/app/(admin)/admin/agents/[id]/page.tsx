@@ -284,7 +284,7 @@ export default function AgentDetailsPage() {
             >
               {planOptions.map((plan) => (
                 <option key={plan} value={plan}>
-                  {PLAN_LABELS[plan]} (€{PLAN_PRICES[plan]}/mes)
+                  {PLAN_LABELS[plan]} (€{PLAN_PRICES[plan]?.monthly}/mes)
                 </option>
               ))}
             </select>

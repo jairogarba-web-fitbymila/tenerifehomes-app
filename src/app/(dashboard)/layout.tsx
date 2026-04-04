@@ -20,6 +20,7 @@ import {
   User,
   Calendar,
   DollarSign,
+  CreditCard,
   Lock,
   Shield,
 } from 'lucide-react'
@@ -41,6 +42,7 @@ const navItems: NavItem[] = [
   { href: '/dashboard/rentals', label: 'Alquileres', icon: Calendar, moduleId: 'properties_rent_vacation' },
   { href: '/dashboard/accounting', label: 'Contabilidad', icon: DollarSign, moduleId: 'accounting' },
   { href: '/dashboard/website', label: 'Mi web', icon: Globe },
+  { href: '/dashboard/billing', label: 'Facturación', icon: CreditCard },
   { href: '/dashboard/settings', label: 'Ajustes', icon: Settings },
 ]
 

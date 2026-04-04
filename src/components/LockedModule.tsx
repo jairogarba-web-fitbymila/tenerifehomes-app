@@ -76,7 +76,7 @@ export function LockedModule({
 
         {requiredPlan && (
           <p className="text-sm text-gray-500 mt-6">
-            Actualmente: <span className="font-medium">€{PLAN_PRICES[requiredPlan]}/mes</span>
+            Actualmente: <span className="font-medium">€{PLAN_PRICES[requiredPlan]?.monthly}/mes</span>
           </p>
         )}
       </div>

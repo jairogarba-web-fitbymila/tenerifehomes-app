@@ -1,137 +1,263 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Globe, Search, Camera, Share2, Users, Languages, TrendingUp, FileSignature, MessageSquare, Mail, BarChart3, Building2, Palette, Check } from 'lucide-react'
+import { Check, Loader2, ArrowRight, Star } from 'lucide-react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase-browser'
+import { PLAN_LABELS, PLAN_PRICES, PLAN_FEATURES, STRIPE_PRICE_IDS, PlanType, getYearlySavings } from '@/lib/modules'
 
-const MODULE_ICONS: Record<string, any> = {
-  dominio: Globe, seo: Search, fotografia_ia: Camera, portales: Share2,
-  crm: Users, multiidioma: Languages, valoracion: TrendingUp,
-  firma_digital: FileSignature, chatbot: MessageSquare, email_marketing: Mail,
-  analytics: BarChart3, propiedades_ilimitadas: Building2, plantillas_premium: Palette,
+const PLANS: PlanType[] = ['starter', 'pro', 'premium', 'agency']
+
+const PLAN_DESCRIPTIONS: Record<PlanType, string> = {
+  starter: 'Para empezar con tu presencia online profesional',
+  pro: 'Para agentes que quieren crecer y captar más clientes',
+  premium: 'Para profesionales que necesitan todo sin límites',
+  agency: 'Para agencias con múltiples agentes y operaciones',
 }
 
-interface ModuleDef {
-  slug: string; name: string; description: string;
-  price_monthly: number; features: string[]; sort_order: number;
-}
-
-const BASE_FEATURES = [
-  'Web profesional personalizable',
-  'Hasta 20 propiedades',
-  '1 plantilla incluida',
-  'Panel de gestión completo',
-  'Soporte por email',
-  'SSL y hosting incluido',
-  'Subdominio *.habibook.com',
-]
+const POPULAR_PLAN: PlanType = 'pro'
 
 export default function PricingPage() {
-  const [modules, setModules] = useState<ModuleDef[]>([])
-  const [selected, setSelected] = useState<Set<string>>(new Set())
-  const [loading, setLoading] = useState(true)
+  const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly')
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
+  const [user, setUser] = useState<any>(null)
+  const [agentId, setAgentId] = useState<string | null>(null)
+  const [canceled, setCanceled] = useState(false)
 
   useEffect(() => {
-    fetch('/api/pricing')
-      .then(r => r.json())
-      .then(d => { setModules(d.modules || []); setLoading(false) })
-      .catch(() => setLoading(false))
+    // Check if user is logged in
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        setUser(user)
+        setAgentId(user.id)
+      }
+    })
+
+    // Check for canceled query param
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('canceled') === 'true') {
+        setCanceled(true)
+        setTimeout(() => setCanceled(false), 5000)
+      }
+    }
   }, [])
 
-  const toggle = (slug: string) => {
-    setSelected(prev => {
-      const next = new Set(prev)
-      next.has(slug) ? next.delete(slug) : next.add(slug)
-      return next
-    })
-  }
+  async function handleCheckout(plan: PlanType) {
+    if (!user) {
+      // Not logged in — redirect to register
+      window.location.href = `/register?plan=${plan}&billing=${billing}`
+      return
+    }
 
-  const total = 19 + modules.filter(m => selected.has(m.slug)).reduce((s, m) => s + Number(m.price_monthly), 0)
+    setLoadingPlan(plan)
+
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan,
+          billing,
+          agent_id: agentId,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (data.redirect) {
+        window.location.href = data.redirect
+        return
+      }
+
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url
+      } else {
+        alert(data.error || 'Error al crear sesión de pago')
+      }
+    } catch (err) {
+      alert('Error de conexión. Inténtalo de nuevo.')
+    } finally {
+      setLoadingPlan(null)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
       <nav className="bg-[#0a1628] text-white px-6 py-4 flex justify-between items-center">
         <Link href="/" className="text-xl font-bold">HabiBook</Link>
-        <Link href="/register" className="bg-[#c9a96e] text-white px-5 py-2 rounded-lg font-medium hover:bg-[#b8944d] transition">Empieza ahora</Link>
+        <div className="flex items-center gap-4">
+          {user ? (
+            <Link href="/dashboard" className="bg-[#c9a96e] text-white px-5 py-2 rounded-lg font-medium hover:bg-[#b8944d] transition">
+              Mi Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="text-gray-300 hover:text-white transition">Iniciar sesión</Link>
+              <Link href="/register" className="bg-[#c9a96e] text-white px-5 py-2 rounded-lg font-medium hover:bg-[#b8944d] transition">
+                Empieza gratis
+              </Link>
+            </>
+          )}
+        </div>
       </nav>
 
-      {/* Hero */}
-      <section className="text-center py-16 px-4">
-        <h1 className="text-4xl md:text-5xl font-bold text-[#0a1628] mb-4">Plan Base + Módulos a tu medida</h1>
-        <p className="text-gray-500 text-lg max-w-2xl mx-auto">Empieza con lo esencial y añade solo lo que necesitas. Sin permanencia.</p>
-      </section>
-
-      {/* Base Plan Card */}
-      <section className="max-w-xl mx-auto px-4 mb-16">
-        <div className="bg-[#0a1628] text-white rounded-2xl p-8 text-center shadow-xl">
-          <span className="inline-block bg-[#c9a96e]/20 text-[#c9a96e] text-sm font-semibold px-4 py-1 rounded-full mb-4">PLAN BASE</span>
-          <div className="flex items-baseline justify-center gap-1 mb-2">
-            <span className="text-5xl font-bold">19€</span>
-            <span className="text-gray-400">/mes</span>
-          </div>
-          <p className="text-gray-400 mb-6">Todo lo que necesitas para empezar</p>
-          <ul className="text-left space-y-3 mb-8">
-            {BASE_FEATURES.map(f => (
-              <li key={f} className="flex items-center gap-2"><Check className="w-5 h-5 text-[#c9a96e] flex-shrink-0" /><span>{f}</span></li>
-            ))}
-          </ul>
-          <Link href="/register" className="block w-full bg-[#c9a96e] text-white py-3 rounded-xl font-semibold hover:bg-[#b8944d] transition text-center">Empezar ahora</Link>
-        </div>
-      </section>
-
-      {/* Modules Grid */}
-      <section className="max-w-6xl mx-auto px-4 mb-32">
-        <h2 className="text-3xl font-bold text-center text-[#0a1628] mb-2">Módulos disponibles</h2>
-        <p className="text-gray-500 text-center mb-10">Selecciona módulos para calcular tu precio mensual</p>
-
-        {loading ? (
-          <div className="text-center py-12 text-gray-400">Cargando módulos...</div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {modules.map(m => {
-              const Icon = MODULE_ICONS[m.slug] || Globe
-              const isSelected = selected.has(m.slug)
-              return (
-                <button key={m.slug} onClick={() => toggle(m.slug)}
-                  className={`text-left p-6 rounded-xl border-2 transition-all ${isSelected ? 'border-[#c9a96e] bg-[#c9a96e]/5 shadow-lg' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
-                  <div className="flex items-center justify-between mb-3">
-                    <Icon className={`w-6 h-6 ${isSelected ? 'text-[#c9a96e]' : 'text-gray-400'}`} />
-                    <span className="font-bold text-lg">{m.price_monthly}€<span className="text-sm font-normal text-gray-400">/mes</span></span>
-                  </div>
-                  <h3 className="font-bold text-[#0a1628] mb-1">{m.name}</h3>
-                  <p className="text-gray-500 text-sm mb-3">{m.description}</p>
-                  {Array.isArray(m.features) && m.features.length > 0 && (
-                    <ul className="space-y-1">
-                      {m.features.map((f: string) => (
-                        <li key={f} className="flex items-center gap-2 text-sm text-gray-600"><Check className="w-4 h-4 text-[#c9a96e]" />{f}</li>
-                      ))}
-                    </ul>
-                  )}
-                </button>
-              )
-            })}
-          </div>
-        )}
-      </section>
-
-      {/* Sticky Calculator Bar */}
-      {selected.size > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-[#0a1628] text-white py-4 px-6 shadow-2xl z-50">
-          <div className="max-w-4xl mx-auto flex items-center justify-between">
-            <div>
-              <span className="text-gray-400">Plan Base 19€ + {selected.size} módulo{selected.size > 1 ? 's' : ''}</span>
-              <div className="text-3xl font-bold">{total.toFixed(2)}€<span className="text-sm font-normal text-gray-400">/mes</span></div>
-            </div>
-            <Link href="/register" className="bg-[#c9a96e] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#b8944d] transition">
-              Empezar ahora
-            </Link>
-          </div>
+      {/* Canceled banner */}
+      {canceled && (
+        <div className="bg-amber-50 border-b border-amber-200 text-amber-800 text-center py-3 text-sm">
+          Pago cancelado. Puedes elegir un plan cuando quieras.
         </div>
       )}
 
+      {/* Hero */}
+      <section className="text-center py-16 px-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-[#0a1628] mb-4">
+          Elige el plan perfecto para tu negocio
+        </h1>
+        <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-8">
+          Regístrate gratis, configura tu web, y publica cuando estés listo. Sin permanencia.
+        </p>
+
+        {/* Billing toggle */}
+        <div className="inline-flex items-center bg-white rounded-xl border border-gray-200 p-1 shadow-sm">
+          <button
+            onClick={() => setBilling('monthly')}
+            className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              billing === 'monthly'
+                ? 'bg-[#0a1628] text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Mensual
+          </button>
+          <button
+            onClick={() => setBilling('yearly')}
+            className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              billing === 'yearly'
+                ? 'bg-[#0a1628] text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Anual
+            <span className="ml-1.5 inline-block bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold">
+              2 meses gratis
+            </span>
+          </button>
+        </div>
+      </section>
+
+      {/* Plans Grid */}
+      <section className="max-w-7xl mx-auto px-4 pb-20">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {PLANS.map((plan) => {
+            const isPopular = plan === POPULAR_PLAN
+            const price = PLAN_PRICES[plan][billing]
+            const monthlyEquiv = billing === 'yearly' ? Math.round(price / 12) : price
+            const savings = billing === 'yearly' ? getYearlySavings(plan) : 0
+            const isLoading = loadingPlan === plan
+
+            return (
+              <div
+                key={plan}
+                className={`relative bg-white rounded-2xl border-2 p-8 flex flex-col transition-all ${
+                  isPopular
+                    ? 'border-[#c9a96e] shadow-xl scale-[1.02]'
+                    : 'border-gray-200 hover:border-gray-300 hover:shadow-lg'
+                }`}
+              >
+                {isPopular && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                    <span className="inline-flex items-center gap-1 bg-[#c9a96e] text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md">
+                      <Star className="w-3.5 h-3.5 fill-white" />
+                      MÁS POPULAR
+                    </span>
+                  </div>
+                )}
+
+                {/* Plan name */}
+                <h3 className="text-lg font-bold text-[#0a1628] mb-1">{PLAN_LABELS[plan]}</h3>
+                <p className="text-sm text-gray-500 mb-6">{PLAN_DESCRIPTIONS[plan]}</p>
+
+                {/* Price */}
+                <div className="mb-6">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-bold text-[#0a1628]">{monthlyEquiv}€</span>
+                    <span className="text-gray-400">/mes</span>
+                  </div>
+                  {billing === 'yearly' && (
+                    <div className="mt-1">
+                      <span className="text-sm text-gray-500">Facturado {price}€/año</span>
+                      <span className="ml-2 text-sm text-green-600 font-semibold">Ahorras {savings}€</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* CTA Button */}
+                <button
+                  onClick={() => handleCheckout(plan)}
+                  disabled={isLoading}
+                  className={`w-full py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 mb-8 ${
+                    isPopular
+                      ? 'bg-[#c9a96e] text-white hover:bg-[#b8944d] shadow-md'
+                      : 'bg-[#0a1628] text-white hover:bg-[#1a2a42]'
+                  }`}
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      {user ? 'Suscribirme' : 'Empezar ahora'}
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+
+                {/* Features */}
+                <ul className="space-y-3 flex-1">
+                  {PLAN_FEATURES[plan].map((feature) => (
+                    <li key={feature} className="flex items-start gap-2.5">
+                      <Check className="w-5 h-5 text-[#c9a96e] flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-gray-700">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* FAQ section */}
+      <section className="max-w-3xl mx-auto px-4 pb-20">
+        <h2 className="text-2xl font-bold text-center text-[#0a1628] mb-10">Preguntas frecuentes</h2>
+        <div className="space-y-6">
+          <div>
+            <h3 className="font-semibold text-[#0a1628] mb-1">¿Puedo probar antes de pagar?</h3>
+            <p className="text-gray-600 text-sm">Sí. Regístrate gratis, configura tu web con tu plantilla favorita, y publica solo cuando estés satisfecho.</p>
+          </div>
+          <div>
+            <h3 className="font-semibold text-[#0a1628] mb-1">¿Hay permanencia?</h3>
+            <p className="text-gray-600 text-sm">No. Puedes cancelar en cualquier momento desde tu panel. Tu web seguirá activa hasta el final del periodo pagado.</p>
+          </div>
+          <div>
+            <h3 className="font-semibold text-[#0a1628] mb-1">¿Puedo cambiar de plan?</h3>
+            <p className="text-gray-600 text-sm">Sí. Sube o baja de plan cuando quieras desde tu dashboard. El cambio se aplica de forma inmediata con prorrateo automático.</p>
+          </div>
+          <div>
+            <h3 className="font-semibold text-[#0a1628] mb-1">¿El plan anual tiene descuento?</h3>
+            <p className="text-gray-600 text-sm">Sí, el plan anual equivale a 10 meses: te regalamos 2 meses al año.</p>
+          </div>
+          <div>
+            <h3 className="font-semibold text-[#0a1628] mb-1">¿Qué métodos de pago aceptáis?</h3>
+            <p className="text-gray-600 text-sm">Aceptamos todas las tarjetas de crédito y débito (Visa, Mastercard, American Express). Los pagos se procesan de forma segura con Stripe.</p>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="text-center py-8 text-gray-400 text-sm">
+      <footer className="text-center py-8 text-gray-400 text-sm border-t border-gray-100">
         © 2026 HabiBook. Todos los derechos reservados.
       </footer>
     </div>
