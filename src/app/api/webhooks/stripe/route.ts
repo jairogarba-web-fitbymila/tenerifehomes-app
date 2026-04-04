@@ -19,6 +19,13 @@ function getSupabaseAdmin() {
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
+function safeDate(val: any): string | null {
+  if (!val) return null
+  if (typeof val === 'number') return new Date(val * 1000).toISOString()
+  if (typeof val === 'string') return val
+  return null
+}
+
 async function updateAgentPlan(supabaseAdmin: ReturnType<typeof getSupabaseAdmin>, agentId: string, plan: string, subscriptionStatus: string, subscriptionId: string, currentPeriodEnd: string | null) {
   // Update stripe_customers table
   await supabaseAdmin
@@ -38,11 +45,11 @@ async function updateAgentPlan(supabaseAdmin: ReturnType<typeof getSupabaseAdmin
       .eq('id', agentId)
   }
 
-  // If subscription is canceled/unpaid, downgrade to starter
+  // If subscription is canceled/unpaid, downgrade to starter and unpublish
   if (['canceled', 'unpaid', 'past_due'].includes(subscriptionStatus)) {
     await supabaseAdmin
       .from('agent_profiles')
-      .update({ plan: 'starter' })
+      .update({ plan: 'starter', is_published: false })
       .eq('id', agentId)
   }
 
@@ -94,17 +101,15 @@ export async function POST(req: Request) {
             planKey,
             subscription.status,
             subscription.id,
-            subscription.current_period_end
-              ? new Date(subscription.current_period_end * 1000).toISOString()
-              : null
+            safeDate(subscription.current_period_end)
           )
         }
 
-        // TODO: Mark agent as published when is_published column is added
-        // await supabaseAdmin
-        //   .from('agent_profiles')
-        //   .update({ is_published: true })
-        //   .eq('id', agentId)
+        // Mark agent as published after successful payment
+        await supabaseAdmin
+          .from('agent_profiles')
+          .update({ is_published: true })
+          .eq('id', agentId)
 
         break
       }
