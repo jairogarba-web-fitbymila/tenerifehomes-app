@@ -740,7 +740,7 @@ export async function POST(request: Request) {
       city: zone || 'Tenerife',
       languages: ['es', 'en'],
     }
-    if (zone) profileData.primary_zone = zone
+    // primary_zone column doesn't exist in agent_profiles — zone is stored in city
 
     const { error: profileError } = await supabaseAdmin
       .from('agent_profiles')
