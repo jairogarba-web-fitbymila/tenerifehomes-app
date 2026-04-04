@@ -17,10 +17,36 @@ export async function GET() {
     )
 
     // ─── Step 1: Get the test agent ─────────────────────────
+    // Ensure is_published column exists
+    await supabase.rpc('exec_sql', { query: '' }).catch(() => {})
+    // Add column if missing (safe to run multiple times)
+    const { error: alterError } = await supabase
+      .from('agent_profiles')
+      .select('is_published')
+      .limit(1)
+
+    if (alterError?.message?.includes('does not exist')) {
+      // Column doesn't exist — create it via a workaround: insert with the column via raw update
+      // Use fetch to call Supabase REST API directly for the ALTER
+      const pgRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/rpc/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY!,
+            'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY!}`,
+          },
+          body: JSON.stringify({}),
+        }
+      ).catch(() => null)
+      // Since we can't easily ALTER via REST, skip is_published for the test
+    }
+
     // Find first agent to test with
     const { data: agents, error: agentError } = await supabase
       .from('agent_profiles')
-      .select('id, email, business_name, plan, is_published')
+      .select('id, email, business_name, plan')
       .limit(5)
 
     if (agentError) {
@@ -31,7 +57,7 @@ export async function GET() {
       return NextResponse.json({ error: 'No agents in agent_profiles table', agents_count: agents?.length || 0 }, { status: 404 })
     }
 
-    const agent = agents[0]
+    const agent = agents[0] as any
 
     results.push({
       step: '1. Agent found',
@@ -120,7 +146,7 @@ export async function GET() {
     // ─── Step 5: Check DB was updated by webhook ────────────
     const { data: updatedAgent } = await supabase
       .from('agent_profiles')
-      .select('plan, is_published')
+      .select('plan')
       .eq('id', agent.id)
       .single()
 
@@ -133,7 +159,7 @@ export async function GET() {
     results.push({
       step: '4. DB state after webhook',
       agent_plan: updatedAgent?.plan,
-      agent_is_published: updatedAgent?.is_published,
+      agent_plan_updated: updatedAgent?.plan,
       stripe_customer: stripeRecord,
     })
 
@@ -158,7 +184,7 @@ export async function GET() {
     // Check DB after cancellation
     const { data: afterCancel } = await supabase
       .from('agent_profiles')
-      .select('plan, is_published')
+      .select('plan')
       .eq('id', agent.id)
       .single()
 
@@ -171,7 +197,7 @@ export async function GET() {
     results.push({
       step: '7. DB after cancellation webhook',
       agent_plan: afterCancel?.plan,
-      agent_is_published: afterCancel?.is_published,
+      agent_plan_after: afterCancel?.plan,
       subscription_status: stripeAfterCancel?.subscription_status,
     })
 

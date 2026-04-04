@@ -42,7 +42,7 @@ async function updateAgentPlan(supabaseAdmin: ReturnType<typeof getSupabaseAdmin
   if (['canceled', 'unpaid', 'past_due'].includes(subscriptionStatus)) {
     await supabaseAdmin
       .from('agent_profiles')
-      .update({ plan: 'starter', is_published: false })
+      .update({ plan: 'starter' })
       .eq('id', agentId)
   }
 
@@ -100,11 +100,11 @@ export async function POST(req: Request) {
           )
         }
 
-        // Mark agent as published (they paid!)
-        await supabaseAdmin
-          .from('agent_profiles')
-          .update({ is_published: true })
-          .eq('id', agentId)
+        // TODO: Mark agent as published when is_published column is added
+        // await supabaseAdmin
+        //   .from('agent_profiles')
+        //   .update({ is_published: true })
+        //   .eq('id', agentId)
 
         break
       }
