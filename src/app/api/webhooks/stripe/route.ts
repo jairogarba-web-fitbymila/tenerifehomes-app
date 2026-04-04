@@ -2,22 +2,24 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-03-31.basil' as any,
-})
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2025-03-31.basil' as any,
+  })
+}
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 // Disable body parsing — Stripe needs raw body for signature verification
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-async function updateAgentPlan(agentId: string, plan: string, subscriptionStatus: string, subscriptionId: string, currentPeriodEnd: string | null) {
+async function updateAgentPlan(supabaseAdmin: ReturnType<typeof getSupabaseAdmin>, agentId: string, plan: string, subscriptionStatus: string, subscriptionId: string, currentPeriodEnd: string | null) {
   // Update stripe_customers table
   await supabaseAdmin
     .from('stripe_customers')
@@ -48,6 +50,10 @@ async function updateAgentPlan(agentId: string, plan: string, subscriptionStatus
 }
 
 export async function POST(req: Request) {
+  const stripe = getStripe()
+  const supabaseAdmin = getSupabaseAdmin()
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
+
   try {
     const body = await req.text()
     const signature = req.headers.get('stripe-signature')
@@ -83,6 +89,7 @@ export async function POST(req: Request) {
         if (session.subscription) {
           const subscription: any = await stripe.subscriptions.retrieve(session.subscription as string)
           await updateAgentPlan(
+            supabaseAdmin,
             agentId,
             planKey,
             subscription.status,
@@ -118,6 +125,7 @@ export async function POST(req: Request) {
 
           if (sc) {
             await updateAgentPlan(
+              supabaseAdmin,
               sc.agent_id,
               planKey || 'starter',
               subscription.status,
@@ -131,6 +139,7 @@ export async function POST(req: Request) {
         }
 
         await updateAgentPlan(
+          supabaseAdmin,
           agentId,
           planKey || 'starter',
           subscription.status,
@@ -160,6 +169,7 @@ export async function POST(req: Request) {
 
         if (targetAgentId) {
           await updateAgentPlan(
+            supabaseAdmin,
             targetAgentId,
             'starter',
             'canceled',
