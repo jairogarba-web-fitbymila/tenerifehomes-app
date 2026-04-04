@@ -504,18 +504,29 @@ async function seedDemo(demo) {
     }
     console.log(`  Profile UPDATED (existing id: ${actualId.slice(0, 8)}...)`)
   } else {
-    // Agent doesn't exist — create auth user first, then profile
+    // Agent doesn't exist — create or find auth user, then profile
     const demoEmail = `demo-${slug}@habibook.local`
+    let authUserId = null
     const { data: authUser, error: authErr } = await supabase.auth.admin.createUser({
       email: demoEmail,
       password: 'DemoPassword123!',
       email_confirm: true,
     })
     if (authErr) {
-      console.error(`  Auth user error: ${authErr.message}`)
-      return false
+      // User might already exist — try to find them
+      const { data: listData } = await supabase.auth.admin.listUsers()
+      const existingUser = listData?.users?.find(u => u.email === demoEmail)
+      if (existingUser) {
+        authUserId = existingUser.id
+        console.log(`  Auth user found (existing: ${authUserId.slice(0, 8)}...)`)
+      } else {
+        console.error(`  Auth user error: ${authErr.message}`)
+        return false
+      }
+    } else {
+      authUserId = authUser.user.id
     }
-    actualId = authUser.user.id
+    actualId = authUserId
     const profileData = sanitizeProfile({ ...demo.profile, id: actualId })
     const { error: insertErr } = await supabase
       .from('agent_profiles')
@@ -542,7 +553,9 @@ async function seedDemo(demo) {
   await supabase.from('properties').delete().eq('agent_id', effectiveId)
   const propsData = demo.properties.map(p => {
     const { area_m2, area_built, ...rest } = p
-    return { agent_id: effectiveId, size_m2: area_m2 || area_built || null, ...rest }
+    const propSlug = (rest.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + effectiveId.slice(0, 6)
+    const property_type = rest.operation_type === 'sale' ? 'apartment' : 'apartment'
+    return { agent_id: effectiveId, size_m2: area_m2 || area_built || null, slug: propSlug, property_type, ...rest }
   })
   const { error: propsErr } = await supabase.from('properties').insert(propsData)
   if (propsErr) console.error(`  Properties error: ${propsErr.message}`)
