@@ -54,10 +54,10 @@ export default function AdminDashboard() {
         }
 
         const estimatedMRR =
-          planCounts.starter * PLAN_PRICES.starter +
-          planCounts.pro * PLAN_PRICES.pro +
-          planCounts.premium * PLAN_PRICES.premium +
-          planCounts.agency * PLAN_PRICES.agency
+          planCounts.starter * PLAN_PRICES.starter.monthly +
+          planCounts.pro * PLAN_PRICES.pro.monthly +
+          planCounts.premium * PLAN_PRICES.premium.monthly +
+          planCounts.agency * PLAN_PRICES.agency.monthly
 
         setStats({
           totalAgents: agents.length,
