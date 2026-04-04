@@ -17,11 +17,13 @@ export async function GET() {
     )
 
     // ─── Step 1: Get the test agent ─────────────────────────
-    const { data: agent } = await supabase
+    // Find first agent to test with
+    const { data: agents } = await supabase
       .from('agent_profiles')
       .select('id, email, business_name, plan, is_published')
-      .eq('email', 'jairogarba@gmail.com')
-      .single()
+      .limit(1)
+
+    const agent = agents?.[0]
 
     if (!agent) {
       return NextResponse.json({ error: 'Test agent not found' }, { status: 404 })
