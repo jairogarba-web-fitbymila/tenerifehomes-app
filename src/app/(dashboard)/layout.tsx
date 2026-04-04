@@ -69,10 +69,11 @@ const planColors: Record<string, string> = {
 }
 
 function hasAccess(modules: Array<{ id: string; min_plan: string }>, overrides: Array<{ module_id: string; is_enabled: boolean }>, plan: string, moduleId: string) {
+  if (!modules || !overrides) return true // Don't lock if data not loaded yet
   const override = overrides.find(o => o.module_id === moduleId)
   if (override) return override.is_enabled
   const mod = modules.find(m => m.id === moduleId)
-  if (!mod) return false
+  if (!mod) return true // If module not defined, allow access
   const hierarchy = { starter: 1, pro: 2, premium: 3, agency: 4 }
   return hierarchy[plan as keyof typeof hierarchy] >= hierarchy[mod.min_plan as keyof typeof hierarchy]
 }
@@ -108,10 +109,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       try {
         const response = await fetch('/api/dashboard/modules')
         if (response.ok) {
-          const moduleData = (await response.json()) as ModuleResponse
-          setModules(moduleData.modules)
-          setOverrides(moduleData.overrides)
-          setPlan(moduleData.plan)
+          const moduleData = await response.json()
+          setModules(moduleData.modules || [])
+          // API returns agentModules, map to overrides format
+          const agentMods = moduleData.agentModules || []
+          setOverrides(agentMods.map((am: any) => ({
+            module_id: am.module_slug || am.module_id,
+            is_enabled: am.is_active ?? true,
+          })))
+          setPlan(moduleData.plan || data?.plan || 'starter')
         }
       } catch (error) {
         console.error('Failed to fetch modules:', error)
