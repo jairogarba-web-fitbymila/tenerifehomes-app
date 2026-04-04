@@ -205,7 +205,7 @@ export default function RegisterPage() {
                   Atrás
                 </button>
                 <button onClick={handleRegister} disabled={loading} className="flex-1 px-4 py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-medium transition text-base disabled:opacity-50 flex items-center justify-center gap-2">
-                  {loading ? (<><Loader2 className="w-5 h-5 animate-spin" />Creando tu web...</>) : 'Crear mi web gratis'}
+                  {loading ? (<><Loader2 className="w-5 h-5 animate-spin" />Creando tu web...</>) : 'Crear mi web'}
                 </button>
               </div>
 

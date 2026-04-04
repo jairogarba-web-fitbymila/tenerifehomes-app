@@ -12,7 +12,7 @@ export default function DemosGalleryPage() {
           Habi<span style={{ color: '#06B6D4' }}>Book</span>
         </Link>
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <Link href='/register' style={{ background: '#06B6D4', color: '#0B1120', padding: '10px 24px', borderRadius: 8, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>Crear mi web gratis</Link>
+          <Link href='/register' style={{ background: '#06B6D4', color: '#0B1120', padding: '10px 24px', borderRadius: 8, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}>Empieza ahora</Link>
         </div>
       </nav>
 

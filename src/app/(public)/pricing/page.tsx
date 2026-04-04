@@ -53,7 +53,7 @@ export default function PricingPage() {
       {/* Navbar */}
       <nav className="bg-[#0a1628] text-white px-6 py-4 flex justify-between items-center">
         <Link href="/" className="text-xl font-bold">HabiBook</Link>
-        <Link href="/register" className="bg-[#c9a96e] text-white px-5 py-2 rounded-lg font-medium hover:bg-[#b8944d] transition">Empieza gratis</Link>
+        <Link href="/register" className="bg-[#c9a96e] text-white px-5 py-2 rounded-lg font-medium hover:bg-[#b8944d] transition">Empieza ahora</Link>
       </nav>
 
       {/* Hero */}
