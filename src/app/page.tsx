@@ -821,7 +821,7 @@ export default function HomePage() {
         <div className="frame-body">
           <div className="frame-num">01</div>
           <h2>
-            6 plantillas.
+            13 plantillas.
             <br />
             Tu marca, <em>tu estilo</em>
           </h2>
@@ -831,7 +831,7 @@ export default function HomePage() {
             minutos.
           </p>
           <div className="frame-highlights">
-            <span className="highlight-chip">6 plantillas</span>
+            <span className="highlight-chip">13 plantillas</span>
             <span className="highlight-chip">Dominio propio</span>
             <span className="highlight-chip">SEO multiidioma</span>
             <span className="highlight-chip">100% responsive</span>
@@ -1063,7 +1063,7 @@ export default function HomePage() {
       {/* TEMPLATES GALLERY */}
       <section className="gallery" id="plantillas">
         <h2>Plantillas que venden</h2>
-        <p>6 plantillas interactivas. Haz clic para explorar cada demo en vivo.</p>
+        <p>13 plantillas interactivas. Haz clic para explorar cada demo en vivo.</p>
         <div className="gallery-grid">
           <a href="/demos/luxury" className="gal-item" style={{textDecoration:'none'}}>
             <Image src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=800&fit=crop" alt="Luxury" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
@@ -1085,16 +1085,16 @@ export default function HomePage() {
             <Image src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=800&fit=crop" alt="Classic" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Classic</h4><span>Roberto Fernandez</span></div>
           </a>
-          <a href="/demos/network" className="gal-item" style={{textDecoration:'none'}}>
-            <Image src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=800&fit=crop" alt="Network" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
-            <div className="gal-cap"><h4>Network</h4><span>Island Properties</span></div>
+          <a href="/demos/editorial-dark" className="gal-item" style={{textDecoration:'none'}}>
+            <Image src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=800&fit=crop&q=80" alt="Editorial Dark" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
+            <div className="gal-cap"><h4>Editorial Dark</h4><span>Julián Vega</span></div>
           </a>
           <a href="/demos/data" className="gal-item" style={{textDecoration:'none'}}>
             <Image src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&h=800&fit=crop" alt="Data-Driven" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Data-Driven</h4><span>DataHomes Tenerife</span></div>
           </a>
           <a href="/demos" className="gal-item" style={{textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#0B1D3A,#1a3a5c)'}}>
-            <div style={{textAlign:'center',color:'white'}}><h4 style={{fontSize:'1.5rem',marginBottom:'0.5rem'}}>Ver todas</h4><span style={{opacity:0.7}}>6 plantillas</span></div>
+            <div style={{textAlign:'center',color:'white'}}><h4 style={{fontSize:'1.5rem',marginBottom:'0.5rem'}}>Ver todas</h4><span style={{opacity:0.7}}>13 plantillas</span></div>
           </a>
         </div>
       </section>
