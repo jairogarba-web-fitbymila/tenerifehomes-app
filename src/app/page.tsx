@@ -1066,31 +1066,31 @@ export default function HomePage() {
         <p>13 plantillas interactivas. Haz clic para explorar cada demo en vivo.</p>
         <div className="gallery-grid">
           <a href="/demos/luxury" className="gal-item" style={{textDecoration:'none'}}>
-            <Image src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=800&fit=crop" alt="Luxury" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
+            <Image src="/previews/luxury.png" alt="Luxury" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Luxury</h4><span>Victoria Laurent</span></div>
           </a>
           <a href="/demos/mediterranean" className="gal-item" style={{textDecoration:'none'}}>
-            <Image src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&h=800&fit=crop" alt="Mediterranean" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
+            <Image src="/previews/mediterranean.png" alt="Mediterranean" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Mediterranean</h4><span>Antonio Reyes</span></div>
           </a>
           <a href="/demos/corporate" className="gal-item" style={{textDecoration:'none'}}>
-            <Image src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=800&fit=crop" alt="Corporate" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
+            <Image src="/previews/corporate.png" alt="Corporate" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Corporate</h4><span>Tenerife Prime</span></div>
           </a>
           <a href="/demos/boutique" className="gal-item" style={{textDecoration:'none'}}>
-            <Image src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=800&fit=crop" alt="Boutique" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
+            <Image src="/previews/boutique.png" alt="Boutique" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Boutique</h4><span>Maison Tenerife</span></div>
           </a>
-          <a href="/demos/classic" className="gal-item" style={{textDecoration:'none'}}>
-            <Image src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=800&fit=crop" alt="Classic" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
-            <div className="gal-cap"><h4>Classic</h4><span>Roberto Fernandez</span></div>
-          </a>
           <a href="/demos/editorial-dark" className="gal-item" style={{textDecoration:'none'}}>
-            <Image src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=800&fit=crop&q=80" alt="Editorial Dark" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
+            <Image src="/previews/editorial-dark.png" alt="Editorial Dark" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Editorial Dark</h4><span>Julián Vega</span></div>
           </a>
+          <a href="/demos/monolith" className="gal-item" style={{textDecoration:'none'}}>
+            <Image src="/previews/monolith.png" alt="Monolith" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
+            <div className="gal-cap"><h4>Monolith</h4><span>MONOLITH Tenerife</span></div>
+          </a>
           <a href="/demos/data" className="gal-item" style={{textDecoration:'none'}}>
-            <Image src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&h=800&fit=crop" alt="Data-Driven" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
+            <Image src="/previews/data.png" alt="Data-Driven" fill sizes="(max-width:768px) 100vw, 25vw" style={{objectFit:'cover'}} />
             <div className="gal-cap"><h4>Data-Driven</h4><span>DataHomes Tenerife</span></div>
           </a>
           <a href="/demos" className="gal-item" style={{textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#0B1D3A,#1a3a5c)'}}>
